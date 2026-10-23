@@ -48,9 +48,9 @@
                         <td>$<?= number_format($p['price'], 0) ?></td>
                         <td><?= esc($p['city']) ?></td>
                         <td>
-                            <a href="<?= site_url('my-properties/edit/' . $p['pid']) ?>" class="btn btn-sm btn-warning">Editar</a>
-                            <a href="<?= site_url('my-properties/delete/' . $p['pid']) ?>" class="btn btn-sm btn-danger"
-                               onclick="return confirm('¿Eliminar esta propiedad?')">Eliminar</a>
+                            <a href="<?= site_url('my-properties/edit/' . $p['pid']) ?>" class="btn btn-sm btn-warning" title="Editar"><i class="fas fa-pencil-alt"></i></a>
+                            <a href="<?= site_url('my-properties/delete/' . $p['pid']) ?>" class="btn btn-sm btn-danger text-white"
+                               title="Borrar" onclick="return confirm('¿Eliminar esta propiedad?')"><i class="fas fa-trash"></i></a>
                         </td>
                     </tr>
                     <?php endforeach ?>
@@ -61,4 +61,7 @@
     </div>
 </div>
 
+<?= $this->endSection() ?>
+<?= $this->section('scripts') ?>
+<script>$('[title]').tooltip();</script>
 <?= $this->endSection() ?>

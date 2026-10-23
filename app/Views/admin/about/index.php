@@ -30,9 +30,9 @@
                             </td>
                             <td><?= esc($a['title']) ?></td>
                             <td>
-                                <a href="<?= site_url('admin/about/edit/' . $a['id']) ?>" class="btn btn-sm btn-warning"><i class="fe fe-edit"></i></a>
+                                <a href="<?= site_url('admin/about/edit/' . $a['id']) ?>" class="btn btn-sm btn-warning" title="Editar"><i class="fe fe-edit"></i></a>
                                 <a href="<?= site_url('admin/about/delete/' . $a['id']) ?>"
-                                   class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar?')"><i class="fe fe-trash-2"></i></a>
+                                   class="btn btn-sm btn-danger text-white" title="Borrar" onclick="return confirm('¿Eliminar?')"><i class="fe fe-trash"></i></a>
                             </td>
                         </tr>
                         <?php endforeach ?>
@@ -43,4 +43,7 @@
     </div>
 </div>
 
+<?= $this->endSection() ?>
+<?= $this->section('scripts') ?>
+<script>$('[title]').tooltip();</script>
 <?= $this->endSection() ?>

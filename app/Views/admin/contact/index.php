@@ -25,8 +25,9 @@
                                 <td><?= esc(substr($c['message'], 0, 60)) ?>...</td>
                                 <td>
                                     <a href="<?= site_url('admin/contacts/delete/' . $c['cid']) ?>"
-                                       class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar?')">
-                                        <i class="fe fe-trash-2"></i>
+                                       class="btn btn-sm btn-danger text-white"
+                                       title="Borrar" onclick="return confirm('¿Eliminar?')">
+                                        <i class="fe fe-trash"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -45,4 +46,5 @@
 <script src="<?= base_url('admin/assets/plugins/datatables/jQuery.dataTables.min.js') ?>"></script>
 <script src="<?= base_url('admin/assets/plugins/datatables/dataTables.bootstrap4.min.js') ?>"></script>
 <script>$('.datatable').DataTable({ language: { url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json' } });</script>
+<script>$('[title]').tooltip();</script>
 <?= $this->endSection() ?>

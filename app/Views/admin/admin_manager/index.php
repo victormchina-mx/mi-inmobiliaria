@@ -27,8 +27,9 @@
                             <td><?= esc($a['aphone']) ?></td>
                             <td>
                                 <a href="<?= site_url('admin/admins/delete/' . $a['aid']) ?>"
-                                   class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar administrador?')">
-                                    <i class="fe fe-trash-2"></i>
+                                   class="btn btn-sm btn-danger text-white"
+                                   title="Borrar" onclick="return confirm('¿Eliminar administrador?')">
+                                    <i class="fe fe-trash"></i>
                                 </a>
                             </td>
                         </tr>
@@ -40,4 +41,7 @@
     </div>
 </div>
 
+<?= $this->endSection() ?>
+<?= $this->section('scripts') ?>
+<script>$('[title]').tooltip();</script>
 <?= $this->endSection() ?>

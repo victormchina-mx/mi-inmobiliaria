@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="<?= base_url('css/layerslider.css') ?>">
 <link rel="stylesheet" href="<?= base_url('css/color.css') ?>" id="color-change">
 <link rel="stylesheet" href="<?= base_url('css/owl.carousel.min.css') ?>">
-<link rel="stylesheet" href="<?= base_url('css/font-awesome.min.css') ?>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="<?= base_url('fonts/flaticon/flaticon.css') ?>">
 <link rel="stylesheet" href="<?= base_url('css/style.css') ?>">
 <?= $this->renderSection('styles') ?>

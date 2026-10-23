@@ -54,13 +54,14 @@
                                 <td class="text-capitalize"><?= esc($p['uname']) ?></td>
                                 <td><?= date('d-m-Y', strtotime($p['created_at'])) ?></td>
                                 <td>
-                                    <a href="<?= site_url('admin/property/edit/' . $p['pid']) ?>" class="btn btn-sm btn-warning">
+                                    <a href="<?= site_url('admin/property/edit/' . $p['pid']) ?>" class="btn btn-sm btn-warning"
+                                       title="Editar">
                                         <i class="fe fe-edit"></i>
                                     </a>
                                     <a href="<?= site_url('admin/property/delete/' . $p['pid']) ?>"
-                                       class="btn btn-sm btn-danger"
-                                       onclick="return confirm('¿Eliminar esta propiedad?')">
-                                        <i class="fe fe-trash-2"></i>
+                                       class="btn btn-sm btn-danger text-white"
+                                       title="Borrar" onclick="return confirm('¿Eliminar esta propiedad?')">
+                                        <i class="fe fe-trash"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -79,4 +80,5 @@
 <script src="<?= base_url('admin/assets/plugins/datatables/jQuery.dataTables.min.js') ?>"></script>
 <script src="<?= base_url('admin/assets/plugins/datatables/dataTables.bootstrap4.min.js') ?>"></script>
 <script>$('.datatable').DataTable({ language: { url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json' } });</script>
+<script>$('[title]').tooltip();</script>
 <?= $this->endSection() ?>

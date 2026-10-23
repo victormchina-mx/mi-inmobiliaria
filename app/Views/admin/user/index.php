@@ -54,12 +54,13 @@
                                         ],
                                     };
                                     ?>
-                                    <a href="<?= $editUrl ?>" class="btn btn-sm btn-primary mr-1">
+                                    <a href="<?= $editUrl ?>" class="btn btn-sm btn-primary mr-1"
+                                       title="Editar">
                                         <i class="fe fe-edit"></i>
                                     </a>
-                                    <a href="<?= $deleteUrl ?>" class="btn btn-sm btn-danger"
-                                       onclick="return confirm('¿Eliminar este usuario?')">
-                                        <i class="fe fe-trash-2"></i>
+                                    <a href="<?= $deleteUrl ?>" class="btn btn-sm btn-danger text-white"
+                                       title="Borrar" onclick="return confirm('¿Eliminar este usuario?')">
+                                        <i class="fe fe-trash"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -78,4 +79,5 @@
 <script src="<?= base_url('admin/assets/plugins/datatables/jQuery.dataTables.min.js') ?>"></script>
 <script src="<?= base_url('admin/assets/plugins/datatables/dataTables.bootstrap4.min.js') ?>"></script>
 <script>$('.datatable').DataTable({ language: { url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json' } });</script>
+<script>$('[title]').tooltip();</script>
 <?= $this->endSection() ?>
