@@ -1,0 +1,9 @@
+.env
+vendor/
+writable/cache/*
+writable/logs/*
+writable/session/*
+writable/uploads/*
+writable/debugbar/*
+public/uploads/
+*.DS_Store
