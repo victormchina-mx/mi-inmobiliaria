@@ -2,6 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Repositorio
+
+- **GitHub:** https://github.com/victormchina-mx/mi-inmobiliaria
+- **Producción:** https://inmobiliaria.vmch.net/
+
 ## Comandos esenciales
 
 ```bash
