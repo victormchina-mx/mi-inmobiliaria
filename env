@@ -1,0 +1,32 @@
+#--------------------------------------------------------------------
+# ENVIRONMENT
+#--------------------------------------------------------------------
+# CI_ENVIRONMENT = production
+
+#--------------------------------------------------------------------
+# APP
+#--------------------------------------------------------------------
+# app.baseURL = 'http://localhost:8080'
+
+#--------------------------------------------------------------------
+# DATABASE
+#--------------------------------------------------------------------
+# database.default.hostname = localhost
+# database.default.database = nombre_bd
+# database.default.username = usuario
+# database.default.password = contraseña
+# database.default.DBDriver = MySQLi
+# database.default.port     = 3306
+
+#--------------------------------------------------------------------
+# EMAIL / SMTP
+#--------------------------------------------------------------------
+# email.protocol   = smtp
+# email.SMTPHost   = smtp.hostinger.com
+# email.SMTPUser   = correo@tudominio.com
+# email.SMTPPass   = tu_contraseña_smtp
+# email.SMTPPort   = 465
+# email.SMTPCrypto = ssl
+# email.fromEmail  = correo@tudominio.com
+# email.fromName   = "Real Estate"
+# email.mailType   = html
