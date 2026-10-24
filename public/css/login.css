@@ -2,124 +2,187 @@
     display: table;
     height: 100vh;
     min-height: 100vh;
+    width: 100%;
+    background: var(--theme-light-color);
 }
 .login-wrapper {
-	width: 100%;
-	height: 100%;
-	display: table-cell;
-	vertical-align: middle;
+    width: 100%;
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    padding: 24px 16px;
 }
 .login-wrapper .loginbox {
-    background-color: #fff;
-    border-radius: 6px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	display: flex;
-    margin: 1.875rem auto;
-    max-width: 400px;
-    min-height: 500px;
+    background-color: var(--theme-white-color);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+    display: flex;
+    margin: 0 auto;
+    max-width: 820px;
+    min-height: 520px;
     width: 100%;
+    overflow: hidden;
 }
+
+/* Left panel — gradient brand */
 .login-wrapper .loginbox .login-left {
     align-items: center;
-    background: linear-gradient(180deg, #3949ab, #2962ff);
-    border-radius: 6px 0 0 6px;
+    background: var(--theme-gradient-primary);
+    border-radius: 0;
     flex-direction: column;
     justify-content: center;
-    padding: 80px;
+    padding: 60px 40px;
     width: 400px;
     display: flex;
+    position: relative;
+    overflow: hidden;
 }
+.login-wrapper .loginbox .login-left::before {
+    content: "";
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    top: -80px;
+    right: -80px;
+}
+.login-wrapper .loginbox .login-left::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    bottom: -60px;
+    left: -40px;
+}
+
+/* Right panel */
 .login-wrapper .loginbox .login-right {
     align-items: center;
     display: flex;
     justify-content: center;
-    padding: 40px;
-    width: 400px;
+    padding: 48px 40px;
+    width: 420px;
+    flex: 1;
 }
 .login-wrapper .loginbox .login-right .login-right-wrap {
     max-width: 100%;
     flex: 0 0 100%;
 }
 .login-wrapper .loginbox .login-right h1 {
-    font-size: 26px;
-    font-weight: 500;
-    margin-bottom: 5px;
+    font-family: var(--theme-highlight-font);
+    font-optical-sizing: auto;
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 6px;
     text-align: center;
+    color: var(--theme-secondary-color);
+    letter-spacing: -0.02em;
 }
 .account-subtitle {
-    color: #4c4c4c;
-    font-size: 17px;
-    margin-bottom: 1.875rem;
+    color: var(--theme-ordinary-color);
+    font-size: 15px;
+    margin-bottom: 28px;
     text-align: center;
 }
+
+/* Forgot / don't have account links */
 .login-wrapper .loginbox .login-right .forgotpass a {
-	color: #a0a0a0;
+    color: var(--text-light-color);
+    font-size: 13px;
+    transition: color 0.2s ease;
 }
 .login-wrapper .loginbox .login-right .forgotpass a:hover {
-	color: #333;
-	text-decoration: underline;
+    color: var(--theme-primary-color);
+    text-decoration: none;
 }
 .login-wrapper .loginbox .login-right .dont-have {
-	color: #a0a0a0;
-	margin-top: 1.875rem;
+    color: var(--theme-ordinary-color);
+    margin-top: 24px;
+    font-size: 14px;
+    text-align: center;
 }
 .login-wrapper .loginbox .login-right .dont-have a {
-	color: #333;
+    color: var(--theme-primary-color);
+    font-weight: 600;
 }
 .login-wrapper .loginbox .login-right .dont-have a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
+
+/* Social login */
 .social-login {
-	text-align: center;
+    text-align: center;
 }
 .social-login > span {
-	color: #a0a0a0;
-	margin-right: 8px;
+    color: var(--text-light-color);
+    margin-right: 8px;
+    font-size: 13px;
 }
 .social-login > a {
-	background-color: #ccc;
-	border-radius: 4px;
-	color: #fff;
-	display: inline-block;
-	font-size: 18px;
-	height: 32px;
-	line-height: 32px;
-	margin-right: 6px;
-	text-align: center;
-	width: 32px;
+    background-color: var(--theme-light-color);
+    border-radius: 8px;
+    color: var(--theme-secondary-color);
+    display: inline-block;
+    font-size: 18px;
+    height: 36px;
+    line-height: 36px;
+    margin-right: 6px;
+    text-align: center;
+    width: 36px;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
-.social-login > a:last-child {
-	margin-right: 0;
+.social-login > a:hover {
+    transform: translateY(-2px);
 }
-.social-login > a.facebook {
-	background-color: #4b75bd;
-}
-.social-login > a.google {
-	background-color: #fe5240;
-}
+.social-login > a.facebook  { background-color: #e8edf7; color: #4b75bd; }
+.social-login > a.google    { background-color: #fdecea; color: #fe5240; }
+
+/* Login/Register divider */
 .login-or {
-	color: #a0a0a0;
-	margin-bottom: 20px;
-	margin-top: 20px;
-	padding-bottom: 10px;
-	padding-top: 10px;
-	position: relative;
+    color: var(--text-light-color);
+    margin: 20px 0;
+    padding: 10px 0;
+    position: relative;
+    text-align: center;
 }
 .or-line {
-	background-color: #e5e5e5;
-	height: 1px;
-	margin-bottom: 0;
-	margin-top: 0;
-	display: block;
+    background-color: rgba(15,23,42,0.08);
+    height: 1px;
+    display: block;
+    margin: 0;
 }
 .span-or {
-	background-color: #fff;
-	display: block;
-	left: 50%;
-	margin-left: -20px;
-	position: absolute;
-	text-align: center;
-	text-transform: uppercase;
-	top: 0;
-	width: 42px;
+    background-color: var(--theme-white-color);
+    display: block;
+    left: 50%;
+    margin-left: -20px;
+    position: absolute;
+    text-align: center;
+    text-transform: uppercase;
+    top: 0;
+    width: 42px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-light-color);
+    letter-spacing: 0.05em;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    .login-wrapper .loginbox {
+        flex-direction: column;
+        max-width: 420px;
+    }
+    .login-wrapper .loginbox .login-left {
+        width: 100%;
+        padding: 40px 24px;
+        min-height: 160px;
+    }
+    .login-wrapper .loginbox .login-right {
+        width: 100%;
+        padding: 32px 24px;
+    }
 }

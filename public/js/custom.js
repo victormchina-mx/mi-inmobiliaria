@@ -749,5 +749,45 @@
 		
 	});
 
+    // FASE 3 — scroll suave del indicador hero
+    $(document).on('click', '.hero-scroll-indicator', function(e) {
+        e.preventDefault();
+        var target = $($(this).attr('href'));
+        if (target.length) {
+            $('html, body').animate({ scrollTop: target.offset().top - 80 }, 800, 'swing');
+        }
+    });
+
 })(jQuery);
+
+/* ================================================================
+   FASE 5 — Intersection Observer reveal system
+   ================================================================ */
+(function() {
+    var SELECTOR = '.reveal-up, .reveal-scale, .reveal-left, .reveal-right';
+
+    // Fallback for browsers without IntersectionObserver
+    if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll(SELECTOR).forEach(function(el) {
+            el.classList.add('is-visible');
+        });
+        return;
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.10,
+        rootMargin: '0px 0px -48px 0px'
+    });
+
+    document.querySelectorAll(SELECTOR).forEach(function(el) {
+        observer.observe(el);
+    });
+})();
 

@@ -2,14 +2,14 @@
 <?= $this->section('content') ?>
 
 <!-- Banner -->
-<div class="overlay-black w-100 slider-banner1 position-relative"
+<div id="hero-section" class="overlay-black w-100 slider-banner1 position-relative"
      style="background-image: url('<?= base_url('images/banner/rshmpg.jpg') ?>'); background-size: cover; background-position: center center;">
     <div class="container h-100">
         <div class="row h-100 align-items-center">
-            <div class="col-lg-12">
+            <div class="col-lg-10 col-xl-8">
                 <div class="text-white">
-                    <h1 class="mb-4"><span class="text-success">Déjanos</span><br>Guiarte a tu Hogar</h1>
-                    <form method="post" action="<?= site_url('property/grid') ?>">
+                    <h1 id="hero-headline" class="mb-4"><span class="text-success">Déjanos</span><br>Guiarte a tu Hogar</h1>
+                    <form id="hero-form" method="post" action="<?= site_url('property/grid') ?>">
                         <?= csrf_field() ?>
                         <div class="row">
                             <div class="col-md-6 col-lg-2">
@@ -36,7 +36,7 @@
                             </div>
                             <div class="col-md-8 col-lg-6">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="city" placeholder="Ciudad...">
+                                    <input type="text" class="form-control" name="city" placeholder="Ciudad, colonia...">
                                 </div>
                             </div>
                             <div class="col-md-4 col-lg-2">
@@ -48,36 +48,43 @@
             </div>
         </div>
     </div>
+    <a href="#servicios" class="hero-scroll-indicator" aria-label="Scroll hacia abajo">
+        <i class="fas fa-chevron-down"></i>
+    </a>
 </div>
 
 <!-- Servicios -->
-<div class="full-row bg-gray">
+<div id="servicios" class="full-row bg-gray">
     <div class="container">
-        <div class="row"><div class="col-lg-12"><h2 class="text-secondary double-down-line text-center mb-5">Lo que Hacemos</h2></div></div>
+        <div class="row">
+            <div class="col-lg-12 reveal-up">
+                <h2 class="text-secondary double-down-line text-center mb-5">Lo que Hacemos</h2>
+            </div>
+        </div>
         <div class="text-box-one">
             <div class="row">
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6 reveal-up reveal-delay-1">
                     <div class="p-4 text-center hover-bg-white hover-shadow rounded mb-4 transation-3s">
                         <i class="flaticon-rent text-success flat-medium"></i>
                         <h5 class="text-secondary py-3 m-0">Servicio de Venta</h5>
                         <p>Te ayudamos a vender tu propiedad al mejor precio del mercado.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6 reveal-up reveal-delay-2">
                     <div class="p-4 text-center hover-bg-white hover-shadow rounded mb-4 transation-3s">
                         <i class="flaticon-for-rent text-success flat-medium"></i>
                         <h5 class="text-secondary py-3 m-0">Servicio de Renta</h5>
                         <p>Encuentra o publica propiedades en renta con facilidad.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6 reveal-up reveal-delay-3">
                     <div class="p-4 text-center hover-bg-white hover-shadow rounded mb-4 transation-3s">
                         <i class="flaticon-list text-success flat-medium"></i>
                         <h5 class="text-secondary py-3 m-0">Listado de Propiedades</h5>
                         <p>Catálogo completo de propiedades disponibles.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6 reveal-up reveal-delay-4">
                     <div class="p-4 text-center hover-bg-white hover-shadow rounded mb-4 transation-3s">
                         <i class="flaticon-diagram text-success flat-medium"></i>
                         <h5 class="text-secondary py-3 m-0">Inversión Legal</h5>
@@ -93,11 +100,13 @@
 <div class="full-row">
     <div class="container">
         <div class="row">
-            <div class="col-md-12"><h2 class="text-secondary double-down-line text-center mb-4">Propiedades Recientes</h2></div>
+            <div class="col-md-12 reveal-up">
+                <h2 class="text-secondary double-down-line text-center mb-4">Propiedades Recientes</h2>
+            </div>
             <div class="col-md-12">
                 <div class="row">
                     <?php foreach ($properties as $p): ?>
-                    <div class="col-md-6 col-lg-4">
+                    <div class="col-md-6 col-lg-4 reveal-scale">
                         <div class="featured-thumb hover-zoomer mb-4">
                             <div class="overlay-black overflow-hidden position-relative">
                                 <img src="<?= base_url('uploads/property/' . esc($p['pimage'])) ?>" alt="<?= esc($p['title']) ?>">
@@ -145,17 +154,17 @@
         <div class="row">
             <div class="col-md-12 col-lg-6">
                 <div class="living-list pr-4">
-                    <h3 class="pb-4 mb-3 text-white">Por Qué Elegirnos</h3>
+                    <h3 class="pb-4 mb-3 text-white reveal-up">Por Qué Elegirnos</h3>
                     <ul>
-                        <li class="mb-4 text-white d-flex">
+                        <li class="mb-4 text-white d-flex reveal-left reveal-delay-1">
                             <i class="flaticon-reward flat-medium float-left d-table mr-4 text-success"></i>
                             <div class="pl-2"><h5 class="mb-3">Los Mejor Calificados</h5><p>Años de experiencia avalados por cientos de clientes satisfechos.</p></div>
                         </li>
-                        <li class="mb-4 text-white d-flex">
+                        <li class="mb-4 text-white d-flex reveal-left reveal-delay-2">
                             <i class="flaticon-real-estate flat-medium float-left d-table mr-4 text-success"></i>
                             <div class="pl-2"><h5 class="mb-3">Calidad de Servicio</h5><p>Atención personalizada en cada etapa de tu proceso.</p></div>
                         </li>
-                        <li class="mb-4 text-white d-flex">
+                        <li class="mb-4 text-white d-flex reveal-left reveal-delay-3">
                             <i class="flaticon-seller flat-medium float-left d-table mr-4 text-success"></i>
                             <div class="pl-2"><h5 class="mb-3">Agentes Experimentados</h5><p>Nuestros agentes conocen el mercado y trabajan para ti.</p></div>
                         </li>
@@ -209,7 +218,7 @@
 <div class="full-row">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12 reveal-up">
                 <div class="content-sidebar p-4">
                     <div class="mb-3 col-lg-12">
                         <h4 class="double-down-line-left text-secondary position-relative pb-4 mb-4">Testimonios</h4>

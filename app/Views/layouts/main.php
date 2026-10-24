@@ -6,8 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="shortcut icon" type="image/png" href="/favicon.ico">
 <link rel="shortcut icon" href="<?= base_url('images/favicon.ico') ?>">
-<link href="https://fonts.googleapis.com/css?family=Muli:400,400i,500,600,700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Comfortaa:400,700" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
 <link rel="stylesheet" href="<?= base_url('css/bootstrap-slider.css') ?>">
 <link rel="stylesheet" href="<?= base_url('css/jquery-ui.css') ?>">
@@ -88,7 +89,7 @@
                                         <li class="nav-item"><a class="nav-link" href="<?= site_url('login') ?>">Login / Registro</a></li>
                                         <?php endif ?>
                                     </ul>
-                                    <a class="btn btn-success d-none d-xl-block" style="border-radius:30px;" href="<?= site_url('my-properties/add') ?>">Publicar Propiedad</a>
+                                    <a class="btn btn-success btn-pulse d-none d-xl-block" href="<?= site_url('my-properties/add') ?>">Publicar Propiedad</a>
                                    <!-- <button class="btn btn-primary d-none d-xl-block ml-2" style="border-radius:30px;" data-toggle="modal" data-target="#modalCrearAdmin">Crear Admin</button>
                                     <a class="btn btn-secondary d-none d-xl-block ml-2" style="border-radius:30px;" href="<?// = site_url('admin/dashboard') ?>">Panel Admin</a> -->
                                 </div>
@@ -111,7 +112,7 @@
         <?= $this->renderSection('content') ?>
 
         <!-- Footer -->
-        <footer class="full-row bg-secondary p-0">
+        <footer class="full-row bg-secondary p-0 reveal-up">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
