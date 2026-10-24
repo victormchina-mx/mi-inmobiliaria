@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Models\CityModel;
 use App\Models\PropertyModel;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\RedirectResponse;
@@ -26,12 +27,11 @@ class Property extends BaseController
 
     public function create(): string
     {
-        $userModel = new UserModel();
-
         return view('admin/property/form', [
             'pageTitle' => 'Agregar Propiedad',
             'property'  => null,
-            'users'     => $userModel->findAll(),
+            'users'     => (new UserModel())->findAll(),
+            'cities'    => (new CityModel())->withState()->orderBy('state.sname', 'ASC')->orderBy('city.cname', 'ASC')->findAll(),
         ]);
     }
 
@@ -50,12 +50,11 @@ class Property extends BaseController
 
     public function edit(int $pid): string
     {
-        $userModel = new UserModel();
-
         return view('admin/property/form', [
             'pageTitle' => 'Editar Propiedad',
             'property'  => $this->propertyModel->find($pid),
-            'users'     => $userModel->findAll(),
+            'users'     => (new UserModel())->findAll(),
+            'cities'    => (new CityModel())->withState()->orderBy('state.sname', 'ASC')->orderBy('city.cname', 'ASC')->findAll(),
         ]);
     }
 
