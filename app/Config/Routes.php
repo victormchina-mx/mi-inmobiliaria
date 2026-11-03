@@ -60,7 +60,6 @@ $routes->get('admin', 'Admin\Dashboard::index');
 $routes->get('admin/login', 'Admin\Auth::login');
 $routes->post('admin/login', 'Admin\Auth::doLogin');
 $routes->get('admin/logout', 'Admin\Auth::logout');
-$routes->post('admin/register', 'Admin\Register::create');
 $routes->get('admin/forgot-password', 'Admin\Auth::forgotPassword');
 $routes->post('admin/forgot-password', 'Admin\Auth::sendResetLink');
 $routes->get('admin/reset-password/(:hash)', 'Admin\Auth::resetPassword/$1');

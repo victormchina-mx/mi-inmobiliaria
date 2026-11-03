@@ -99,8 +99,6 @@
                                         <?php endif ?>
                                     </ul>
                                     <a class="btn btn-success btn-pulse d-none d-xl-block" href="<?= site_url('my-properties/add') ?>">Publicar Propiedad</a>
-                                   <!-- <button class="btn btn-primary d-none d-xl-block ml-2" style="border-radius:30px;" data-toggle="modal" data-target="#modalCrearAdmin">Crear Admin</button>
-                                    <a class="btn btn-secondary d-none d-xl-block ml-2" style="border-radius:30px;" href="<?// = site_url('admin/dashboard') ?>">Panel Admin</a> -->
                                 </div>
                             </nav>
                         </div>
@@ -199,49 +197,6 @@
     </div>
 </div>
 
-<!-- Modal Crear Admin -->
-<div class="modal fade" id="modalCrearAdmin" tabindex="-1" role="dialog" aria-labelledby="modalCrearAdminLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalCrearAdminLabel">Crear Administrador</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form method="post" action="<?= site_url('admin/register') ?>">
-                <?= csrf_field() ?>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Usuario *</label>
-                        <input type="text" name="auser" class="form-control" required maxlength="50">
-                    </div>
-                    <div class="form-group">
-                        <label>Email *</label>
-                        <input type="email" name="aemail" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Contraseña * (mín. 6 caracteres)</label>
-                        <input type="password" name="apass" class="form-control" required minlength="6">
-                    </div>
-                    <div class="form-group">
-                        <label>Teléfono</label>
-                        <input type="text" name="aphone" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Fecha de Nacimiento</label>
-                        <input type="date" name="adob" class="form-control">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar Admin</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- /Modal Crear Admin -->
 
 <script src="<?= base_url('js/jquery.min.js') ?>"></script>
 <script src="<?= base_url('js/popper.min.js') ?>"></script>
