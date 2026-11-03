@@ -3846,6 +3846,13 @@ blockquote {
   border: 1px solid rgba(255, 255, 255, 0.08);
   transition: background 0.3s ease, transform 0.3s ease;
 }
+/* Las tarjetas usan .reveal-up: conservar el fade de entrada además del hover */
+.fact-counter .count.reveal-up {
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.3s ease;
+}
 .fact-counter .count:hover {
   background: rgba(255, 255, 255, 0.09);
   transform: translateY(-4px);

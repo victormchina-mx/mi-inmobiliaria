@@ -355,43 +355,46 @@
 	  
 	});
  
-	// Fact Counter For Achivement Counting
-	function factCounter() {
-	  if($('.fact-counter').length){
-	   $('.fact-counter .count.animated').each(function() {
-	  
-		var $t = $(this),
-		 n = $t.find(".count-num").attr("data-stop"),
-		 r = parseInt($t.find(".count-num").attr("data-speed"), 10);
-		 
-		if (!$t.hasClass("counted")) {
-		 $t.addClass("counted");
-		 $({
-		  countNum: $t.find(".count-text").text()
-		 }).animate({
-		  countNum: n
-		 }, {
-		  duration: r,
-		  easing: "linear",
-		  step: function() {
-		   $t.find(".count-num").text(Math.floor(this.countNum));
-		  },
-		  complete: function() {
-		   $t.find(".count-num").text(this.countNum);
-		  }
-		 });
-		}
-		
-		//set skill building height
-		 var size = $(this).children('.progress-bar').attr('aria-valuenow');
-		 $(this).children('.progress-bar').css('width', size+'%');
+	// Fact Counter: anima cada número UNA sola vez, cuando la sección
+	// entra en pantalla. Antes se ejecutaba en cada evento de scroll.
+	function initFactCounter() {
+		var nums = document.querySelectorAll('.fact-counter .count-num');
+		if (!nums.length) { return; }
 
-		
-	   });
-	  }
+		var reduceMotion = window.matchMedia &&
+			window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		function run(el) {
+			var target = parseInt(el.getAttribute('data-stop'), 10) || 0;
+			if (reduceMotion || target === 0) { el.textContent = target; return; }
+			var duration = 1500, start = null;
+			el.textContent = '0';
+			function step(ts) {
+				if (start === null) { start = ts; }
+				var t = Math.min((ts - start) / duration, 1);
+				var eased = 1 - Math.pow(1 - t, 3); // ease-out
+				el.textContent = Math.round(eased * target);
+				if (t < 1) { window.requestAnimationFrame(step); }
+			}
+			window.requestAnimationFrame(step);
+		}
+
+		if (!('IntersectionObserver' in window)) { return; } // deja el número final del servidor
+
+		var io = new IntersectionObserver(function(entries) {
+			entries.forEach(function(entry) {
+				if (entry.isIntersecting) {
+					io.unobserve(entry.target);
+					run(entry.target);
+				}
+			});
+		}, { threshold: 0.4 });
+
+		nums.forEach(function(el) { io.observe(el); });
 	}
-	
-	
+	initFactCounter();
+
+
 	// Elements Animation
 	if($('.wow').length){
 		var wow = new WOW(
@@ -408,13 +411,10 @@
 
 
     // When document is Scrollig, do
+	// No llamar wow.init() aquí: reinicia WOW.js y hace que todos los
+	// elementos .wow desaparezcan y vuelvan a animarse en cada scroll.
 	$window.on('scroll', function() {
-		factCounter();
 		headerStyle();
-		// Re-check for .wow elements entering the viewport. wow.js's own
-		// scroll listener doesn't reliably fire in all environments, so we
-		// nudge it from the scroll handler that's already running here.
-		if (typeof wow !== 'undefined') { wow.init(); }
 	});
 
 	// Youtube and Vimeo video popup control

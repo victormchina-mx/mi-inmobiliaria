@@ -182,28 +182,28 @@
         <div class="fact-counter">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="count wow fadeInUp text-center mb-sm-50" data-wow-delay="0s">
+                    <div class="count reveal-up text-center mb-sm-50">
                         <i class="flaticon-house flat-large text-white"></i>
                         <div class="count-num text-success my-4" data-speed="3000" data-stop="<?= $totalProps ?>"><?= $totalProps ?></div>
                         <div class="text-white h5">Propiedades Disponibles</div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="count wow fadeInUp text-center mb-sm-50" data-wow-delay="0.1s">
+                    <div class="count reveal-up reveal-delay-1 text-center mb-sm-50">
                         <i class="flaticon-house flat-large text-white"></i>
                         <div class="count-num text-success my-4" data-speed="3000" data-stop="<?= $saleProps ?>"><?= $saleProps ?></div>
                         <div class="text-white h5">En Venta</div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="count wow fadeInUp text-center mb-sm-50" data-wow-delay="0.2s">
+                    <div class="count reveal-up reveal-delay-2 text-center mb-sm-50">
                         <i class="flaticon-house flat-large text-white"></i>
                         <div class="count-num text-success my-4" data-speed="3000" data-stop="<?= $rentProps ?>"><?= $rentProps ?></div>
                         <div class="text-white h5">En Renta</div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="count wow fadeInUp text-center mb-sm-50" data-wow-delay="0.3s">
+                    <div class="count reveal-up reveal-delay-3 text-center mb-sm-50">
                         <i class="flaticon-man flat-large text-white"></i>
                         <div class="count-num text-success my-4" data-speed="3000" data-stop="<?= $totalUsers ?>"><?= $totalUsers ?></div>
                         <div class="text-white h5">Usuarios Registrados</div>
