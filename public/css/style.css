@@ -3391,9 +3391,12 @@ blockquote {
    ================================================================ */
 
 /* ---- Keyframes ---- */
+/* Ken Burns con transform: la foto siempre cubre todo (cover) y solo se
+   escala la capa. Antes se animaba background-size en %, que solo fija el
+   ancho y dejaba franjas grises arriba/abajo en pantallas verticales. */
 @keyframes heroBgKenBurns {
-  0%   { background-size: 105%; background-position: 50% 40%; }
-  100% { background-size: 115%; background-position: 53% 45%; }
+  0%   { transform: scale(1.05) translate(0, 0); }
+  100% { transform: scale(1.15) translate(-1.5%, -1%); }
 }
 @keyframes heroFadeUp {
   from { opacity: 0; transform: translateY(44px); }
@@ -3416,9 +3419,29 @@ blockquote {
 .slider-banner1 {
   height: 100vh !important;
   min-height: 600px;
-  animation: heroBgKenBurns 14s ease-in-out infinite alternate;
+  background-size: cover !important;
+  background-position: center center;
   background-repeat: no-repeat;
   overflow: hidden;
+  isolation: isolate;
+}
+
+/* Capa con la misma foto que hace el zoom lento (debajo del degradado) */
+.slider-banner1::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  transform-origin: center center;
+  will-change: transform;
+  animation: heroBgKenBurns 14s ease-in-out infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .slider-banner1::after { animation: none; }
 }
 
 /* Gradient overlay — replaces flat black */
