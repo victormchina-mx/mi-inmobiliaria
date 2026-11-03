@@ -126,123 +126,130 @@
 	
 	
 	// LayerSlider Settings
-	$('#image-slider').layerSlider({
-		sliderVersion: '6.0.0',
-		type: 'fullwidth',
-		responsiveUnder: 0,
-		layersContainer: 1200,
-		maxRatio: 1,
-		parallaxScrollReverse: true,
-		hideUnder: 0,
-		hideOver: 100000,
-		skin: 'v5',
-		showBarTimer: true,
-		thumbnailNavigation: 'disabled',
-		allowRestartOnResize: true,
-		skinsPath: 'skins/',
-		height: 900
-	});
-	
-	$('#image-slider-2').layerSlider({
-		sliderVersion: '6.0.0',
-		type: 'fullwidth',
-		responsiveUnder: 0,
-		layersContainer: 1200,
-		maxRatio: 1,
-		parallaxScrollReverse: true,
-		hideUnder: 0,
-		hideOver: 100000,
-		skin: 'v5',
-		showBarTimer: false,
-		thumbnailNavigation: 'disabled',
-		allowRestartOnResize: true,
-		skinsPath: 'skins/',
-		height: 800
-	});
-	
-	$('#gastronomy-slider').layerSlider({
-		sliderVersion: '6.2.2',
-		pauseOnHover: 'enable',
-		skin: 'numbers',
-		globalBGSize: 'cover',
-		navStartStop: false,
-		navButtons: false,
-		showCircleTimer: false,
-		skinsPath: 'skins/'
-	});
-	
-	$('#home5-slider').layerSlider({
-		sliderVersion: '6.2.1',
-		pauseOnHover: 'enable',
-		type: 'Responsive',
-		responsiveUnder: 0,
-		fullSizeMode: 'normal',
-		maxRatio: 1,
-		parallaxScrollReverse: true,
-		hideUnder: 0,
-		hideOver: 100000,
-		skin: 'v5',
-		showBarTimer: false,
-		showCircleTimer: false,
-		navStartStop: false,
-		navButtons: false,
-		thumbnailNavigation: 'disabled',
-		allowRestartOnResize: true,
-		skinsPath: 'skins/',
-		height: 800
-	});
-	
-	$('#single-property').layerSlider({
-		sliderVersion: '6.5.0b2',
-		type: 'popup',
-		pauseOnHover: 'disabled',
-		skin: 'photogallery',
-		globalBGSize: 'cover',
-		navStartStop: false,
-		hoverBottomNav: true,
-		showCircleTimer: false,
-		thumbnailNavigation: 'always',
-		tnContainerWidth: '100%',
-		tnHeight: 70,
-		popupShowOnTimeout: 1,
-		popupShowOnce: false,
-		popupCloseButtonStyle: 'background: rgba(0,0,0,.5); border-radius: 2px; border: 0; left: auto; right: 10px;',
-		popupResetOnClose: 'disabled',
-		popupDistanceLeft: 20,
-		popupDistanceRight: 20,
-		popupDistanceTop: 20,
-		popupDistanceBottom: 20,
-		popupDurationIn: 750,
-		popupDelayIn: 500,
-		popupTransitionIn: 'scalefromtop',
-		popupTransitionOut: 'scaletobottom',
-		skinsPath: 'skins/'
-	});
-	
-	$('#single-property-2').layerSlider({
-		sliderVersion: '6.0.0',
-		responsiveUnder: 0,
-		layersContainer: 0,
-		slideBGSize: 'auto',
-		skin: 'v5',
-		thumbnailNavigation: 'always',
-		skinsPath: 'skins/'
-	});
-	
-	$('#dynamic-slider').layerSlider({
-			sliderVersion: '6.5.0b1',
+	// Guarded: LayerSlider's JS only loads on pages that actually use it
+	// (the property detail gallery). Calling the plugin where it isn't
+	// loaded used to throw here and silently abort the rest of this file.
+	// jQuery itself already no-ops each call below on a selector that
+	// matches nothing, so one outer check covers all seven sliders.
+	if (typeof $.fn.layerSlider === 'function') {
+		$('#image-slider').layerSlider({
+			sliderVersion: '6.0.0',
 			type: 'fullwidth',
-			allowFullscreen: false,
-			pauseOnHover: 'enable',
+			responsiveUnder: 0,
+			layersContainer: 1200,
 			maxRatio: 1,
-			autoStart: true,
-			skin: 'v6',
+			parallaxScrollReverse: true,
+			hideUnder: 0,
+			hideOver: 100000,
+			skin: 'v5',
+			showBarTimer: true,
+			thumbnailNavigation: 'disabled',
+			allowRestartOnResize: true,
+			skinsPath: 'skins/',
+			height: 900
+		});
+
+		$('#image-slider-2').layerSlider({
+			sliderVersion: '6.0.0',
+			type: 'fullwidth',
+			responsiveUnder: 0,
+			layersContainer: 1200,
+			maxRatio: 1,
+			parallaxScrollReverse: true,
+			hideUnder: 0,
+			hideOver: 100000,
+			skin: 'v5',
+			showBarTimer: false,
+			thumbnailNavigation: 'disabled',
+			allowRestartOnResize: true,
+			skinsPath: 'skins/',
+			height: 800
+		});
+
+		$('#gastronomy-slider').layerSlider({
+			sliderVersion: '6.2.2',
+			pauseOnHover: 'enable',
+			skin: 'numbers',
 			globalBGSize: 'cover',
 			navStartStop: false,
+			navButtons: false,
 			showCircleTimer: false,
-			thumbnailNavigation: 'disabled',
 			skinsPath: 'skins/'
 		});
+
+		$('#home5-slider').layerSlider({
+			sliderVersion: '6.2.1',
+			pauseOnHover: 'enable',
+			type: 'Responsive',
+			responsiveUnder: 0,
+			fullSizeMode: 'normal',
+			maxRatio: 1,
+			parallaxScrollReverse: true,
+			hideUnder: 0,
+			hideOver: 100000,
+			skin: 'v5',
+			showBarTimer: false,
+			showCircleTimer: false,
+			navStartStop: false,
+			navButtons: false,
+			thumbnailNavigation: 'disabled',
+			allowRestartOnResize: true,
+			skinsPath: 'skins/',
+			height: 800
+		});
+
+		$('#single-property').layerSlider({
+			sliderVersion: '6.5.0b2',
+			type: 'popup',
+			pauseOnHover: 'disabled',
+			skin: 'photogallery',
+			globalBGSize: 'cover',
+			navStartStop: false,
+			hoverBottomNav: true,
+			showCircleTimer: false,
+			thumbnailNavigation: 'always',
+			tnContainerWidth: '100%',
+			tnHeight: 70,
+			popupShowOnTimeout: 1,
+			popupShowOnce: false,
+			popupCloseButtonStyle: 'background: rgba(0,0,0,.5); border-radius: 2px; border: 0; left: auto; right: 10px;',
+			popupResetOnClose: 'disabled',
+			popupDistanceLeft: 20,
+			popupDistanceRight: 20,
+			popupDistanceTop: 20,
+			popupDistanceBottom: 20,
+			popupDurationIn: 750,
+			popupDelayIn: 500,
+			popupTransitionIn: 'scalefromtop',
+			popupTransitionOut: 'scaletobottom',
+			skinsPath: 'skins/'
+		});
+
+		$('#single-property-2').layerSlider({
+			sliderVersion: '6.0.0',
+			responsiveUnder: 0,
+			layersContainer: 0,
+			slideBGSize: 'auto',
+			skin: 'v5',
+			thumbnailNavigation: 'always',
+			skinsPath: 'skins/'
+		});
+
+		$('#dynamic-slider').layerSlider({
+				sliderVersion: '6.5.0b1',
+				type: 'fullwidth',
+				allowFullscreen: false,
+				pauseOnHover: 'enable',
+				maxRatio: 1,
+				autoStart: true,
+				skin: 'v6',
+				globalBGSize: 'cover',
+				navStartStop: false,
+				showCircleTimer: false,
+				thumbnailNavigation: 'disabled',
+				skinsPath: 'skins/'
+			});
+	}
 
 
 	//	Feature property
@@ -404,12 +411,18 @@
 	$window.on('scroll', function() {
 		factCounter();
 		headerStyle();
+		// Re-check for .wow elements entering the viewport. wow.js's own
+		// scroll listener doesn't reliably fire in all environments, so we
+		// nudge it from the scroll handler that's already running here.
+		if (typeof wow !== 'undefined') { wow.init(); }
 	});
 
 	// Youtube and Vimeo video popup control
 	jQuery(function(){
-		jQuery("a.video-popup").YouTubePopUp();
-		//jQuery("a.video-popup").YouTubePopUp( { autoplay: 0 } ); // Disable autoplay
+		if (typeof jQuery.fn.YouTubePopUp === 'function') {
+			jQuery("a.video-popup").YouTubePopUp();
+			//jQuery("a.video-popup").YouTubePopUp( { autoplay: 0 } ); // Disable autoplay
+		}
 	});
    
    
@@ -445,7 +458,10 @@
 	}
 
 	// 27. Contact Form Validation
-	if($contact.length){
+	// Guarded: the jquery.validate plugin this calls was never actually
+	// bundled in public/js, so this threw on every visit to the contact
+	// page and silently aborted the rest of this file from here on.
+	if($contact.length && typeof $.fn.validate === 'function'){
 		$contact.validate({  //#contact-form contact form id
 			rules: {
 				name: {

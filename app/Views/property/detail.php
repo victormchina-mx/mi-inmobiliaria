@@ -1,5 +1,60 @@
 <?= $this->extend('layouts/main') ?>
+
+<?= $this->section('styles') ?>
+<link rel="stylesheet" href="<?= base_url('css/layerslider.css') ?>">
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script src="<?= base_url('js/greensock.js') ?>"></script>
+<script src="<?= base_url('js/layerslider.transitions.js') ?>"></script>
+<script src="<?= base_url('js/layerslider.kreaturamedia.jquery.js') ?>"></script>
+<?= $this->endSection() ?>
+
 <?= $this->section('content') ?>
+
+<?php
+    $schemaImages = [];
+    foreach (['pimage', 'pimage1', 'pimage2', 'pimage3', 'pimage4'] as $img) {
+        if (! empty($property[$img])) {
+            $schemaImages[] = base_url('uploads/property/' . $property[$img]);
+        }
+    }
+
+    // Property descriptions are saved as rich text (TinyMCE) with no
+    // server-side sanitization, so render them through an allowlist here
+    // rather than trusting the stored HTML directly — otherwise anyone
+    // who can publish a listing could inject a stored XSS payload.
+    $safeDescription = strip_tags($property['pcontent'] ?? '', '<p><br><b><strong><i><em><u><ul><ol><li>');
+    $safeDescription = preg_replace('/\s(on\w+|style)\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $safeDescription);
+
+    $schema = [
+        '@context'    => 'https://schema.org',
+        '@type'       => 'RealEstateListing',
+        'name'        => $property['title'],
+        'description' => strip_tags($property['pcontent'] ?? ''),
+        'url'         => current_url(),
+        'image'       => $schemaImages,
+        'address'     => [
+            '@type'           => 'PostalAddress',
+            'streetAddress'   => $property['location'] ?? '',
+            'addressLocality' => $property['city'] ?? '',
+            'addressRegion'   => $property['state'] ?? '',
+        ],
+        'offers' => [
+            '@type'        => 'Offer',
+            'price'        => $property['price'] ?? '',
+            'priceCurrency'=> 'MXN',
+            'availability' => 'https://schema.org/InStock',
+        ],
+        'numberOfRooms' => $property['bedroom'] ?? '',
+        'floorSize' => [
+            '@type'    => 'QuantitativeValue',
+            'value'    => $property['size'] ?? '',
+            'unitCode' => 'MTK',
+        ],
+    ];
+?>
+<script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
 
 <div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.jpg') ?>');">
     <div class="container">
@@ -66,8 +121,10 @@
                         </ul>
                     </div>
 
+                    <?php if (trim(strip_tags($safeDescription)) !== ''): ?>
                     <h4 class="text-secondary my-4">Descripción</h4>
-                    <p><?= $property['pcontent'] ?></p>
+                    <div><?= $safeDescription ?></div>
+                    <?php endif; ?>
 
                     <h5 class="mt-5 mb-4 text-secondary">Resumen de la Propiedad</h5>
                     <div class="table-striped font-14 pb-2">
@@ -155,7 +212,7 @@
                         <div class="input-group-prepend"><div class="input-group-text">%</div></div>
                         <input type="number" step="0.01" class="form-control" name="interest" placeholder="Tasa de interés">
                     </div>
-                    <button type="submit" class="btn btn-danger mt-4">Calcular Cuota</button>
+                    <button type="submit" class="btn btn-primary mt-4">Calcular Cuota</button>
                 </form>
 
                 <?php if (! empty($featured)): ?>

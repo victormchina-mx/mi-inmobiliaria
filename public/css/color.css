@@ -3,7 +3,7 @@
 ==================================*/
 :root {
   /* Core palette */
-  --theme-primary-color:          #00C896;
+  --theme-primary-color:          #C9A96E;
   --theme-secondary-color:        #0F172A;
   --theme-ordinary-color:         #4B5563;
   --theme-white-color:            #FAFAF8;
@@ -15,10 +15,11 @@
 
   /* Accent & premium */
   --theme-gold-color:             #C9A96E;
+  --theme-terracota-color:        #B56B45;
   --theme-teal-alt:               #0891B2;
 
   /* Opacity variants */
-  --theme-primary-opacity-color:  rgba(0, 200, 150, 0.80);
+  --theme-primary-opacity-color:  rgba(201, 169, 110, 0.80);
   --theme-secondary-opacity-color:rgba(15, 23, 42, 0.72);
   --theme-white-opacity-color:    rgba(250, 250, 248, 0.30);
   --theme-dark-opacity-color:     rgba(0, 0, 0, 0.50);
@@ -28,13 +29,13 @@
   --theme-glass-border:           rgba(250, 250, 248, 0.15);
 
   /* Gradients */
-  --theme-gradient-primary:       linear-gradient(135deg, #00C896 0%, #0891B2 100%);
+  --theme-gradient-primary:       linear-gradient(135deg, #C9A96E 0%, #B56B45 100%);
   --theme-gradient-dark:          linear-gradient(160deg, #0F172A 0%, #1a2744 100%);
 
   /* Shadows */
   --theme-shadow-card:            0 4px 24px rgba(15, 23, 42, 0.10);
   --theme-shadow-hover:           0 12px 40px rgba(15, 23, 42, 0.18);
-  --theme-shadow-glow:            0 0 0 3px rgba(0, 200, 150, 0.25);
+  --theme-shadow-glow:            0 0 0 3px rgba(201, 169, 110, 0.25);
 
   /* Typography */
   --theme-ordinary-font:          'Plus Jakarta Sans', sans-serif;

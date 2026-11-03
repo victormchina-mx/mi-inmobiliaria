@@ -7,3 +7,10 @@ writable/uploads/*
 writable/debugbar/*
 public/uploads/
 *.DS_Store
+
+# Respaldos manuales y basura de macOS
+*.bak
+*.bak-*
+*_BackUp*
+*_BackUP*
+.DS_Store

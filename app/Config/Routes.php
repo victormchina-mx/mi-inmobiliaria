@@ -6,6 +6,7 @@ use CodeIgniter\Router\RouteCollection;
 
 // ─── Rutas públicas ──────────────────────────────────────────────────────────
 $routes->get('/', 'Home::index');
+$routes->get('sitemap.xml', 'Sitemap::index');
 $routes->get('property', 'Property::index');
 $routes->get('property/grid', 'Property::grid');
 $routes->post('property/grid', 'Property::grid');
@@ -40,6 +41,18 @@ $routes->group('', ['filter' => 'user-auth'], static function ($routes) {
     $routes->get('my-properties/edit/(:num)', 'User\MyProperty::edit/$1');
     $routes->post('my-properties/edit/(:num)', 'User\MyProperty::update/$1');
     $routes->get('my-properties/delete/(:num)', 'User\MyProperty::delete/$1');
+});
+
+// ─── API para la App Móvil ───────────────────────────────────────────────────
+$routes->post('api/v1/auth/login', 'Api\Auth::login');
+$routes->get('api/v1/lookups/cities', 'Api\Lookups::cities');
+
+$routes->group('api/v1', ['filter' => 'api-auth'], static function ($routes) {
+    $routes->get('me', 'Api\Auth::me');
+    $routes->get('my-properties', 'Api\Properties::mine');
+    $routes->get('properties/(:num)', 'Api\Properties::show/$1');
+    $routes->post('properties', 'Api\Properties::store');
+    $routes->post('properties/(:num)', 'Api\Properties::update/$1');
 });
 
 // ─── Panel de administración ──────────────────────────────────────────────────

@@ -6,11 +6,11 @@
 <style>
     body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
     .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 8px; overflow: hidden; }
-    .header { background-color: #28a745; padding: 30px; text-align: center; }
+    .header { background-color: #3c50e0; padding: 30px; text-align: center; }
     .header h1 { color: #ffffff; margin: 0; font-size: 22px; }
     .body { padding: 35px 40px; color: #333333; }
     .body p { line-height: 1.6; margin-bottom: 16px; }
-    .btn { display: inline-block; background-color: #28a745; color: #ffffff !important;
+    .btn { display: inline-block; background-color: #3c50e0; color: #ffffff !important;
            text-decoration: none; padding: 14px 32px; border-radius: 5px;
            font-size: 15px; font-weight: bold; margin: 10px 0; }
     .btn-wrap { text-align: center; margin: 24px 0; }
@@ -23,7 +23,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>Real Estate &mdash; Recuperación de Contraseña</h1>
+        <h1>Real Estate</h1>
     </div>
     <div class="body">
         <p>Hola, <strong><?= esc($userName) ?></strong>.</p>
@@ -38,7 +38,7 @@
         </div>
 
         <p style="margin-top:24px; font-size:13px; color:#777;">Si el botón no funciona, copia y pega este enlace en tu navegador:<br>
-        <a href="<?= esc($resetUrl) ?>" style="color:#28a745; word-break:break-all;"><?= esc($resetUrl) ?></a></p>
+        <a href="<?= esc($resetUrl) ?>" style="color:#3c50e0; word-break:break-all;"><?= esc($resetUrl) ?></a></p>
     </div>
     <div class="footer">
         &copy; <?= date('Y') ?> Real Estate &mdash; Correo generado automáticamente, no responder.

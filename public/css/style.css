@@ -1179,7 +1179,7 @@ blockquote {
   height: 1em;
   position: relative;
   top: 30px;
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--theme-ordinary-font);
 }
 .jslider table {
   width: 100%;
@@ -3210,14 +3210,14 @@ p {
   background: var(--theme-gradient-primary);
   border-color: transparent;
   color: #fff;
-  box-shadow: 0 4px 14px rgba(0, 200, 150, 0.30);
+  box-shadow: 0 4px 14px rgba(201, 169, 110, 0.30);
   position: relative;
   overflow: hidden;
 }
 .btn-success:hover,
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(0, 200, 150, 0.40);
+  box-shadow: 0 8px 22px rgba(201, 169, 110, 0.40);
   filter: none;
   color: #fff;
 }
@@ -3266,6 +3266,27 @@ p {
 .hover-shadow:hover {
   box-shadow: var(--theme-shadow-hover) !important;
   transform: translateY(-4px);
+}
+
+/* ---- Brand color override ----
+   The templates use Bootstrap's .text-success / .btn-success as the de facto
+   brand-accent utility across every page (headline, icons, prices, stats,
+   agent info) rather than Bootstrap's semantic "success" meaning. Route it
+   to the theme variable so the whole site follows the brand palette.
+   Genuine success messages (.alert-success) are left untouched above. */
+.text-success {
+  color: var(--theme-primary-color) !important;
+}
+.bg-success {
+  background-color: var(--theme-primary-color) !important;
+}
+.btn-outline-success {
+  color: var(--theme-primary-color) !important;
+  border-color: var(--theme-primary-color) !important;
+}
+.btn-outline-success:hover {
+  background-color: var(--theme-primary-color) !important;
+  color: #fff !important;
 }
 
 /* ---- New utility classes ---- */
@@ -3341,7 +3362,7 @@ blockquote {
   border: none;
 }
 .alert-success {
-  background-color: rgba(0, 200, 150, 0.12);
+  background-color: rgba(16, 185, 129, 0.12);
   color: #065f46;
 }
 .alert-danger {
@@ -3396,6 +3417,7 @@ blockquote {
   height: 100vh !important;
   min-height: 600px;
   animation: heroBgKenBurns 14s ease-in-out infinite alternate;
+  background-repeat: no-repeat;
   overflow: hidden;
 }
 
@@ -3405,7 +3427,7 @@ blockquote {
     135deg,
     rgba(15, 23, 42, 0.84) 0%,
     rgba(15, 23, 42, 0.58) 55%,
-    rgba(0, 200, 150, 0.10) 100%
+    rgba(201, 169, 110, 0.10) 100%
   );
   z-index: 0;
 }
@@ -3422,6 +3444,8 @@ blockquote {
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.08;
+  color: var(--theme-white-color);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
   animation: heroFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
 }
 
@@ -3449,7 +3473,7 @@ blockquote {
 #hero-form .form-control:focus {
   background: rgba(255, 255, 255, 0.20);
   border-color: var(--theme-primary-color);
-  box-shadow: 0 0 0 3px rgba(0, 200, 150, 0.20);
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.20);
   color: #fff;
 }
 #hero-form .form-control::placeholder { color: rgba(255,255,255,0.55); }
@@ -3618,7 +3642,7 @@ blockquote {
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  background: var(--theme-gold-color) !important;
+  background: var(--theme-terracota-color) !important;
   color: #fff !important;
   z-index: 99;
 }
@@ -3748,7 +3772,7 @@ blockquote {
 .text-box-one .p-4:hover {
   transform: translateY(-6px);
   box-shadow: var(--theme-shadow-hover) !important;
-  border-color: rgba(0, 200, 150, 0.18);
+  border-color: rgba(201, 169, 110, 0.18);
 }
 
 /* Icon circle */
@@ -3759,12 +3783,12 @@ blockquote {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: rgba(0, 200, 150, 0.10);
+  background: rgba(201, 169, 110, 0.10);
   margin-bottom: 4px;
   transition: transform 0.3s ease, background 0.3s ease;
 }
 .text-box-one .p-4:hover [class*="flaticon-"] {
-  background: rgba(0, 200, 150, 0.18);
+  background: rgba(201, 169, 110, 0.18);
   animation: iconPop 0.45s ease;
 }
 
@@ -3790,7 +3814,7 @@ blockquote {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: rgba(0, 200, 150, 0.15);
+  background: rgba(201, 169, 110, 0.15);
   margin-right: 20px !important;
 }
 .living-list ul li h5 {

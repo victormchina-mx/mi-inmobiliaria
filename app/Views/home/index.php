@@ -109,7 +109,7 @@
                     <div class="col-md-6 col-lg-4 reveal-scale">
                         <div class="featured-thumb hover-zoomer mb-4">
                             <div class="overlay-black overflow-hidden position-relative">
-                                <img src="<?= base_url('uploads/property/' . esc($p['pimage'])) ?>" alt="<?= esc($p['title']) ?>">
+                                <img src="<?= base_url('uploads/property/' . esc($p['pimage'])) ?>" alt="<?= esc($p['title']) ?>" loading="lazy">
                                 <div class="featured bg-success text-white">Nuevo</div>
                                 <div class="sale bg-success text-white text-capitalize">Para <?= esc($p['stype'] === 'sale' ? 'Venta' : 'Renta') ?></div>
                                 <div class="price text-primary"><b>$<?= number_format($p['price'], 0) ?></b> <span class="text-white"><?= esc($p['size']) ?> m²</span></div>
@@ -132,7 +132,7 @@
                                 </div>
                                 <div class="p-4 d-inline-block w-100">
                                     <div class="float-left text-capitalize"><i class="fas fa-user text-success mr-1"></i>Por: <?= esc($p['uname']) ?></div>
-                                    <div class="float-right"><i class="far fa-calendar-alt text-success mr-1"></i> <?= date('d-m-Y', strtotime($p['created_at'])) ?></div>
+                                    <div class="float-right"><i class="far fa-calendar-alt text-success mr-1"></i> <?= (! empty($p['created_at']) && strpos($p['created_at'], '0000-00-00') !== 0) ? date('d-m-Y', strtotime($p['created_at'])) : 'Reciente' ?></div>
                                 </div>
                             </div>
                         </div>
@@ -182,28 +182,28 @@
         <div class="fact-counter">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="count wow text-center mb-sm-50">
+                    <div class="count wow fadeInUp text-center mb-sm-50" data-wow-delay="0s">
                         <i class="flaticon-house flat-large text-white"></i>
                         <div class="count-num text-success my-4" data-speed="3000" data-stop="<?= $totalProps ?>"><?= $totalProps ?></div>
                         <div class="text-white h5">Propiedades Disponibles</div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="count wow text-center mb-sm-50">
+                    <div class="count wow fadeInUp text-center mb-sm-50" data-wow-delay="0.1s">
                         <i class="flaticon-house flat-large text-white"></i>
                         <div class="count-num text-success my-4" data-speed="3000" data-stop="<?= $saleProps ?>"><?= $saleProps ?></div>
                         <div class="text-white h5">En Venta</div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="count wow text-center mb-sm-50">
+                    <div class="count wow fadeInUp text-center mb-sm-50" data-wow-delay="0.2s">
                         <i class="flaticon-house flat-large text-white"></i>
                         <div class="count-num text-success my-4" data-speed="3000" data-stop="<?= $rentProps ?>"><?= $rentProps ?></div>
                         <div class="text-white h5">En Renta</div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="count wow text-center mb-sm-50">
+                    <div class="count wow fadeInUp text-center mb-sm-50" data-wow-delay="0.3s">
                         <i class="flaticon-man flat-large text-white"></i>
                         <div class="count-num text-success my-4" data-speed="3000" data-stop="<?= $totalUsers ?>"><?= $totalUsers ?></div>
                         <div class="text-white h5">Usuarios Registrados</div>

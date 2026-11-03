@@ -14,6 +14,7 @@ use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
 use App\Filters\UserAuthFilter;
 use App\Filters\AdminAuthFilter;
+use App\Filters\ApiAuthFilter;
 
 class Filters extends BaseFilters
 {
@@ -38,6 +39,7 @@ class Filters extends BaseFilters
         'performance'   => PerformanceMetrics::class,
         'user-auth'     => UserAuthFilter::class,
         'admin-auth'    => AdminAuthFilter::class,
+        'api-auth'      => ApiAuthFilter::class,
     ];
 
     /**

@@ -4,6 +4,15 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="<?= esc($metaDescription ?? 'Encuentra tu próxima propiedad en venta o renta: casas, departamentos y oficinas. Real Estate, tu aliado de confianza en bienes raíces.') ?>">
+<link rel="canonical" href="<?= current_url() ?>">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Real Estate">
+<meta property="og:title" content="<?= esc($pageTitle ?? 'Real Estate') ?>">
+<meta property="og:description" content="<?= esc($metaDescription ?? 'Encuentra tu próxima propiedad en venta o renta: casas, departamentos y oficinas.') ?>">
+<meta property="og:url" content="<?= current_url() ?>">
+<meta property="og:image" content="<?= $ogImage ?? base_url('images/banner/rshmpg.jpg') ?>">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="shortcut icon" type="image/png" href="/favicon.ico">
 <link rel="shortcut icon" href="<?= base_url('images/favicon.ico') ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,10 +21,10 @@
 <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
 <link rel="stylesheet" href="<?= base_url('css/bootstrap-slider.css') ?>">
 <link rel="stylesheet" href="<?= base_url('css/jquery-ui.css') ?>">
-<link rel="stylesheet" href="<?= base_url('css/layerslider.css') ?>">
 <link rel="stylesheet" href="<?= base_url('css/color.css') ?>" id="color-change">
 <link rel="stylesheet" href="<?= base_url('css/owl.carousel.min.css') ?>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 <link rel="stylesheet" href="<?= base_url('fonts/flaticon/flaticon.css') ?>">
 <link rel="stylesheet" href="<?= base_url('css/style.css') ?>">
 <?= $this->renderSection('styles') ?>
@@ -33,8 +42,8 @@
                     <div class="row">
                         <div class="col-md-8">
                             <ul class="top-contact list-text-white d-table">
-                                <li><a href="#"><i class="fas fa-phone-alt text-success mr-1"></i>+1 243-765-4321</a></li>
-                                <li><a href="#"><i class="fas fa-envelope text-success mr-1"></i>info@realestate.com</a></li>
+                                <li><a href="tel:+525576062384"><i class="fas fa-phone-alt text-success mr-1"></i>55 7606 2384</a></li>
+                                <li><a href="mailto:inmobiliaria.info@vmch.net"><i class="fas fa-envelope text-success mr-1"></i>inmobiliaria.info@vmch.net</a></li>
                             </ul>
                         </div>
                         <div class="col-md-4">
@@ -155,7 +164,7 @@
                                                 <ul class="text-white">
                                                     <li><i class="fas fa-map-marker-alt text-white mr-2"></i>27 Ingram Street, Dayton</li>
                                                     <li><i class="fas fa-phone-alt text-white mr-2"></i>55 7606 2384</li>
-                                                    <li><i class="fas fa-envelope text-white mr-2"></i>helpline@inmobiliaria.vmch.net</li>
+                                                    <li><i class="fas fa-envelope text-white mr-2"></i>inmobiliaria.info@vmch.net</li>
                                                 </ul>
                                                 <div class="footer-widget media-widget mt-4 text-white hover-text-primary">
                                                     <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -235,17 +244,15 @@
 <!-- /Modal Crear Admin -->
 
 <script src="<?= base_url('js/jquery.min.js') ?>"></script>
-<script src="<?= base_url('js/greensock.js') ?>"></script>
-<script src="<?= base_url('js/layerslider.transitions.js') ?>"></script>
-<script src="<?= base_url('js/layerslider.kreaturamedia.jquery.js') ?>"></script>
 <script src="<?= base_url('js/popper.min.js') ?>"></script>
 <script src="<?= base_url('js/bootstrap.min.js') ?>"></script>
 <script src="<?= base_url('js/owl.carousel.min.js') ?>"></script>
 <script src="<?= base_url('js/jquery.dependClass-0.1.js') ?>"></script>
 <script src="<?= base_url('js/draggable-0.1.js') ?>"></script>
+<script src="<?= base_url('js/tmpl.js') ?>"></script>
 <script src="<?= base_url('js/jquery.slider.js') ?>"></script>
 <script src="<?= base_url('js/wow.js') ?>"></script>
-<script src="<?= base_url('js/custom.js') ?>"></script>
 <?= $this->renderSection('scripts') ?>
+<script src="<?= base_url('js/custom.js') ?>"></script>
 </body>
 </html>

@@ -3,6 +3,7 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
+use App\Models\CityModel;
 use App\Models\PropertyModel;
 use CodeIgniter\HTTP\RedirectResponse;
 
@@ -28,6 +29,7 @@ class MyProperty extends BaseController
         return view('user/property_form', [
             'pageTitle' => 'Publicar Propiedad',
             'property'  => null,
+            'cities'    => (new CityModel())->withState()->orderBy('state.sname', 'ASC')->orderBy('city.cname', 'ASC')->findAll(),
         ]);
     }
 
@@ -44,28 +46,36 @@ class MyProperty extends BaseController
             return redirect()->back()->withInput()->with('error', implode(' ', $this->validator->getErrors()));
         }
 
+        $status       = $this->request->getPost('status');
+        $cancelReason = trim((string) $this->request->getPost('cancel_reason'));
+
+        if ($status === 'cancelled' && $cancelReason === '') {
+            return redirect()->back()->withInput()->with('error', 'Debes indicar el motivo de cancelación.');
+        }
+
         $images = $this->uploadPropertyImages();
 
         $this->propertyModel->insert([
             'title'          => $this->request->getPost('title'),
             'pcontent'       => $this->request->getPost('content'),
             'type'           => $this->request->getPost('ptype'),
-            'bhk'            => $this->request->getPost('bhk'),
+            'bhk'            => $this->request->getPost('bhk') ?? '',
             'stype'          => $this->request->getPost('stype'),
             'bedroom'        => (int) $this->request->getPost('bed'),
             'bathroom'       => (int) $this->request->getPost('bath'),
             'balcony'        => (int) $this->request->getPost('balc'),
             'kitchen'        => (int) $this->request->getPost('kitc'),
             'hall'           => (int) $this->request->getPost('hall'),
-            'floor'          => $this->request->getPost('floor'),
+            'floor'          => $this->request->getPost('floor') ?? '',
             'size'           => (int) $this->request->getPost('asize'),
             'price'          => (float) $this->request->getPost('price'),
             'location'       => $this->request->getPost('loc'),
             'city'           => $this->request->getPost('city'),
             'state'          => $this->request->getPost('state'),
             'feature'        => $this->request->getPost('feature'),
-            'totalfloor'     => $this->request->getPost('totalfl'),
-            'status'         => $this->request->getPost('status'),
+            'totalfloor'     => $this->request->getPost('totalfl') ?? '',
+            'status'         => $status,
+            'cancel_reason'  => $status === 'cancelled' ? $cancelReason : null,
             'isFeatured'     => (int) $this->request->getPost('isFeatured'),
             'uid'            => session()->get('uid'),
             'pimage'         => $images['pimage'],
@@ -92,6 +102,7 @@ class MyProperty extends BaseController
         return view('user/property_form', [
             'pageTitle' => 'Editar Propiedad',
             'property'  => $property,
+            'cities'    => (new CityModel())->withState()->orderBy('state.sname', 'ASC')->orderBy('city.cname', 'ASC')->findAll(),
         ]);
     }
 
@@ -114,28 +125,36 @@ class MyProperty extends BaseController
             return redirect()->back()->withInput()->with('error', implode(' ', $this->validator->getErrors()));
         }
 
+        $status       = $this->request->getPost('status');
+        $cancelReason = trim((string) $this->request->getPost('cancel_reason'));
+
+        if ($status === 'cancelled' && $cancelReason === '') {
+            return redirect()->back()->withInput()->with('error', 'Debes indicar el motivo de cancelación.');
+        }
+
         $images = $this->uploadPropertyImages($property);
 
         $this->propertyModel->update($pid, [
             'title'          => $this->request->getPost('title'),
             'pcontent'       => $this->request->getPost('content'),
             'type'           => $this->request->getPost('ptype'),
-            'bhk'            => $this->request->getPost('bhk'),
+            'bhk'            => $this->request->getPost('bhk') ?? '',
             'stype'          => $this->request->getPost('stype'),
             'bedroom'        => (int) $this->request->getPost('bed'),
             'bathroom'       => (int) $this->request->getPost('bath'),
             'balcony'        => (int) $this->request->getPost('balc'),
             'kitchen'        => (int) $this->request->getPost('kitc'),
             'hall'           => (int) $this->request->getPost('hall'),
-            'floor'          => $this->request->getPost('floor'),
+            'floor'          => $this->request->getPost('floor') ?? '',
             'size'           => (int) $this->request->getPost('asize'),
             'price'          => (float) $this->request->getPost('price'),
             'location'       => $this->request->getPost('loc'),
             'city'           => $this->request->getPost('city'),
             'state'          => $this->request->getPost('state'),
             'feature'        => $this->request->getPost('feature'),
-            'totalfloor'     => $this->request->getPost('totalfl'),
-            'status'         => $this->request->getPost('status'),
+            'totalfloor'     => $this->request->getPost('totalfl') ?? '',
+            'status'         => $status,
+            'cancel_reason'  => $status === 'cancelled' ? $cancelReason : null,
             'isFeatured'     => (int) $this->request->getPost('isFeatured'),
             'pimage'         => $images['pimage'],
             'pimage1'        => $images['pimage1'],

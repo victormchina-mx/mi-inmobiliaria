@@ -16,7 +16,7 @@ class PropertyModel extends Model
         'bedroom', 'bathroom', 'balcony', 'kitchen', 'hall',
         'floor', 'size', 'price', 'location', 'city', 'state',
         'feature', 'pimage', 'pimage1', 'pimage2', 'pimage3', 'pimage4',
-        'uid', 'status', 'mapimage', 'topmapimage', 'groundmapimage',
+        'uid', 'status', 'cancel_reason', 'mapimage', 'topmapimage', 'groundmapimage',
         'totalfloor', 'isFeatured',
     ];
 
@@ -35,10 +35,16 @@ class PropertyModel extends Model
                     ->join('user', 'user.uid = property.uid');
     }
 
-    /** Scope: solo propiedades destacadas */
+    /** Scope: solo propiedades destacadas (y visibles al público) */
     public function featured(): static
     {
-        return $this->where('property.isFeatured', 1);
+        return $this->where('property.isFeatured', 1)->where('property.status', 'available');
+    }
+
+    /** Scope: solo propiedades visibles al público (estado Disponible) */
+    public function available(): static
+    {
+        return $this->where('property.status', 'available');
     }
 
     /** Scope: propiedades de un usuario específico */
@@ -53,9 +59,11 @@ class PropertyModel extends Model
         return $this->where('property.state', $state);
     }
 
-    /** Filtro combinado de búsqueda (grid) */
+    /** Filtro combinado de búsqueda (grid) — solo propiedades visibles al público */
     public function applyFilters(array $filters): static
     {
+        $this->where('property.status', 'available');
+
         if (! empty($filters['type'])) {
             $this->where('property.type', $filters['type']);
         }
