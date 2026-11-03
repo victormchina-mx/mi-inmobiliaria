@@ -50,16 +50,11 @@
                             <div class="top-contact float-right">
                                 <ul class="list-text-white d-table">
                                     <?php if (session()->get('uemail')): ?>
-                                        <li><i class="fas fa-user text-success mr-1"></i>
-                                            <a href="<?= site_url('logout') ?>">Logout</a>
-                                        </li>
+                                        <li><a href="<?= site_url('profile') ?>"><i class="fas fa-user text-success mr-1"></i>Hola, <?= esc(session()->get('uname')) ?></a></li>
+                                        <li class="top-sep"><a href="<?= site_url('logout') ?>"><i class="fas fa-sign-out-alt text-success mr-1"></i>Cerrar sesión</a></li>
                                     <?php else: ?>
-                                        <li><i class="fas fa-user text-success mr-1"></i>
-                                            <a href="<?= site_url('login') ?>">Login</a>&nbsp;|&nbsp;
-                                        </li>
-                                        <li><i class="fas fa-user-plus text-success mr-1"></i>
-                                            <a href="<?= site_url('register') ?>">Register</a>
-                                        </li>
+                                        <li><a href="<?= site_url('login') ?>"><i class="fas fa-user text-success mr-1"></i>Iniciar sesión</a></li>
+                                        <li class="top-sep"><a href="<?= site_url('register') ?>"><i class="fas fa-user-plus text-success mr-1"></i>Registrarse</a></li>
                                     <?php endif ?>
                                 </ul>
                             </div>
@@ -95,7 +90,7 @@
                                             </ul>
                                         </li>
                                         <?php else: ?>
-                                        <li class="nav-item"><a class="nav-link" href="<?= site_url('login') ?>">Login / Registro</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="<?= site_url('login') ?>">Iniciar sesión</a></li>
                                         <?php endif ?>
                                     </ul>
                                     <a class="btn btn-success btn-pulse d-none d-xl-block" href="<?= site_url('my-properties/add') ?>">Publicar Propiedad</a>
