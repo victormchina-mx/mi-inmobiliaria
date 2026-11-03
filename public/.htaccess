@@ -47,3 +47,17 @@ Options -Indexes
 # Disable server signature start
 ServerSignature Off
 # Disable server signature end
+
+# ----------------------------------------------------------------------
+# Deny public access to leaked template/credential/backup files
+# (applies recursively to this directory and all subfolders)
+# ----------------------------------------------------------------------
+<FilesMatch "(?i)^01\s*LOGIN\s*DETAILS.*\.txt$|\.bak(-[0-9]+)?$">
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order allow,deny
+		Deny from all
+	</IfModule>
+</FilesMatch>

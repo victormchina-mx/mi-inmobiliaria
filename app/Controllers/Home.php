@@ -16,11 +16,11 @@ class Home extends BaseController
 
         $data = [
             'pageTitle'  => 'Inicio',
-            'properties' => $propertyModel->withOwner()->orderBy('created_at', 'DESC')->limit(9)->findAll(),
+            'properties' => $propertyModel->withOwner()->available()->orderBy('created_at', 'DESC')->limit(9)->findAll(),
             'feedback'   => $feedbackModel->active()->findAll(),
-            'totalProps' => $propertyModel->countAll(),
-            'saleProps'  => $propertyModel->where('stype', 'sale')->countAllResults(),
-            'rentProps'  => $propertyModel->where('stype', 'rent')->countAllResults(),
+            'totalProps' => $propertyModel->available()->countAllResults(),
+            'saleProps'  => $propertyModel->available()->where('stype', 'sale')->countAllResults(),
+            'rentProps'  => $propertyModel->available()->where('stype', 'rent')->countAllResults(),
             'totalUsers' => $userModel->countAll(),
             'popularCities' => ['Olisphis', 'Awrerton', 'Floson', 'Ulmore'],
         ];

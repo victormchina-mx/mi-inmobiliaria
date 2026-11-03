@@ -126,123 +126,130 @@
 	
 	
 	// LayerSlider Settings
-	$('#image-slider').layerSlider({
-		sliderVersion: '6.0.0',
-		type: 'fullwidth',
-		responsiveUnder: 0,
-		layersContainer: 1200,
-		maxRatio: 1,
-		parallaxScrollReverse: true,
-		hideUnder: 0,
-		hideOver: 100000,
-		skin: 'v5',
-		showBarTimer: true,
-		thumbnailNavigation: 'disabled',
-		allowRestartOnResize: true,
-		skinsPath: 'skins/',
-		height: 900
-	});
-	
-	$('#image-slider-2').layerSlider({
-		sliderVersion: '6.0.0',
-		type: 'fullwidth',
-		responsiveUnder: 0,
-		layersContainer: 1200,
-		maxRatio: 1,
-		parallaxScrollReverse: true,
-		hideUnder: 0,
-		hideOver: 100000,
-		skin: 'v5',
-		showBarTimer: false,
-		thumbnailNavigation: 'disabled',
-		allowRestartOnResize: true,
-		skinsPath: 'skins/',
-		height: 800
-	});
-	
-	$('#gastronomy-slider').layerSlider({
-		sliderVersion: '6.2.2',
-		pauseOnHover: 'enable',
-		skin: 'numbers',
-		globalBGSize: 'cover',
-		navStartStop: false,
-		navButtons: false,
-		showCircleTimer: false,
-		skinsPath: 'skins/'
-	});
-	
-	$('#home5-slider').layerSlider({
-		sliderVersion: '6.2.1',
-		pauseOnHover: 'enable',
-		type: 'Responsive',
-		responsiveUnder: 0,
-		fullSizeMode: 'normal',
-		maxRatio: 1,
-		parallaxScrollReverse: true,
-		hideUnder: 0,
-		hideOver: 100000,
-		skin: 'v5',
-		showBarTimer: false,
-		showCircleTimer: false,
-		navStartStop: false,
-		navButtons: false,
-		thumbnailNavigation: 'disabled',
-		allowRestartOnResize: true,
-		skinsPath: 'skins/',
-		height: 800
-	});
-	
-	$('#single-property').layerSlider({
-		sliderVersion: '6.5.0b2',
-		type: 'popup',
-		pauseOnHover: 'disabled',
-		skin: 'photogallery',
-		globalBGSize: 'cover',
-		navStartStop: false,
-		hoverBottomNav: true,
-		showCircleTimer: false,
-		thumbnailNavigation: 'always',
-		tnContainerWidth: '100%',
-		tnHeight: 70,
-		popupShowOnTimeout: 1,
-		popupShowOnce: false,
-		popupCloseButtonStyle: 'background: rgba(0,0,0,.5); border-radius: 2px; border: 0; left: auto; right: 10px;',
-		popupResetOnClose: 'disabled',
-		popupDistanceLeft: 20,
-		popupDistanceRight: 20,
-		popupDistanceTop: 20,
-		popupDistanceBottom: 20,
-		popupDurationIn: 750,
-		popupDelayIn: 500,
-		popupTransitionIn: 'scalefromtop',
-		popupTransitionOut: 'scaletobottom',
-		skinsPath: 'skins/'
-	});
-	
-	$('#single-property-2').layerSlider({
-		sliderVersion: '6.0.0',
-		responsiveUnder: 0,
-		layersContainer: 0,
-		slideBGSize: 'auto',
-		skin: 'v5',
-		thumbnailNavigation: 'always',
-		skinsPath: 'skins/'
-	});
-	
-	$('#dynamic-slider').layerSlider({
-			sliderVersion: '6.5.0b1',
+	// Guarded: LayerSlider's JS only loads on pages that actually use it
+	// (the property detail gallery). Calling the plugin where it isn't
+	// loaded used to throw here and silently abort the rest of this file.
+	// jQuery itself already no-ops each call below on a selector that
+	// matches nothing, so one outer check covers all seven sliders.
+	if (typeof $.fn.layerSlider === 'function') {
+		$('#image-slider').layerSlider({
+			sliderVersion: '6.0.0',
 			type: 'fullwidth',
-			allowFullscreen: false,
-			pauseOnHover: 'enable',
+			responsiveUnder: 0,
+			layersContainer: 1200,
 			maxRatio: 1,
-			autoStart: true,
-			skin: 'v6',
+			parallaxScrollReverse: true,
+			hideUnder: 0,
+			hideOver: 100000,
+			skin: 'v5',
+			showBarTimer: true,
+			thumbnailNavigation: 'disabled',
+			allowRestartOnResize: true,
+			skinsPath: 'skins/',
+			height: 900
+		});
+
+		$('#image-slider-2').layerSlider({
+			sliderVersion: '6.0.0',
+			type: 'fullwidth',
+			responsiveUnder: 0,
+			layersContainer: 1200,
+			maxRatio: 1,
+			parallaxScrollReverse: true,
+			hideUnder: 0,
+			hideOver: 100000,
+			skin: 'v5',
+			showBarTimer: false,
+			thumbnailNavigation: 'disabled',
+			allowRestartOnResize: true,
+			skinsPath: 'skins/',
+			height: 800
+		});
+
+		$('#gastronomy-slider').layerSlider({
+			sliderVersion: '6.2.2',
+			pauseOnHover: 'enable',
+			skin: 'numbers',
 			globalBGSize: 'cover',
 			navStartStop: false,
+			navButtons: false,
 			showCircleTimer: false,
-			thumbnailNavigation: 'disabled',
 			skinsPath: 'skins/'
 		});
+
+		$('#home5-slider').layerSlider({
+			sliderVersion: '6.2.1',
+			pauseOnHover: 'enable',
+			type: 'Responsive',
+			responsiveUnder: 0,
+			fullSizeMode: 'normal',
+			maxRatio: 1,
+			parallaxScrollReverse: true,
+			hideUnder: 0,
+			hideOver: 100000,
+			skin: 'v5',
+			showBarTimer: false,
+			showCircleTimer: false,
+			navStartStop: false,
+			navButtons: false,
+			thumbnailNavigation: 'disabled',
+			allowRestartOnResize: true,
+			skinsPath: 'skins/',
+			height: 800
+		});
+
+		$('#single-property').layerSlider({
+			sliderVersion: '6.5.0b2',
+			type: 'popup',
+			pauseOnHover: 'disabled',
+			skin: 'photogallery',
+			globalBGSize: 'cover',
+			navStartStop: false,
+			hoverBottomNav: true,
+			showCircleTimer: false,
+			thumbnailNavigation: 'always',
+			tnContainerWidth: '100%',
+			tnHeight: 70,
+			popupShowOnTimeout: 1,
+			popupShowOnce: false,
+			popupCloseButtonStyle: 'background: rgba(0,0,0,.5); border-radius: 2px; border: 0; left: auto; right: 10px;',
+			popupResetOnClose: 'disabled',
+			popupDistanceLeft: 20,
+			popupDistanceRight: 20,
+			popupDistanceTop: 20,
+			popupDistanceBottom: 20,
+			popupDurationIn: 750,
+			popupDelayIn: 500,
+			popupTransitionIn: 'scalefromtop',
+			popupTransitionOut: 'scaletobottom',
+			skinsPath: 'skins/'
+		});
+
+		$('#single-property-2').layerSlider({
+			sliderVersion: '6.0.0',
+			responsiveUnder: 0,
+			layersContainer: 0,
+			slideBGSize: 'auto',
+			skin: 'v5',
+			thumbnailNavigation: 'always',
+			skinsPath: 'skins/'
+		});
+
+		$('#dynamic-slider').layerSlider({
+				sliderVersion: '6.5.0b1',
+				type: 'fullwidth',
+				allowFullscreen: false,
+				pauseOnHover: 'enable',
+				maxRatio: 1,
+				autoStart: true,
+				skin: 'v6',
+				globalBGSize: 'cover',
+				navStartStop: false,
+				showCircleTimer: false,
+				thumbnailNavigation: 'disabled',
+				skinsPath: 'skins/'
+			});
+	}
 
 
 	//	Feature property
@@ -348,43 +355,46 @@
 	  
 	});
  
-	// Fact Counter For Achivement Counting
-	function factCounter() {
-	  if($('.fact-counter').length){
-	   $('.fact-counter .count.animated').each(function() {
-	  
-		var $t = $(this),
-		 n = $t.find(".count-num").attr("data-stop"),
-		 r = parseInt($t.find(".count-num").attr("data-speed"), 10);
-		 
-		if (!$t.hasClass("counted")) {
-		 $t.addClass("counted");
-		 $({
-		  countNum: $t.find(".count-text").text()
-		 }).animate({
-		  countNum: n
-		 }, {
-		  duration: r,
-		  easing: "linear",
-		  step: function() {
-		   $t.find(".count-num").text(Math.floor(this.countNum));
-		  },
-		  complete: function() {
-		   $t.find(".count-num").text(this.countNum);
-		  }
-		 });
-		}
-		
-		//set skill building height
-		 var size = $(this).children('.progress-bar').attr('aria-valuenow');
-		 $(this).children('.progress-bar').css('width', size+'%');
+	// Fact Counter: anima cada número UNA sola vez, cuando la sección
+	// entra en pantalla. Antes se ejecutaba en cada evento de scroll.
+	function initFactCounter() {
+		var nums = document.querySelectorAll('.fact-counter .count-num');
+		if (!nums.length) { return; }
 
-		
-	   });
-	  }
+		var reduceMotion = window.matchMedia &&
+			window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		function run(el) {
+			var target = parseInt(el.getAttribute('data-stop'), 10) || 0;
+			if (reduceMotion || target === 0) { el.textContent = target; return; }
+			var duration = 1500, start = null;
+			el.textContent = '0';
+			function step(ts) {
+				if (start === null) { start = ts; }
+				var t = Math.min((ts - start) / duration, 1);
+				var eased = 1 - Math.pow(1 - t, 3); // ease-out
+				el.textContent = Math.round(eased * target);
+				if (t < 1) { window.requestAnimationFrame(step); }
+			}
+			window.requestAnimationFrame(step);
+		}
+
+		if (!('IntersectionObserver' in window)) { return; } // deja el número final del servidor
+
+		var io = new IntersectionObserver(function(entries) {
+			entries.forEach(function(entry) {
+				if (entry.isIntersecting) {
+					io.unobserve(entry.target);
+					run(entry.target);
+				}
+			});
+		}, { threshold: 0.4 });
+
+		nums.forEach(function(el) { io.observe(el); });
 	}
-	
-	
+	initFactCounter();
+
+
 	// Elements Animation
 	if($('.wow').length){
 		var wow = new WOW(
@@ -401,15 +411,18 @@
 
 
     // When document is Scrollig, do
+	// No llamar wow.init() aquí: reinicia WOW.js y hace que todos los
+	// elementos .wow desaparezcan y vuelvan a animarse en cada scroll.
 	$window.on('scroll', function() {
-		factCounter();
 		headerStyle();
 	});
 
 	// Youtube and Vimeo video popup control
 	jQuery(function(){
-		jQuery("a.video-popup").YouTubePopUp();
-		//jQuery("a.video-popup").YouTubePopUp( { autoplay: 0 } ); // Disable autoplay
+		if (typeof jQuery.fn.YouTubePopUp === 'function') {
+			jQuery("a.video-popup").YouTubePopUp();
+			//jQuery("a.video-popup").YouTubePopUp( { autoplay: 0 } ); // Disable autoplay
+		}
 	});
    
    
@@ -445,7 +458,10 @@
 	}
 
 	// 27. Contact Form Validation
-	if($contact.length){
+	// Guarded: the jquery.validate plugin this calls was never actually
+	// bundled in public/js, so this threw on every visit to the contact
+	// page and silently aborted the rest of this file from here on.
+	if($contact.length && typeof $.fn.validate === 'function'){
 		$contact.validate({  //#contact-form contact form id
 			rules: {
 				name: {

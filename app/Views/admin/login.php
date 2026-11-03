@@ -24,7 +24,7 @@
                         <form method="post" action="<?= site_url('admin/login') ?>">
                             <?= csrf_field() ?>
                             <div class="form-group">
-                                <label>Usuario o correo *</label>
+                                <label>Usuario *</label>
                                 <input type="text" name="auser" class="form-control"
                                        value="<?= esc(old('auser')) ?>" required autofocus>
                             </div>

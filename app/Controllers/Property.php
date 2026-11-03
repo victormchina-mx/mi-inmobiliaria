@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\PropertyModel;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Property extends BaseController
 {
@@ -17,13 +18,13 @@ class Property extends BaseController
     {
         return view('property/index', [
             'pageTitle'  => 'Propiedades',
-            'properties' => $this->propertyModel->withOwner()->orderBy('created_at', 'DESC')->findAll(),
+            'properties' => $this->propertyModel->withOwner()->available()->orderBy('created_at', 'DESC')->findAll(),
         ]);
     }
 
-    public function show(int $pid): string
+    public function show(int $pid): string|RedirectResponse
     {
-        $property = $this->propertyModel->withOwner()->find($pid);
+        $property = $this->propertyModel->withOwner()->available()->find($pid);
 
         if (! $property) {
             return redirect()->to('property')->with('error', 'Propiedad no encontrada.');
@@ -61,7 +62,7 @@ class Property extends BaseController
         return view('property/by_state', [
             'pageTitle'  => 'Propiedades en ' . esc($state),
             'state'      => $state,
-            'properties' => $this->propertyModel->withOwner()->byState($state)->findAll(),
+            'properties' => $this->propertyModel->withOwner()->available()->byState($state)->findAll(),
         ]);
     }
 }
