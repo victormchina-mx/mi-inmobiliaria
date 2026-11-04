@@ -1,2 +1,3 @@
 User-agent: *
 Disallow: 
+Sitemap: https://inmobiliaria.vmch.net/sitemap.xml
