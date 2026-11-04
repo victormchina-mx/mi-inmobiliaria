@@ -43,8 +43,22 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="text-secondary">Foto de perfil</label>
-                                <input type="file" name="uimage" class="form-control-file" accept="image/*">
+                                <label class="text-secondary d-block" for="uimage">Foto de perfil <span class="file-upload__optional">(opcional)</span></label>
+                                <div class="file-upload" data-file-upload>
+                                    <div class="file-upload__preview" aria-hidden="true">
+                                        <i class="fas fa-user"></i>
+                                        <img src="" alt="" hidden>
+                                    </div>
+                                    <div class="file-upload__body">
+                                        <input type="file" id="uimage" name="uimage" class="file-upload__input"
+                                               accept="image/jpeg,image/png,image/gif,image/webp">
+                                        <label for="uimage" class="file-upload__btn">
+                                            <i class="fas fa-camera mr-1"></i><span data-file-upload-btn>Elegir foto</span>
+                                        </label>
+                                        <div class="file-upload__name" data-file-upload-name aria-live="polite">Ningún archivo seleccionado</div>
+                                        <small class="file-upload__hint">JPG, PNG, GIF o WebP</small>
+                                    </div>
+                                </div>
                             </div>
                             <button class="btn btn-success" type="submit">Registrarme</button>
                         </form>

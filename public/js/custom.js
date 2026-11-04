@@ -807,3 +807,54 @@
     });
 })();
 
+/* ================================================================
+   Campo de imagen con vista previa ([data-file-upload])
+   Reemplaza visualmente el input nativo ("Choose File / No file
+   chosen") por un botón en español con vista previa de la foto.
+   ================================================================ */
+(function() {
+    var ALLOWED = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+    document.querySelectorAll('[data-file-upload]').forEach(function(box) {
+        var input   = box.querySelector('input[type="file"]');
+        var img     = box.querySelector('.file-upload__preview img');
+        var icon    = box.querySelector('.file-upload__preview i');
+        var nameEl  = box.querySelector('[data-file-upload-name]');
+        var btnText = box.querySelector('[data-file-upload-btn]');
+        var emptyText = nameEl ? nameEl.textContent : '';
+        var objectUrl = null;
+        if (!input) { return; }
+
+        function reset(message) {
+            if (objectUrl) { URL.revokeObjectURL(objectUrl); objectUrl = null; }
+            if (img)  { img.hidden = true; img.removeAttribute('src'); }
+            if (icon) { icon.hidden = false; }
+            if (btnText) { btnText.textContent = 'Elegir foto'; }
+            box.classList.remove('is-selected');
+            box.classList.toggle('has-error', !!message);
+            if (nameEl) { nameEl.textContent = message || emptyText; }
+        }
+
+        input.addEventListener('change', function() {
+            var file = input.files && input.files[0];
+            if (!file) { reset(); return; }
+
+            if (ALLOWED.indexOf(file.type) === -1) {
+                input.value = '';
+                reset('Formato no permitido. Usa JPG, PNG, GIF o WebP.');
+                return;
+            }
+
+            reset();
+            box.classList.add('is-selected');
+            if (nameEl)  { nameEl.textContent = file.name; }
+            if (btnText) { btnText.textContent = 'Cambiar foto'; }
+            if (img && window.URL && URL.createObjectURL) {
+                objectUrl = URL.createObjectURL(file);
+                img.src = objectUrl;
+                img.hidden = false;
+                if (icon) { icon.hidden = true; }
+            }
+        });
+    });
+})();
