@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 <link rel="stylesheet" href="<?= base_url('fonts/flaticon/flaticon.css') ?>">
 <link rel="stylesheet" href="<?= base_url('css/style.css') ?>">
+<link rel="stylesheet" href="<?= base_url('css/file-upload.css') ?>">
 <?= $this->renderSection('styles') ?>
 <title><?= esc($pageTitle ?? 'Real Estate') ?> | Real Estate by Vick</title>
 </head>
@@ -204,5 +205,6 @@
 <script src="<?= base_url('js/wow.js') ?>"></script>
 <?= $this->renderSection('scripts') ?>
 <script src="<?= base_url('js/custom.js') ?>"></script>
+<script src="<?= base_url('js/file-upload.js') ?>"></script>
 </body>
 </html>
