@@ -7,8 +7,20 @@ use App\Models\UserModel;
 
 class Auth extends BaseApiController
 {
+    /** Intentos de login permitidos por IP en un minuto. */
+    private const LOGIN_ATTEMPTS_PER_MINUTE = 5;
+
     public function login()
     {
+        // Frena los intentos de adivinar contraseñas (por IP)
+        $throttler = service('throttler');
+        $bucket    = 'api-login-' . md5((string) $this->request->getIPAddress());
+
+        if ($throttler->check($bucket, self::LOGIN_ATTEMPTS_PER_MINUTE, MINUTE) === false) {
+            return $this->jsonResponse(['error' => 'Demasiados intentos. Espera un minuto e inténtalo de nuevo.'], 429)
+                ->setHeader('Retry-After', (string) max(1, $throttler->getTokenTime()));
+        }
+
         $rules = [
             'email' => 'required|valid_email',
             'pass'  => 'required',
@@ -27,10 +39,7 @@ class Auth extends BaseApiController
             return $this->jsonResponse(['error' => 'Email o contraseña incorrectos.'], 401);
         }
 
-        return $this->jsonResponse([
-            'token' => SimpleJwt::encode(['uid' => (int) $user['uid']]),
-            'user'  => $this->publicUser($user),
-        ]);
+        return $this->tokenResponse($user);
     }
 
     public function me()
@@ -47,8 +56,20 @@ class Auth extends BaseApiController
             return $this->jsonResponse(['error' => 'Usuario no encontrado.'], 404);
         }
 
+        return $this->tokenResponse($user);
+    }
+
+    /** Emite un token nuevo; si JWT_SECRET no está bien configurado responde 503 en vez de un error 500. */
+    private function tokenResponse(array $user)
+    {
+        try {
+            $token = SimpleJwt::encode(['uid' => (int) $user['uid']]);
+        } catch (\RuntimeException $e) {
+            return $this->jsonResponse(['error' => 'El servicio no está disponible. Inténtalo más tarde.'], 503);
+        }
+
         return $this->jsonResponse([
-            'token' => SimpleJwt::encode(['uid' => (int) $user['uid']]),
+            'token' => $token,
             'user'  => $this->publicUser($user),
         ]);
     }

@@ -195,7 +195,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Características (HTML)</label>
-                        <textarea name="feature" class="form-control tinymce" rows="4"><?= $property['feature'] ?? '' ?></textarea>
+                        <textarea name="feature" class="form-control tinymce" rows="4"><?= esc($property['feature'] ?? '') ?></textarea>
                     </div>
                 </div>
 

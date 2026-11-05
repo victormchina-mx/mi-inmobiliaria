@@ -3,6 +3,7 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
+use App\Libraries\HtmlSanitizer;
 use App\Models\CityModel;
 use App\Models\PropertyModel;
 use CodeIgniter\HTTP\RedirectResponse;
@@ -57,7 +58,7 @@ class MyProperty extends BaseController
 
         $this->propertyModel->insert([
             'title'          => $this->request->getPost('title'),
-            'pcontent'       => $this->request->getPost('content'),
+            'pcontent'       => HtmlSanitizer::clean($this->request->getPost('content')),
             'type'           => $this->request->getPost('ptype'),
             'bhk'            => $this->request->getPost('bhk') ?? '',
             'stype'          => $this->request->getPost('stype'),
@@ -72,7 +73,7 @@ class MyProperty extends BaseController
             'location'       => $this->request->getPost('loc'),
             'city'           => $this->request->getPost('city'),
             'state'          => $this->request->getPost('state'),
-            'feature'        => $this->request->getPost('feature'),
+            'feature'        => HtmlSanitizer::clean($this->request->getPost('feature')),
             'totalfloor'     => $this->request->getPost('totalfl') ?? '',
             'status'         => $status,
             'cancel_reason'  => $status === 'cancelled' ? $cancelReason : null,
@@ -136,7 +137,7 @@ class MyProperty extends BaseController
 
         $this->propertyModel->update($pid, [
             'title'          => $this->request->getPost('title'),
-            'pcontent'       => $this->request->getPost('content'),
+            'pcontent'       => HtmlSanitizer::clean($this->request->getPost('content')),
             'type'           => $this->request->getPost('ptype'),
             'bhk'            => $this->request->getPost('bhk') ?? '',
             'stype'          => $this->request->getPost('stype'),
@@ -151,7 +152,7 @@ class MyProperty extends BaseController
             'location'       => $this->request->getPost('loc'),
             'city'           => $this->request->getPost('city'),
             'state'          => $this->request->getPost('state'),
-            'feature'        => $this->request->getPost('feature'),
+            'feature'        => HtmlSanitizer::clean($this->request->getPost('feature')),
             'totalfloor'     => $this->request->getPost('totalfl') ?? '',
             'status'         => $status,
             'cancel_reason'  => $status === 'cancelled' ? $cancelReason : null,
