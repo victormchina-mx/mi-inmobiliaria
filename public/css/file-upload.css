@@ -1,0 +1,176 @@
+/* ================================================================
+   Campo de imagen con vista previa (.file-upload)
+   Componente independiente: se carga en el sitio público y en el
+   panel de admin, así que no depende de las variables --theme-*.
+   Vista: app/Views/partials/file_upload.php · JS: js/file-upload.js
+   ================================================================ */
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px dashed rgba(15, 23, 42, 0.22);
+  border-radius: 12px;
+  background: #F4F4F1;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.file-upload.is-selected {
+  border-style: solid;
+  border-color: rgba(201, 169, 110, 0.75);
+}
+.file-upload.has-error {
+  border-color: #d92d20;
+}
+
+/* ---- Vista previa ---- */
+.file-upload__preview {
+  position: relative;
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  color: rgba(15, 23, 42, 0.30);
+}
+.file-upload__preview svg {
+  width: 28px;
+  height: 28px;
+}
+.file-upload__preview img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.file-upload__preview img[hidden],
+.file-upload__preview svg[hidden] {
+  display: none;
+}
+
+.file-upload__body {
+  min-width: 0;
+}
+
+/* El input nativo queda oculto pero accesible por teclado */
+.file-upload__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+/* ---- Botón ---- */
+.file-upload .file-upload__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 8px 16px;
+  border: 1px solid #C9A96E;
+  border-radius: 8px;
+  background: #fff;
+  color: #0F172A;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-transform: none;
+  letter-spacing: normal;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+/* El sitio pinta de dorado cualquier <span> dentro de un label */
+.file-upload .file-upload__btn span {
+  color: inherit;
+}
+.file-upload .file-upload__btn svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+}
+.file-upload .file-upload__btn:hover {
+  background: #0F172A;
+  border-color: #0F172A;
+  color: #fff;
+}
+.file-upload__input:focus-visible + .file-upload__btn {
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.45);
+}
+
+/* ---- Textos ---- */
+.file-upload__name {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #4B5563;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.file-upload.has-error .file-upload__name {
+  color: #b42318;
+  white-space: normal;
+}
+.file-upload__hint {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+}
+label .file-upload__optional,
+.form-group label .file-upload__optional {
+  font-weight: 400;
+  font-size: 0.85em;
+  color: #6b7280;
+}
+
+/* ================================================================
+   Variante mosaico (.file-upload--tile): para columnas angostas,
+   como las 8 imágenes de una propiedad. Vista previa rectangular
+   arriba y el botón debajo.
+   ================================================================ */
+.file-upload--tile {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  padding: 10px;
+}
+.file-upload--tile .file-upload__preview {
+  flex: none;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+}
+.file-upload--tile .file-upload__preview svg {
+  width: 32px;
+  height: 32px;
+}
+.file-upload--tile .file-upload__body {
+  text-align: center;
+}
+.file-upload--tile .file-upload__btn {
+  justify-content: center;
+  width: 100%;
+  padding: 7px 10px;
+  font-size: 13px;
+}
+.file-upload--tile .file-upload__name {
+  font-size: 12px;
+}
+/* En celular las columnas miden ~150 px: quitar el ícono del botón para
+   que "Cambiar imagen" quepa en una línea */
+@media (max-width: 575px) {
+  .file-upload--tile .file-upload__btn {
+    padding: 7px 6px;
+    white-space: nowrap;
+  }
+  .file-upload--tile .file-upload__btn svg {
+    display: none;
+  }
+}

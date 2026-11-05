@@ -280,20 +280,18 @@
 
                         <div class="col-md-12"><h5 class="text-secondary mt-2 mb-3">Imágenes</h5></div>
                         <?php $imgDefs = [
-                            'aimage'=>['pimage','Principal'],'aimage1'=>['pimage1','Img 2'],'aimage2'=>['pimage2','Img 3'],
-                            'aimage3'=>['pimage3','Img 4'],'aimage4'=>['pimage4','Img 5'],
-                            'fimage'=>['mapimage','Plano'],'fimage1'=>['topmapimage','Planta Alta'],'fimage2'=>['groundmapimage','Planta Baja'],
+                            'aimage'=>['pimage','Imagen principal'],'aimage1'=>['pimage1','Imagen 2'],'aimage2'=>['pimage2','Imagen 3'],
+                            'aimage3'=>['pimage3','Imagen 4'],'aimage4'=>['pimage4','Imagen 5'],
+                            'fimage'=>['mapimage','Plano principal'],'fimage1'=>['topmapimage','Planta Alta'],'fimage2'=>['groundmapimage','Planta Baja'],
                         ]; ?>
                         <?php foreach ($imgDefs as $input => [$field, $label]): ?>
-                        <div class="col-md-3 mb-3">
-                            <label><?= $label ?></label>
-                            <?php if ($property && ! empty($property[$field])): ?>
-                            <div class="mb-1">
-                                <img src="<?= base_url('uploads/property/' . esc($property[$field])) ?>"
-                                     height="50" style="object-fit:cover; border-radius:4px;">
-                            </div>
-                            <?php endif ?>
-                            <input type="file" name="<?= $input ?>" class="form-control-file" accept="image/*">
+                        <div class="col-6 col-md-3 mb-3">
+                            <?= view('partials/file_upload', [
+                                'name'    => $input,
+                                'label'   => $label,
+                                'current' => ($property && ! empty($property[$field])) ? base_url('uploads/property/' . $property[$field]) : '',
+                                'tile'    => true,
+                            ]) ?>
                         </div>
                         <?php endforeach ?>
 

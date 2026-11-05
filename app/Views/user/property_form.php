@@ -214,15 +214,13 @@
                 ];
                 ?>
                 <?php foreach ($imgFields as $inputName => [$dbField, $label]): ?>
-                <div class="col-md-3 mb-3">
-                    <label><?= $label ?></label>
-                    <?php if ($property && ! empty($property[$dbField])): ?>
-                    <div class="mb-1">
-                        <img src="<?= base_url('uploads/property/' . esc($property[$dbField])) ?>"
-                             alt="<?= $label ?>" height="60" style="object-fit:cover;">
-                    </div>
-                    <?php endif ?>
-                    <input type="file" name="<?= $inputName ?>" class="form-control-file" accept="image/*">
+                <div class="col-6 col-md-3 mb-3">
+                    <?= view('partials/file_upload', [
+                        'name'    => $inputName,
+                        'label'   => $label,
+                        'current' => ($property && ! empty($property[$dbField])) ? base_url('uploads/property/' . $property[$dbField]) : '',
+                        'tile'    => true,
+                    ]) ?>
                 </div>
                 <?php endforeach ?>
 
