@@ -26,11 +26,13 @@ class Auth extends BaseApiController
             'pass'  => 'required',
         ];
 
-        if (! $this->validate($rules)) {
+        // validateData() sobre body(): validate() leería el JSON por su cuenta
+        // y lanzaría una excepción (500) si viene mal formado.
+        $body = $this->body();
+
+        if (! $this->validateData($body, $rules)) {
             return $this->jsonResponse(['error' => implode(' ', $this->validator->getErrors())], 422);
         }
-
-        $body = $this->body();
 
         $userModel = new UserModel();
         $user      = $userModel->where('uemail', $body['email'])->first();
