@@ -36,8 +36,7 @@
                             <td><?= esc($s['sname']) ?></td>
                             <td>
                                 <a href="<?= site_url('admin/states/edit/' . $s['sid']) ?>" class="btn btn-sm btn-warning" title="Editar"><i class="fe fe-edit"></i></a>
-                                <a href="<?= site_url('admin/states/delete/' . $s['sid']) ?>" class="btn btn-sm btn-danger text-white"
-                                   title="Borrar" onclick="return confirm('¿Eliminar?')"><i class="fe fe-trash"></i></a>
+                                <?= view('partials/delete_button', ['url' => site_url('admin/states/delete/' . $s['sid']), 'confirm' => '¿Eliminar?', 'icon' => 'fe fe-trash']) ?>
                             </td>
                         </tr>
                         <?php endforeach ?>

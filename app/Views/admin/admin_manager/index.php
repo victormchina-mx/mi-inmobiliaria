@@ -26,11 +26,7 @@
                             <td><?= esc($a['aemail']) ?></td>
                             <td><?= esc($a['aphone']) ?></td>
                             <td>
-                                <a href="<?= site_url('admin/admins/delete/' . $a['aid']) ?>"
-                                   class="btn btn-sm btn-danger text-white"
-                                   title="Borrar" onclick="return confirm('¿Eliminar administrador?')">
-                                    <i class="fe fe-trash"></i>
-                                </a>
+                                <?= view('partials/delete_button', ['url' => site_url('admin/admins/delete/' . $a['aid']), 'confirm' => '¿Eliminar administrador?', 'icon' => 'fe fe-trash']) ?>
                             </td>
                         </tr>
                         <?php endforeach ?>

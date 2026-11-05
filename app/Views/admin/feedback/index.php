@@ -34,11 +34,7 @@
                                             <?= $f['status'] ? 'Desaprobar' : 'Aprobar' ?>
                                         </button>
                                     </form>
-                                    <a href="<?= site_url('admin/feedback/delete/' . $f['fid']) ?>"
-                                       class="btn btn-sm btn-danger text-white"
-                                       title="Borrar" onclick="return confirm('¿Eliminar?')">
-                                        <i class="fe fe-trash"></i>
-                                    </a>
+                                    <?= view('partials/delete_button', ['url' => site_url('admin/feedback/delete/' . $f['fid']), 'confirm' => '¿Eliminar?', 'icon' => 'fe fe-trash']) ?>
                                 </td>
                             </tr>
                             <?php endforeach ?>
