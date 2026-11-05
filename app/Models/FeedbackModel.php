@@ -32,4 +32,11 @@ class FeedbackModel extends Model
         return $this->select('feedback.*, user.uname, user.uemail')
                     ->join('user', 'user.uid = feedback.uid');
     }
+
+    /** Etiquetas en español para los mensajes de validación del modelo. */
+    protected function initialize()
+    {
+        parent::initialize();
+        $this->validationRules = \App\Libraries\FieldLabels::apply($this->validationRules);
+    }
 }

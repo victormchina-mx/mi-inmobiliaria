@@ -21,4 +21,11 @@ class CityModel extends Model
         return $this->select('city.*, state.sname')
                     ->join('state', 'state.sid = city.sid');
     }
+
+    /** Etiquetas en español para los mensajes de validación del modelo. */
+    protected function initialize()
+    {
+        parent::initialize();
+        $this->validationRules = \App\Libraries\FieldLabels::apply($this->validationRules);
+    }
 }
