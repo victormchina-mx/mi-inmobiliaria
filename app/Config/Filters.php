@@ -15,6 +15,7 @@ use CodeIgniter\Filters\SecureHeaders;
 use App\Filters\UserAuthFilter;
 use App\Filters\AdminAuthFilter;
 use App\Filters\ApiAuthFilter;
+use App\Filters\ThrottleFilter;
 
 class Filters extends BaseFilters
 {
@@ -40,6 +41,7 @@ class Filters extends BaseFilters
         'user-auth'     => UserAuthFilter::class,
         'admin-auth'    => AdminAuthFilter::class,
         'api-auth'      => ApiAuthFilter::class,
+        'throttle'      => ThrottleFilter::class,
     ];
 
     /**

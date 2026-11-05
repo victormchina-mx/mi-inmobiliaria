@@ -21,14 +21,14 @@ $routes->post('calculator', 'Calculator::calculate');
 
 // ─── Autenticación de usuario ─────────────────────────────────────────────────
 $routes->get('login', 'Auth::login');
-$routes->post('login', 'Auth::doLogin');
+$routes->post('login', 'Auth::doLogin', ['filter' => 'throttle:5,60']);
 $routes->get('register', 'Auth::register');
 $routes->post('register', 'Auth::doRegister');
 $routes->get('logout', 'Auth::logout');
 $routes->get('forgot-password', 'Auth::forgotPassword');
-$routes->post('forgot-password', 'Auth::sendResetLink');
+$routes->post('forgot-password', 'Auth::sendResetLink', ['filter' => 'throttle:3,300']);
 $routes->get('reset-password/(:hash)', 'Auth::resetPassword/$1');
-$routes->post('reset-password/(:hash)', 'Auth::doResetPassword/$1');
+$routes->post('reset-password/(:hash)', 'Auth::doResetPassword/$1', ['filter' => 'throttle:5,300']);
 
 // ─── Área de usuario (requiere sesión) ───────────────────────────────────────
 $routes->group('', ['filter' => 'user-auth'], static function ($routes) {
@@ -58,12 +58,12 @@ $routes->group('api/v1', ['filter' => 'api-auth'], static function ($routes) {
 // ─── Panel de administración ──────────────────────────────────────────────────
 $routes->get('admin', 'Admin\Dashboard::index');
 $routes->get('admin/login', 'Admin\Auth::login');
-$routes->post('admin/login', 'Admin\Auth::doLogin');
+$routes->post('admin/login', 'Admin\Auth::doLogin', ['filter' => 'throttle:5,60']);
 $routes->get('admin/logout', 'Admin\Auth::logout');
 $routes->get('admin/forgot-password', 'Admin\Auth::forgotPassword');
-$routes->post('admin/forgot-password', 'Admin\Auth::sendResetLink');
+$routes->post('admin/forgot-password', 'Admin\Auth::sendResetLink', ['filter' => 'throttle:3,300']);
 $routes->get('admin/reset-password/(:hash)', 'Admin\Auth::resetPassword/$1');
-$routes->post('admin/reset-password/(:hash)', 'Admin\Auth::doResetPassword/$1');
+$routes->post('admin/reset-password/(:hash)', 'Admin\Auth::doResetPassword/$1', ['filter' => 'throttle:5,300']);
 
 $routes->group('admin', ['filter' => 'admin-auth'], static function ($routes) {
     // Dashboard
