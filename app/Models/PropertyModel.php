@@ -76,4 +76,11 @@ class PropertyModel extends Model
 
         return $this;
     }
+
+    /** Etiquetas en español para los mensajes de validación del modelo. */
+    protected function initialize()
+    {
+        parent::initialize();
+        $this->validationRules = \App\Libraries\FieldLabels::apply($this->validationRules);
+    }
 }

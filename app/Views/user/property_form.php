@@ -125,15 +125,14 @@
                                value="<?= esc($property['price'] ?? old('price')) ?>" required>
                     </div>
                 </div>
+                <?php if (! empty($property['isFeatured'])): ?>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>¿Destacada?</label>
-                        <select name="isFeatured" class="form-control">
-                            <option value="0" <?= ($property['isFeatured'] ?? 0) == 0 ? 'selected' : '' ?>>No</option>
-                            <option value="1" <?= ($property['isFeatured'] ?? 0) == 1 ? 'selected' : '' ?>>Sí</option>
-                        </select>
+                        <label>Destacada</label>
+                        <p class="form-control-plaintext"><span class="badge badge-success">Destacada por el administrador</span></p>
                     </div>
                 </div>
+                <?php endif ?>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Ubicación</label>

@@ -77,7 +77,8 @@ class MyProperty extends BaseController
             'totalfloor'     => $this->request->getPost('totalfl') ?? '',
             'status'         => $status,
             'cancel_reason'  => $status === 'cancelled' ? $cancelReason : null,
-            'isFeatured'     => (int) $this->request->getPost('isFeatured'),
+            // Solo el admin decide qué propiedades se destacan
+            'isFeatured'     => 0,
             'uid'            => session()->get('uid'),
             'pimage'         => $images['pimage'],
             'pimage1'        => $images['pimage1'],
@@ -156,7 +157,6 @@ class MyProperty extends BaseController
             'totalfloor'     => $this->request->getPost('totalfl') ?? '',
             'status'         => $status,
             'cancel_reason'  => $status === 'cancelled' ? $cancelReason : null,
-            'isFeatured'     => (int) $this->request->getPost('isFeatured'),
             'pimage'         => $images['pimage'],
             'pimage1'        => $images['pimage1'],
             'pimage2'        => $images['pimage2'],

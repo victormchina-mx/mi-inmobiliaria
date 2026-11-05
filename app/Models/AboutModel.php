@@ -15,4 +15,11 @@ class AboutModel extends Model
         'title'   => 'required|max_length[100]',
         'content' => 'required',
     ];
+
+    /** Etiquetas en español para los mensajes de validación del modelo. */
+    protected function initialize()
+    {
+        parent::initialize();
+        $this->validationRules = \App\Libraries\FieldLabels::apply($this->validationRules);
+    }
 }

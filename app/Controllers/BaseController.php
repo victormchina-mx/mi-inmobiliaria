@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\FieldLabels;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -41,5 +42,17 @@ abstract class BaseController extends Controller
 
         // Preload any models, libraries, etc, here.
         // $this->session = service('session');
+    }
+
+    /** Igual que Controller::validate(), con etiquetas en español para los mensajes. */
+    protected function validate($rules, array $messages = []): bool
+    {
+        return parent::validate(FieldLabels::apply($rules), $messages);
+    }
+
+    /** Igual que Controller::validateData(), con etiquetas en español para los mensajes. */
+    protected function validateData(array $data, $rules, array $messages = [], ?string $dbGroup = null): bool
+    {
+        return parent::validateData($data, FieldLabels::apply($rules), $messages, $dbGroup);
     }
 }

@@ -14,4 +14,11 @@ class StateModel extends Model
     protected $validationRules = [
         'sname' => 'required|max_length[100]',
     ];
+
+    /** Etiquetas en español para los mensajes de validación del modelo. */
+    protected function initialize()
+    {
+        parent::initialize();
+        $this->validationRules = \App\Libraries\FieldLabels::apply($this->validationRules);
+    }
 }

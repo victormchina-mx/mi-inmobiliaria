@@ -18,4 +18,11 @@ class ContactModel extends Model
         'subject' => 'required|max_length[100]',
         'message' => 'required',
     ];
+
+    /** Etiquetas en español para los mensajes de validación del modelo. */
+    protected function initialize()
+    {
+        parent::initialize();
+        $this->validationRules = \App\Libraries\FieldLabels::apply($this->validationRules);
+    }
 }
