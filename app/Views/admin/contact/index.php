@@ -24,11 +24,7 @@
                                 <td><?= esc($c['subject']) ?></td>
                                 <td><?= esc(substr($c['message'], 0, 60)) ?>...</td>
                                 <td>
-                                    <a href="<?= site_url('admin/contacts/delete/' . $c['cid']) ?>"
-                                       class="btn btn-sm btn-danger text-white"
-                                       title="Borrar" onclick="return confirm('¿Eliminar?')">
-                                        <i class="fe fe-trash"></i>
-                                    </a>
+                                    <?= view('partials/delete_button', ['url' => site_url('admin/contacts/delete/' . $c['cid']), 'confirm' => '¿Eliminar?', 'icon' => 'fe fe-trash']) ?>
                                 </td>
                             </tr>
                             <?php endforeach ?>

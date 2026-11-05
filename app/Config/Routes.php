@@ -40,7 +40,7 @@ $routes->group('', ['filter' => 'user-auth'], static function ($routes) {
     $routes->post('my-properties/add', 'User\MyProperty::store');
     $routes->get('my-properties/edit/(:num)', 'User\MyProperty::edit/$1');
     $routes->post('my-properties/edit/(:num)', 'User\MyProperty::update/$1');
-    $routes->get('my-properties/delete/(:num)', 'User\MyProperty::delete/$1');
+    $routes->post('my-properties/delete/(:num)', 'User\MyProperty::delete/$1');
 });
 
 // ─── API para la App Móvil ───────────────────────────────────────────────────
@@ -78,44 +78,44 @@ $routes->group('admin', ['filter' => 'admin-auth'], static function ($routes) {
     $routes->post('property/create', 'Admin\Property::store');
     $routes->get('property/edit/(:num)', 'Admin\Property::edit/$1');
     $routes->post('property/edit/(:num)', 'Admin\Property::update/$1');
-    $routes->get('property/delete/(:num)', 'Admin\Property::delete/$1');
+    $routes->post('property/delete/(:num)', 'Admin\Property::delete/$1');
 
     // Usuarios / agentes / builders
     $routes->get('users', 'Admin\User::index');
     $routes->get('users/edit/(:num)', 'Admin\User::edit/$1');
     $routes->post('users/edit/(:num)', 'Admin\User::update/$1');
-    $routes->get('users/delete/(:num)', 'Admin\User::delete/$1');
+    $routes->post('users/delete/(:num)', 'Admin\User::delete/$1');
     $routes->get('agents', 'Admin\User::agents');
     $routes->get('agents/edit/(:num)', 'Admin\User::edit/$1');
     $routes->post('agents/edit/(:num)', 'Admin\User::update/$1');
-    $routes->get('agents/delete/(:num)', 'Admin\User::deleteAgent/$1');
+    $routes->post('agents/delete/(:num)', 'Admin\User::deleteAgent/$1');
     $routes->get('builders', 'Admin\User::builders');
     $routes->get('builders/edit/(:num)', 'Admin\User::edit/$1');
     $routes->post('builders/edit/(:num)', 'Admin\User::update/$1');
-    $routes->get('builders/delete/(:num)', 'Admin\User::deleteBuilder/$1');
+    $routes->post('builders/delete/(:num)', 'Admin\User::deleteBuilder/$1');
 
     // Estados
     $routes->get('states', 'Admin\State::index');
     $routes->post('states', 'Admin\State::store');
     $routes->get('states/edit/(:num)', 'Admin\State::edit/$1');
     $routes->post('states/edit/(:num)', 'Admin\State::update/$1');
-    $routes->get('states/delete/(:num)', 'Admin\State::delete/$1');
+    $routes->post('states/delete/(:num)', 'Admin\State::delete/$1');
 
     // Ciudades
     $routes->get('cities', 'Admin\City::index');
     $routes->post('cities', 'Admin\City::store');
     $routes->get('cities/edit/(:num)', 'Admin\City::edit/$1');
     $routes->post('cities/edit/(:num)', 'Admin\City::update/$1');
-    $routes->get('cities/delete/(:num)', 'Admin\City::delete/$1');
+    $routes->post('cities/delete/(:num)', 'Admin\City::delete/$1');
 
     // Contactos
     $routes->get('contacts', 'Admin\Contact::index');
-    $routes->get('contacts/delete/(:num)', 'Admin\Contact::delete/$1');
+    $routes->post('contacts/delete/(:num)', 'Admin\Contact::delete/$1');
 
     // Feedback
     $routes->get('feedback', 'Admin\Feedback::index');
     $routes->post('feedback/edit/(:num)', 'Admin\Feedback::update/$1');
-    $routes->get('feedback/delete/(:num)', 'Admin\Feedback::delete/$1');
+    $routes->post('feedback/delete/(:num)', 'Admin\Feedback::delete/$1');
 
     // About
     $routes->get('about', 'Admin\About::index');
@@ -123,11 +123,11 @@ $routes->group('admin', ['filter' => 'admin-auth'], static function ($routes) {
     $routes->post('about/create', 'Admin\About::store');
     $routes->get('about/edit/(:num)', 'Admin\About::edit/$1');
     $routes->post('about/edit/(:num)', 'Admin\About::update/$1');
-    $routes->get('about/delete/(:num)', 'Admin\About::delete/$1');
+    $routes->post('about/delete/(:num)', 'Admin\About::delete/$1');
 
     // Admins
     $routes->get('admins', 'Admin\AdminManager::index');
     $routes->get('admins/create', 'Admin\AdminManager::create');
     $routes->post('admins/create', 'Admin\AdminManager::store');
-    $routes->get('admins/delete/(:num)', 'Admin\AdminManager::delete/$1');
+    $routes->post('admins/delete/(:num)', 'Admin\AdminManager::delete/$1');
 });

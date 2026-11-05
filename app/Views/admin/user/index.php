@@ -58,10 +58,7 @@
                                        title="Editar">
                                         <i class="fe fe-edit"></i>
                                     </a>
-                                    <a href="<?= $deleteUrl ?>" class="btn btn-sm btn-danger text-white"
-                                       title="Borrar" onclick="return confirm('¿Eliminar este usuario?')">
-                                        <i class="fe fe-trash"></i>
-                                    </a>
+                                    <?= view('partials/delete_button', ['url' => $deleteUrl, 'confirm' => '¿Eliminar este usuario?', 'icon' => 'fe fe-trash']) ?>
                                 </td>
                             </tr>
                             <?php endforeach ?>

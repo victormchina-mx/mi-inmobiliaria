@@ -79,7 +79,9 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             // 'honeypot',
-            // 'csrf',
+            // Protección CSRF en todos los POST del sitio web. La API usa un
+            // token Bearer en la cabecera (no cookies), así que no la necesita.
+            'csrf' => ['except' => ['api/*']],
             // 'invalidchars',
         ],
         'after' => [

@@ -58,11 +58,7 @@
                                        title="Editar">
                                         <i class="fe fe-edit"></i>
                                     </a>
-                                    <a href="<?= site_url('admin/property/delete/' . $p['pid']) ?>"
-                                       class="btn btn-sm btn-danger text-white"
-                                       title="Borrar" onclick="return confirm('¿Eliminar esta propiedad?')">
-                                        <i class="fe fe-trash"></i>
-                                    </a>
+                                    <?= view('partials/delete_button', ['url' => site_url('admin/property/delete/' . $p['pid']), 'confirm' => '¿Eliminar esta propiedad?', 'icon' => 'fe fe-trash']) ?>
                                 </td>
                             </tr>
                             <?php endforeach ?>
