@@ -25,9 +25,20 @@ abstract class BaseApiController extends BaseController
     /** Cuerpo de la petición: JSON si Content-Type lo indica, si no los campos POST normales. */
     protected function body(): array
     {
-        $json = $this->request->getJSON(true);
+        // getJSON() lanza una excepción si el cuerpo no es JSON (p. ej. un
+        // formulario x-www-form-urlencoded); solo se usa cuando el
+        // Content-Type lo indica, y un JSON mal formado se trata como vacío.
+        if (stripos($this->request->getHeaderLine('Content-Type'), 'json') !== false) {
+            try {
+                $json = $this->request->getJSON(true);
+            } catch (\Throwable $e) {
+                $json = null;
+            }
 
-        return is_array($json) ? $json : (array) $this->request->getPost();
+            return is_array($json) ? $json : [];
+        }
+
+        return (array) $this->request->getPost();
     }
 
     protected function jsonResponse(array $data, int $status = 200): ResponseInterface
