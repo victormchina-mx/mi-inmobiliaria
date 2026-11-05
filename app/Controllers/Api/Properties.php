@@ -113,11 +113,11 @@ class Properties extends BaseApiController
             'totalfloor'    => $this->request->getPost('totalfl') ?? '',
             'status'        => $status,
             'cancel_reason' => $status === 'cancelled' ? $cancelReason : null,
-            'isFeatured'    => (int) $this->request->getPost('isFeatured'),
         ], $this->uploadImages($existing ?? []));
 
         if ($pid === null) {
-            $data['uid'] = $uid;
+            $data['uid']        = $uid;
+            $data['isFeatured'] = 0; // solo el admin destaca propiedades
             $this->propertyModel->insert($data);
 
             return $this->jsonResponse([
