@@ -24,8 +24,12 @@
     // server-side sanitization, so render them through an allowlist here
     // rather than trusting the stored HTML directly — otherwise anyone
     // who can publish a listing could inject a stored XSS payload.
-    $safeDescription = strip_tags($property['pcontent'] ?? '', '<p><br><b><strong><i><em><u><ul><ol><li>');
-    $safeDescription = preg_replace('/\s(on\w+|style)\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $safeDescription);
+    $safeDescription = \App\Libraries\HtmlSanitizer::clean(
+        $property['pcontent'] ?? '',
+        ['p', 'br', 'b', 'strong', 'i', 'em', 'u', 'ul', 'ol', 'li']
+    );
+    // Las características también son HTML (columnas con listas): misma limpieza
+    $safeFeature = \App\Libraries\HtmlSanitizer::clean($property['feature'] ?? '');
 
     $schema = [
         '@context'    => 'https://schema.org',
@@ -54,7 +58,7 @@
         ],
     ];
 ?>
-<script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
+<script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
 
 <div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.jpg') ?>');">
     <div class="container">
@@ -146,9 +150,9 @@
                         </table>
                     </div>
 
-                    <?php if (! empty($property['feature'])): ?>
+                    <?php if (trim(strip_tags($safeFeature)) !== ''): ?>
                     <h5 class="mt-5 mb-4 text-secondary">Características</h5>
-                    <div class="row"><?= $property['feature'] ?></div>
+                    <div class="row"><?= $safeFeature ?></div>
                     <?php endif ?>
 
                     <!-- Planos -->

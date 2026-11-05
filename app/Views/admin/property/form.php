@@ -274,7 +274,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Características</label>
-                                <textarea name="feature" class="form-control" rows="3"><?= $property['feature'] ?? '' ?></textarea>
+                                <textarea name="feature" class="form-control" rows="3"><?= esc($property['feature'] ?? '') ?></textarea>
                             </div>
                         </div>
 

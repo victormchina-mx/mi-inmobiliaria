@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Api;
 
+use App\Libraries\HtmlSanitizer;
 use App\Models\PropertyModel;
 
 class Properties extends BaseApiController
@@ -77,6 +78,7 @@ class Properties extends BaseApiController
             'ptype' => 'required',
             'stype' => 'required|in_list[sale,rent]',
             'price' => 'required|decimal',
+            'status' => 'permit_empty|in_list[available,sold,rented,cancelled]',
         ];
 
         if (! $this->validate($rules)) {
@@ -92,7 +94,7 @@ class Properties extends BaseApiController
 
         $data = array_merge([
             'title'         => $this->request->getPost('title'),
-            'pcontent'      => $this->request->getPost('content') ?? '',
+            'pcontent'      => HtmlSanitizer::clean($this->request->getPost('content')),
             'type'          => $this->request->getPost('ptype'),
             'bhk'           => $this->request->getPost('bhk') ?? '',
             'stype'         => $this->request->getPost('stype'),
@@ -107,7 +109,7 @@ class Properties extends BaseApiController
             'location'      => $this->request->getPost('loc') ?? '',
             'city'          => $this->request->getPost('city') ?? '',
             'state'         => $this->request->getPost('state') ?? '',
-            'feature'       => $this->request->getPost('feature') ?? '',
+            'feature'       => HtmlSanitizer::clean($this->request->getPost('feature')),
             'totalfloor'    => $this->request->getPost('totalfl') ?? '',
             'status'        => $status,
             'cancel_reason' => $status === 'cancelled' ? $cancelReason : null,

@@ -8,9 +8,25 @@ namespace App\Libraries;
  */
 class SimpleJwt
 {
-    private static function secret(): string
+    /** Longitud mínima de JWT_SECRET (32 bytes = 256 bits, lo que pide HS256). */
+    private const MIN_SECRET_LENGTH = 32;
+
+    /**
+     * Clave de firma. Si falta o es demasiado corta se devuelve null y no se
+     * emite ni se acepta ningún token: con una clave vacía cualquiera podría
+     * firmar tokens válidos para cualquier usuario.
+     */
+    private static function secret(): ?string
     {
-        return (string) env('JWT_SECRET');
+        $secret = (string) env('JWT_SECRET');
+
+        if (strlen($secret) < self::MIN_SECRET_LENGTH) {
+            log_message('critical', 'JWT_SECRET no está definido o tiene menos de ' . self::MIN_SECRET_LENGTH . ' caracteres; la API rechaza todos los tokens.');
+
+            return null;
+        }
+
+        return $secret;
     }
 
     private static function base64UrlEncode(string $data): string
@@ -31,12 +47,17 @@ class SimpleJwt
     /** Genera un token firmado. $payload debe incluir al menos 'uid'. */
     public static function encode(array $payload, int $ttlSeconds = 2592000): string
     {
+        $secret = self::secret();
+        if ($secret === null) {
+            throw new \RuntimeException('JWT_SECRET no está configurado correctamente.');
+        }
+
         $payload['iat'] = time();
         $payload['exp'] = time() + $ttlSeconds;
 
         $header    = self::base64UrlEncode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
         $body      = self::base64UrlEncode(json_encode($payload));
-        $signature = self::base64UrlEncode(hash_hmac('sha256', $header . '.' . $body, self::secret(), true));
+        $signature = self::base64UrlEncode(hash_hmac('sha256', $header . '.' . $body, $secret, true));
 
         return $header . '.' . $body . '.' . $signature;
     }
@@ -50,9 +71,20 @@ class SimpleJwt
             return null;
         }
 
+        $secret = self::secret();
+        if ($secret === null) {
+            return null;
+        }
+
         [$header, $body, $signature] = $parts;
 
-        $expected = self::base64UrlEncode(hash_hmac('sha256', $header . '.' . $body, self::secret(), true));
+        // Solo se acepta el algoritmo con el que se emiten los tokens
+        $head = json_decode(self::base64UrlDecode($header), true);
+        if (! is_array($head) || ($head['alg'] ?? null) !== 'HS256') {
+            return null;
+        }
+
+        $expected = self::base64UrlEncode(hash_hmac('sha256', $header . '.' . $body, $secret, true));
 
         if (! hash_equals($expected, $signature)) {
             return null;
