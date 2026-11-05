@@ -81,7 +81,7 @@ class Properties extends BaseApiController
             'status' => 'permit_empty|in_list[available,sold,rented,cancelled]',
         ];
 
-        if (! $this->validate($rules)) {
+        if (! $this->validateData($this->body(), $rules)) {
             return $this->jsonResponse(['error' => implode(' ', $this->validator->getErrors())], 422);
         }
 
