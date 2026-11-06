@@ -3,7 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
-use App\Libraries\SimpleJwt;
+use App\Libraries\ApiAuth;
 use CodeIgniter\HTTP\ResponseInterface;
 
 abstract class BaseApiController extends BaseController
@@ -11,15 +11,19 @@ abstract class BaseApiController extends BaseController
     /** Uid del usuario autenticado según el Bearer token (null si no hay/no es válido). */
     protected function currentUid(): ?int
     {
-        $header = $this->request->getHeaderLine('Authorization');
+        $auth = ApiAuth::fromRequest($this->request);
 
-        if (! preg_match('/^Bearer\s+(.+)$/i', $header, $matches)) {
-            return null;
-        }
+        return $auth === null ? null : (int) $auth['user']['uid'];
+    }
 
-        $payload = SimpleJwt::decode($matches[1]);
-
-        return isset($payload['uid']) ? (int) $payload['uid'] : null;
+    /**
+     * Usuario y datos del token de la petición actual.
+     *
+     * @return array{user: array, payload: array}|null
+     */
+    protected function currentAuth(): ?array
+    {
+        return ApiAuth::fromRequest($this->request);
     }
 
     /** Cuerpo de la petición: JSON si Content-Type lo indica, si no los campos POST normales. */

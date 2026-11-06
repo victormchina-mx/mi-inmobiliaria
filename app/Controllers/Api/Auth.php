@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Api;
 
-use App\Libraries\SimpleJwt;
+use App\Libraries\ApiAuth;
 use App\Models\UserModel;
 
 class Auth extends BaseApiController
@@ -44,28 +44,38 @@ class Auth extends BaseApiController
         return $this->tokenResponse($user);
     }
 
+    /**
+     * Datos del usuario y token renovado. La renovación conserva la fecha del
+     * inicio de sesión, así que la sesión nunca dura más de ApiAuth::MAX_SESSION.
+     */
     public function me()
     {
-        $uid = $this->currentUid();
+        $auth = $this->currentAuth();
 
-        if (! $uid) {
-            return $this->jsonResponse(['error' => 'Token inválido o expirado.'], 401);
+        if ($auth === null) {
+            return $this->jsonResponse(['error' => 'Tu sesión expiró o se cerró. Inicia sesión de nuevo.'], 401);
         }
 
-        $user = (new UserModel())->find($uid);
+        return $this->tokenResponse($auth['user'], (int) $auth['payload']['auth_time']);
+    }
 
-        if (! $user) {
-            return $this->jsonResponse(['error' => 'Usuario no encontrado.'], 404);
+    /** Cierra la sesión del token actual en el servidor (deja de aceptarse). */
+    public function logout()
+    {
+        $auth = $this->currentAuth();
+
+        if ($auth !== null) {
+            ApiAuth::revoke($auth['payload']);
         }
 
-        return $this->tokenResponse($user);
+        return $this->jsonResponse(['message' => 'Sesión cerrada.']);
     }
 
     /** Emite un token nuevo; si JWT_SECRET no está bien configurado responde 503 en vez de un error 500. */
-    private function tokenResponse(array $user)
+    private function tokenResponse(array $user, ?int $authTime = null)
     {
         try {
-            $token = SimpleJwt::encode(['uid' => (int) $user['uid']]);
+            $token = ApiAuth::issue($user, $authTime);
         } catch (\RuntimeException $e) {
             return $this->jsonResponse(['error' => 'El servicio no está disponible. Inténtalo más tarde.'], 503);
         }
