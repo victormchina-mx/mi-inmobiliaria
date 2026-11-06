@@ -1,0 +1,17 @@
+# ----------------------------------------------------------------------
+# Carpeta de archivos subidos por usuarios y administradores.
+# Aquí solo debe haber imágenes: si alguien lograra subir un script
+# (.php, .phtml, etc.), el servidor se niega a servirlo o ejecutarlo.
+# ----------------------------------------------------------------------
+<FilesMatch "(?i)\.(php[0-9]?|phtml|phar|pht|phps|cgi|pl|py|sh|asp|aspx|jsp|shtml|htaccess|htpasswd)$">
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order allow,deny
+		Deny from all
+	</IfModule>
+</FilesMatch>
+
+# Sin listado de archivos de la carpeta
+Options -Indexes

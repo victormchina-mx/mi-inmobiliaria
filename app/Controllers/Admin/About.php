@@ -8,6 +8,8 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class About extends BaseController
 {
+    private const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
     private AboutModel $aboutModel;
 
     public function __construct()
@@ -40,6 +42,10 @@ class About extends BaseController
         $imageName = '';
         $file = $this->request->getFile('aimage');
         if ($file && $file->isValid() && ! $file->hasMoved()) {
+            // Solo imágenes: sin este chequeo se podía subir un .php a public/uploads
+            if (! in_array($file->getMimeType(), self::ALLOWED_IMAGE_TYPES, true)) {
+                return redirect()->back()->withInput()->with('error', 'Solo se permiten imágenes (jpg, png, gif, webp).');
+            }
             $imageName = $file->getRandomName();
             $file->move(FCPATH . 'uploads/about', $imageName);
         }
@@ -72,6 +78,10 @@ class About extends BaseController
 
         $file = $this->request->getFile('aimage');
         if ($file && $file->isValid() && ! $file->hasMoved()) {
+            // Solo imágenes: sin este chequeo se podía subir un .php a public/uploads
+            if (! in_array($file->getMimeType(), self::ALLOWED_IMAGE_TYPES, true)) {
+                return redirect()->back()->withInput()->with('error', 'Solo se permiten imágenes (jpg, png, gif, webp).');
+            }
             $imageName = $file->getRandomName();
             $file->move(FCPATH . 'uploads/about', $imageName);
         }

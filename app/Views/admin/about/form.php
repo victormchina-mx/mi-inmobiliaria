@@ -23,15 +23,13 @@
                         <label>Contenido *</label>
                         <textarea name="content" class="form-control" rows="8" required><?= $about['content'] ?? '' ?></textarea>
                     </div>
-                    <div class="form-group">
-                        <label>Imagen</label>
-                        <?php if ($about && ! empty($about['image'])): ?>
-                        <div class="mb-2">
-                            <img src="<?= base_url('uploads/about/' . esc($about['image'])) ?>"
-                                 height="80" style="border-radius:4px;">
-                        </div>
-                        <?php endif ?>
-                        <input type="file" name="aimage" class="form-control-file" accept="image/*">
+                    <div class="form-group" style="max-width: 320px;">
+                        <?= view('partials/file_upload', [
+                            'name'    => 'aimage',
+                            'label'   => 'Imagen',
+                            'current' => ($about && ! empty($about['image'])) ? base_url('uploads/about/' . $about['image']) : '',
+                            'tile'    => true,
+                        ]) ?>
                     </div>
                     <button type="submit" class="btn btn-primary">
                         <?= $about ? 'Guardar Cambios' : 'Crear Sección' ?>

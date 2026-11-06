@@ -5,7 +5,10 @@ writable/logs/*
 writable/session/*
 writable/uploads/*
 writable/debugbar/*
-public/uploads/
+# Las fotos subidas no van al repositorio, pero sí la regla que impide
+# ejecutar scripts dentro de la carpeta de subidas
+public/uploads/*
+!public/uploads/.htaccess
 *.DS_Store
 
 # Respaldos manuales y basura de macOS
