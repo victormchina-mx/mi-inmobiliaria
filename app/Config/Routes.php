@@ -49,6 +49,7 @@ $routes->get('api/v1/lookups/cities', 'Api\Lookups::cities');
 
 $routes->group('api/v1', ['filter' => 'api-auth'], static function ($routes) {
     $routes->get('me', 'Api\Auth::me');
+    $routes->post('auth/logout', 'Api\Auth::logout');
     $routes->get('my-properties', 'Api\Properties::mine');
     $routes->get('properties/(:num)', 'Api\Properties::show/$1');
     $routes->post('properties', 'Api\Properties::store');
