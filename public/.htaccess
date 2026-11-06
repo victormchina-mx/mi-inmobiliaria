@@ -51,8 +51,10 @@ ServerSignature Off
 # ----------------------------------------------------------------------
 # Deny public access to leaked template/credential/backup files
 # (applies recursively to this directory and all subfolders)
+# También: archivos de sistema de macOS/Windows (.DS_Store revela los
+# nombres de archivos de la carpeta) y respaldos manuales *_BackUpN.*
 # ----------------------------------------------------------------------
-<FilesMatch "(?i)^01\s*LOGIN\s*DETAILS.*\.txt$|\.bak(-[0-9]+)?$">
+<FilesMatch "(?i)^01\s*LOGIN\s*DETAILS.*\.txt$|\.bak(-[0-9]+)?$|^\.DS_Store$|^Thumbs\.db$|_backup[0-9]*\.[a-z0-9]+$">
 	<IfModule mod_authz_core.c>
 		Require all denied
 	</IfModule>
