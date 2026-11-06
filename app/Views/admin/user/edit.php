@@ -72,16 +72,13 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Foto de perfil <small class="text-muted">(opcional)</small></label>
-                                <input type="file" name="uimage" class="form-control-file" accept="image/*">
-                                <?php if (! empty($user['uimage'])): ?>
-                                <div class="mt-2">
-                                    <img src="<?= base_url('uploads/user/' . esc($user['uimage'])) ?>"
-                                         width="60" height="60" style="object-fit:cover; border-radius:50%;"
-                                         alt="Foto actual">
-                                    <small class="text-muted ml-2">Foto actual</small>
-                                </div>
-                                <?php endif ?>
+                                <?= view('partials/file_upload', [
+                                    'name'     => 'uimage',
+                                    'label'    => 'Foto de perfil',
+                                    'current'  => ! empty($user['uimage']) ? base_url('uploads/user/' . $user['uimage']) : '',
+                                    'avatar'   => true,
+                                    'optional' => true,
+                                ]) ?>
                             </div>
                         </div>
                     </div>
