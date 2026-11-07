@@ -16,12 +16,9 @@
                                 <div class="form-group">
                                     <select class="form-control" name="type">
                                         <option value="">Tipo de Propiedad</option>
-                                        <option value="apartment">Departamento</option>
-                                        <option value="flat">Flat</option>
-                                        <option value="building">Edificio</option>
-                                        <option value="house">Casa</option>
-                                        <option value="villa">Villa</option>
-                                        <option value="office">Oficina</option>
+                                        <?php foreach (\App\Libraries\Labels::PROPERTY_TYPES as $val => $label): ?>
+                                        <option value="<?= esc($val, 'attr') ?>"><?= esc($label) ?></option>
+                                        <?php endforeach ?>
                                     </select>
                                 </div>
                             </div>

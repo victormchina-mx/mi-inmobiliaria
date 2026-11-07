@@ -31,7 +31,7 @@ class Property extends BaseController
         }
 
         return view('property/detail', [
-            'pageTitle' => esc($property['title']),
+            'pageTitle' => $property['title'], // el layout lo escapa
             'property'  => $property,
             'featured'  => $this->propertyModel->withOwner()->featured()->findAll(),
         ]);
@@ -39,10 +39,17 @@ class Property extends BaseController
 
     public function grid(): string
     {
+        // Solo textos: un parámetro enviado como lista (city[]=x) se ignora
+        $param = function (string $name): string {
+            $value = $this->request->getPost($name) ?? $this->request->getGet($name);
+
+            return is_string($value) ? trim($value) : '';
+        };
+
         $filters = [
-            'type'  => $this->request->getPost('type') ?? $this->request->getGet('type'),
-            'stype' => $this->request->getPost('stype') ?? $this->request->getGet('stype'),
-            'city'  => $this->request->getPost('city') ?? $this->request->getGet('city'),
+            'type'  => $param('type'),
+            'stype' => $param('stype'),
+            'city'  => mb_substr($param('city'), 0, 100),
         ];
 
         $properties = $this->propertyModel->withOwner()->applyFilters($filters)->findAll();
@@ -60,7 +67,7 @@ class Property extends BaseController
         $state    = $property['state'] ?? '';
 
         return view('property/by_state', [
-            'pageTitle'  => 'Propiedades en ' . esc($state),
+            'pageTitle'  => 'Propiedades en ' . $state, // el layout lo escapa
             'state'      => $state,
             'properties' => $this->propertyModel->withOwner()->available()->byState($state)->findAll(),
         ]);

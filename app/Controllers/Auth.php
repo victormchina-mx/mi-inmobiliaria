@@ -35,6 +35,8 @@ class Auth extends BaseController
             return redirect()->back()->withInput()->with('error', 'Email o contraseña incorrectos.');
         }
 
+        // Nuevo identificador de sesión al iniciar sesión (evita la fijación de sesión)
+        session()->regenerate(true);
         session()->set([
             'uid'    => $user['uid'],
             'uemail' => $user['uemail'],
@@ -42,7 +44,7 @@ class Auth extends BaseController
             'utype'  => $user['utype'],
         ]);
 
-        return redirect()->to('/')->with('success', 'Bienvenido, ' . esc($user['uname']) . '.');
+        return redirect()->to('/')->with('success', 'Bienvenido, ' . $user['uname'] . '.');
     }
 
     public function register(): string

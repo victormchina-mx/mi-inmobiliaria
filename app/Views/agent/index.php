@@ -15,10 +15,18 @@
             <?php foreach ($agents as $agent): ?>
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="agent-widget p-4 shadow-one text-center hover-shadow rounded">
+                    <?php if (! empty($agent['uimage'])): ?>
                     <img src="<?= base_url('uploads/user/' . esc($agent['uimage'])) ?>"
-                         alt="<?= esc($agent['uname']) ?>" class="rounded-circle mb-3" width="100" height="100" style="object-fit:cover;">
+                         alt="<?= esc($agent['uname']) ?>" class="rounded-circle mb-3" width="100" height="100"
+                         style="width:100px; height:100px; object-fit:cover;">
+                    <?php else: ?>
+                    <div class="rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center"
+                         style="width:100px; height:100px; background:#F4F4F1; color:rgba(15,23,42,.35);" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+                    </div>
+                    <?php endif ?>
                     <h5 class="text-secondary text-capitalize"><?= esc($agent['uname']) ?></h5>
-                    <p class="text-muted"><?= esc($agent['utype']) ?></p>
+                    <p class="text-muted"><?= esc(\App\Libraries\Labels::userType($agent['utype'])) ?></p>
                     <ul class="list-unstyled text-left small">
                         <li><i class="fas fa-phone text-success mr-1"></i><?= esc($agent['uphone']) ?></li>
                         <li><i class="fas fa-envelope text-success mr-1"></i><?= esc($agent['uemail']) ?></li>

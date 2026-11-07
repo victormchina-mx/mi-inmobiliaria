@@ -15,7 +15,7 @@ $routes->get('property/(:num)', 'Property::show/$1');
 $routes->get('agents', 'Agent::index');
 $routes->get('about', 'About::index');
 $routes->get('contact', 'Contact::index');
-$routes->post('contact', 'Contact::submit');
+$routes->post('contact', 'Contact::submit', ['filter' => 'throttle:5,600']);
 $routes->get('calculator', 'Calculator::index');
 $routes->post('calculator', 'Calculator::calculate');
 

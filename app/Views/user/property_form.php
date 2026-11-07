@@ -65,7 +65,7 @@
                     <div class="form-group">
                         <label>Tipo de propiedad *</label>
                         <select name="ptype" class="form-control" required>
-                            <?php foreach (['apartment'=>'Departamento','building'=>'Edificio','house'=>'Casa','villa'=>'Villa','office'=>'Oficina','local'=>'Local','bodega'=>'Bodega','terreno'=>'Terreno'] as $val => $label): ?>
+                            <?php foreach (\App\Libraries\Labels::PROPERTY_TYPES as $val => $label): ?>
                             <option value="<?= $val ?>" <?= ($property['type'] ?? old('ptype')) === $val ? 'selected' : '' ?>><?= $label ?></option>
                             <?php endforeach ?>
                         </select>

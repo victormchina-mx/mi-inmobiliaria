@@ -121,7 +121,7 @@
                             <div class="form-group">
                                 <label>Tipo *</label>
                                 <select name="ptype" class="form-control" required>
-                                    <?php foreach (['apartment'=>'Departamento','flat'=>'Flat','building'=>'Edificio','house'=>'Casa','villa'=>'Villa','office'=>'Oficina'] as $v => $l): ?>
+                                    <?php foreach (\App\Libraries\Labels::PROPERTY_TYPES as $v => $l): ?>
                                     <option value="<?= $v ?>" <?= ($property['type'] ?? '') === $v ? 'selected' : '' ?>><?= $l ?></option>
                                     <?php endforeach ?>
                                 </select>
@@ -210,7 +210,7 @@
                                 <select name="uid" class="form-control">
                                     <?php foreach ($users as $u): ?>
                                     <option value="<?= $u['uid'] ?>" <?= ($property['uid'] ?? 0) == $u['uid'] ? 'selected' : '' ?>>
-                                        <?= esc($u['uname']) ?> (<?= esc($u['utype']) ?>)
+                                        <?= esc($u['uname']) ?> (<?= esc(\App\Libraries\Labels::userType($u['utype'])) ?>)
                                     </option>
                                     <?php endforeach ?>
                                 </select>

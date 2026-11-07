@@ -42,12 +42,14 @@ class Auth extends BaseController
             return redirect()->back()->with('error', 'Usuario o contraseña incorrectos.');
         }
 
+        // Nuevo identificador de sesión al iniciar sesión (evita la fijación de sesión)
+        session()->regenerate(true);
         session()->set([
             'auser' => $admin['auser'],
             'aid'   => $admin['aid'],
         ]);
 
-        return redirect()->to('admin/dashboard')->with('success', 'Bienvenido, ' . esc($admin['auser']) . '.');
+        return redirect()->to('admin/dashboard')->with('success', 'Bienvenido, ' . $admin['auser'] . '.');
     }
 
     public function logout(): RedirectResponse
