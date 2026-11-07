@@ -50,6 +50,7 @@
                         <img src="<?= base_url('uploads/property/' . esc($p['pimage'])) ?>" alt="<?= esc($p['title']) ?>">
                         <div class="sale bg-success text-white text-capitalize"><i class="ms" aria-hidden="true"><?= $p['stype'] === 'sale' ? 'sell' : 'key' ?></i>Para <?= $p['stype'] === 'sale' ? 'Venta' : 'Renta' ?></div>
                         <div class="price text-primary"><b>$<?= number_format($p['price'], 0) ?></b></div>
+                        <a href="<?= site_url('property/' . $p['pid']) ?>" class="thumb-link" tabindex="-1" aria-hidden="true"></a>
                     </div>
                     <div class="featured-thumb-data shadow-one">
                         <div class="p-3">
