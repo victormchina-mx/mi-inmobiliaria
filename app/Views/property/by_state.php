@@ -4,7 +4,7 @@
 <div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.jpg') ?>');">
     <div class="container">
         <div class="row">
-            <div class="col-md-12"><h2 class="page-name text-white text-uppercase">Propiedades en <?= esc($state) ?></h2></div>
+            <div class="col-md-12"><h1 class="h2 page-name text-white text-uppercase">Propiedades en <?= esc($state) ?></h1></div>
         </div>
     </div>
 </div>

@@ -21,6 +21,7 @@ class MyProperty extends BaseController
     {
         return view('user/my_properties', [
             'pageTitle'  => 'Mis Propiedades',
+            'noindex'   => true,
             'properties' => $this->propertyModel->byUser(session()->get('uid'))->findAll(),
         ]);
     }
@@ -29,6 +30,7 @@ class MyProperty extends BaseController
     {
         return view('user/property_form', [
             'pageTitle' => 'Publicar Propiedad',
+            'noindex'   => true,
             'property'  => null,
             'cities'    => (new CityModel())->withState()->orderBy('state.sname', 'ASC')->orderBy('city.cname', 'ASC')->findAll(),
         ]);
@@ -103,6 +105,7 @@ class MyProperty extends BaseController
 
         return view('user/property_form', [
             'pageTitle' => 'Editar Propiedad',
+            'noindex'   => true,
             'property'  => $property,
             'cities'    => (new CityModel())->withState()->orderBy('state.sname', 'ASC')->orderBy('city.cname', 'ASC')->findAll(),
         ]);

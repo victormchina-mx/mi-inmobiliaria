@@ -14,7 +14,7 @@ class Auth extends BaseController
             return redirect()->to('/');
         }
 
-        return view('auth/login', ['pageTitle' => 'Iniciar Sesión']);
+        return view('auth/login', ['pageTitle' => 'Iniciar Sesión', 'noindex' => true]);
     }
 
     public function doLogin(): RedirectResponse
@@ -53,7 +53,7 @@ class Auth extends BaseController
             return redirect()->to('/');
         }
 
-        return view('auth/register', ['pageTitle' => 'Registro']);
+        return view('auth/register', ['pageTitle' => 'Registro', 'noindex' => true]);
     }
 
     public function doRegister(): RedirectResponse
@@ -110,7 +110,7 @@ class Auth extends BaseController
             return redirect()->to('/');
         }
 
-        return view('auth/forgot_password');
+        return view('auth/forgot_password', ['pageTitle' => 'Recuperar contraseña', 'noindex' => true]);
     }
 
     public function sendResetLink(): RedirectResponse
@@ -166,7 +166,7 @@ class Auth extends BaseController
                              ->with('error', 'El enlace no es válido o ha expirado. Solicita uno nuevo.');
         }
 
-        return view('auth/reset_password', ['token' => $token]);
+        return view('auth/reset_password', ['token' => $token, 'pageTitle' => 'Nueva contraseña', 'noindex' => true]);
     }
 
     public function doResetPassword(string $token): RedirectResponse

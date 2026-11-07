@@ -103,7 +103,7 @@
                         <div class="bg-success d-table px-3 py-2 rounded text-white text-capitalize">
                             <i class="ms" aria-hidden="true"><?= $property['stype'] === 'sale' ? 'sell' : 'key' ?></i>Para <?= $property['stype'] === 'sale' ? 'Venta' : 'Renta' ?>
                         </div>
-                        <h5 class="mt-2 text-secondary text-capitalize"><?= esc($property['title']) ?></h5>
+                        <h1 class="h5 mt-2 text-secondary text-capitalize"><?= esc($property['title']) ?></h1>
                         <span class="d-block text-capitalize"><i class="fas fa-map-marker-alt text-success"></i> <?= esc($property['location']) ?></span>
                     </div>
                     <div class="col-md-6">

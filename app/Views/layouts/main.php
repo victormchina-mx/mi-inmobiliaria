@@ -6,15 +6,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="<?= esc($metaDescription ?? 'Encuentra tu próxima propiedad en venta o renta: casas, departamentos y oficinas. Real Estate, tu aliado de confianza en bienes raíces.') ?>">
 <link rel="canonical" href="<?= current_url() ?>">
+<?php if (! empty($noindex)): ?>
+<meta name="robots" content="noindex, follow">
+<?php endif ?>
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Real Estate">
+<meta property="og:site_name" content="Real Estate by Vick">
+<meta property="og:locale" content="es_MX">
 <meta property="og:title" content="<?= esc($pageTitle ?? 'Real Estate') ?>">
 <meta property="og:description" content="<?= esc($metaDescription ?? 'Encuentra tu próxima propiedad en venta o renta: casas, departamentos y oficinas.') ?>">
 <meta property="og:url" content="<?= current_url() ?>">
 <meta property="og:image" content="<?= $ogImage ?? base_url('images/banner/rshmpg.jpg') ?>">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="shortcut icon" type="image/png" href="/favicon.ico">
-<link rel="shortcut icon" href="<?= base_url('images/favicon.ico') ?>">
+<link rel="icon" href="<?= base_url('favicon.ico') ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -31,6 +34,7 @@
 <link rel="stylesheet" href="<?= asset_url('css/style.css') ?>">
 <link rel="stylesheet" href="<?= asset_url('css/file-upload.css') ?>">
 <?= $this->renderSection('styles') ?>
+<?= $this->renderSection('schema') ?>
 <title><?= esc($pageTitle ?? 'Real Estate') ?> | Real Estate by Vick</title>
 </head>
 <body>
@@ -71,7 +75,7 @@
                         <div class="col-lg-12">
                             <nav class="navbar navbar-expand-lg navbar-light p-0">
                                 <a class="navbar-brand position-relative" href="<?= site_url('/') ?>">
-                                    <img class="nav-logo" src="<?= base_url('images/logo/restatelg.png') ?>" alt="Logo">
+                                    <img class="nav-logo" src="<?= base_url('images/logo/restatelg.png') ?>" alt="Real Estate by Vick">
                                 </a>
                                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
                                     <span class="navbar-toggler-icon"></span>

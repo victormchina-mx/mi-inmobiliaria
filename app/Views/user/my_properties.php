@@ -4,7 +4,7 @@
 <div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.jpg') ?>');">
     <div class="container">
         <div class="row">
-            <div class="col-md-6"><h2 class="page-name float-left text-white text-uppercase">Mis Propiedades</h2></div>
+            <div class="col-md-6"><h1 class="h2 page-name float-left text-white text-uppercase">Mis Propiedades</h1></div>
             <div class="col-md-6 text-right pt-3">
                 <a href="<?= site_url('my-properties/add') ?>" class="btn btn-success">+ Publicar Propiedad</a>
             </div>

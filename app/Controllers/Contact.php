@@ -9,7 +9,10 @@ class Contact extends BaseController
 {
     public function index(): string
     {
-        return view('contact/index', ['pageTitle' => 'Contacto']);
+        return view('contact/index', [
+            'pageTitle'       => 'Contacto',
+            'metaDescription' => 'Escríbenos o llámanos al 55 7606 2384: te ayudamos a comprar, vender o rentar tu casa, departamento u oficina.',
+        ]);
     }
 
     public function submit(): RedirectResponse

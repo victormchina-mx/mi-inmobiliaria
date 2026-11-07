@@ -1,4 +1,36 @@
 <?= $this->extend('layouts/main') ?>
+<?= $this->section('schema') ?>
+<?php
+// Datos estructurados para Google: quién es el negocio y cómo contactarlo
+$organization = [
+    '@context'   => 'https://schema.org',
+    '@type'      => 'RealEstateAgent',
+    'name'       => 'Real Estate by Vick',
+    'url'        => base_url('/'),
+    'logo'       => base_url('images/logo/restatelg.png'),
+    'image'      => base_url('images/banner/rshmpg.jpg'),
+    'telephone'  => '+52 55 7606 2384',
+    'email'      => 'inmobiliaria.info@vmch.net',
+    'areaServed' => ['@type' => 'Country', 'name' => 'México'],
+];
+$website = [
+    '@context'        => 'https://schema.org',
+    '@type'           => 'WebSite',
+    'name'            => 'Real Estate by Vick',
+    'url'             => base_url('/'),
+    'inLanguage'      => 'es-MX',
+    'potentialAction' => [
+        '@type'       => 'SearchAction',
+        'target'      => site_url('property/grid') . '?city={search_term_string}',
+        'query-input' => 'required name=search_term_string',
+    ],
+];
+$jsonFlags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP;
+?>
+<script type="application/ld+json"><?= json_encode($organization, $jsonFlags) ?></script>
+<script type="application/ld+json"><?= json_encode($website, $jsonFlags) ?></script>
+<?= $this->endSection() ?>
+
 <?= $this->section('content') ?>
 
 <!-- Banner -->
