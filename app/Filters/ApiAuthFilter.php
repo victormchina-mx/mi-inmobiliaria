@@ -28,7 +28,30 @@ class ApiAuthFilter implements FilterInterface
         }
     }
 
+    /**
+     * Renueva la sesión en cada petición correcta: devuelve un token nuevo
+     * (válido 1 hora más) en la cabecera X-Auth-Token. Tras /auth/logout el
+     * token ya está revocado y no se entrega ninguno.
+     */
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
+        if ($response->getStatusCode() >= 400 || $response->hasHeader(ApiAuth::REFRESH_HEADER)) {
+            return $response;
+        }
+
+        $auth = ApiAuth::fromRequest($request);
+
+        if ($auth !== null) {
+            try {
+                $response->setHeader(
+                    ApiAuth::REFRESH_HEADER,
+                    ApiAuth::issue($auth['user'], (int) $auth['payload']['auth_time'])
+                );
+            } catch (\RuntimeException $e) {
+                // JWT_SECRET mal configurado: se responde sin renovar.
+            }
+        }
+
+        return $response;
     }
 }

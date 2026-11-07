@@ -12,8 +12,9 @@ use CodeIgniter\HTTP\RequestInterface;
  *  - queda ligado a la contraseña del usuario ("pwd"): si la contraseña
  *    cambia (admin o "restablecer contraseña"), todos sus tokens dejan de
  *    valer, y si el usuario se borra, también;
- *  - recuerda cuándo se inició sesión ("auth_time"): /me puede renovar el
- *    token, pero nunca más allá de MAX_SESSION (1 hora) desde el login;
+ *  - vence tras 1 hora sin uso (TOKEN_TTL); cada petición autenticada lo
+ *    renueva, conservando cuándo se inició sesión ("auth_time"), y nunca
+ *    más allá de MAX_SESSION desde el login;
  *  - tiene un identificador ("jti") que se puede revocar al cerrar sesión.
  *
  * Los tokens anteriores a este cambio no tienen estos datos y se rechazan:
@@ -22,13 +23,21 @@ use CodeIgniter\HTTP\RequestInterface;
 class ApiAuth
 {
     /**
-     * Vigencia de cada token. Igual a MAX_SESSION: la sesión dura 1 hora
-     * desde el inicio de sesión y después la app pide correo y contraseña.
+     * Vigencia de cada token: 1 hora SIN USO. Cada petición autenticada
+     * devuelve un token nuevo en la cabecera X-Auth-Token (ApiAuthFilter),
+     * así que mientras la app se use la sesión sigue; tras 1 hora sin
+     * actividad el token vence y la app pide correo y contraseña.
      */
     public const TOKEN_TTL = HOUR;
 
-    /** Tiempo máximo desde el inicio de sesión, aunque el token se renueve con /me. */
-    public const MAX_SESSION = HOUR;
+    /**
+     * Límite absoluto desde el inicio de sesión, aunque la app se use a
+     * diario: la renovación conserva auth_time y no pasa de este tiempo.
+     */
+    public const MAX_SESSION = 90 * DAY;
+
+    /** Cabecera en la que se entrega el token renovado. */
+    public const REFRESH_HEADER = 'X-Auth-Token';
 
     private const REVOKED_PREFIX = 'api_revoked_';
 
