@@ -101,7 +101,7 @@
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <div class="bg-success d-table px-3 py-2 rounded text-white text-capitalize">
-                            Para <?= $property['stype'] === 'sale' ? 'Venta' : 'Renta' ?>
+                            <i class="ms" aria-hidden="true"><?= $property['stype'] === 'sale' ? 'sell' : 'key' ?></i>Para <?= $property['stype'] === 'sale' ? 'Venta' : 'Renta' ?>
                         </div>
                         <h5 class="mt-2 text-secondary text-capitalize"><?= esc($property['title']) ?></h5>
                         <span class="d-block text-capitalize"><i class="fas fa-map-marker-alt text-success"></i> <?= esc($property['location']) ?></span>
@@ -115,14 +115,7 @@
                 <!-- Características -->
                 <div class="property-details">
                     <div class="bg-gray property-quantity px-4 pt-4 w-100">
-                        <ul>
-                            <li><span class="text-secondary"><?= esc($property['size']) ?></span> m²</li>
-                            <li><span class="text-secondary"><?= esc($property['bedroom']) ?></span> Cuartos</li>
-                            <li><span class="text-secondary"><?= esc($property['bathroom']) ?></span> Baños</li>
-                            <li><span class="text-secondary"><?= esc($property['balcony']) ?></span> Balcón</li>
-                            <li><span class="text-secondary"><?= esc($property['hall']) ?></span> Sala</li>
-                            <li><span class="text-secondary"><?= esc($property['kitchen']) ?></span> Cocina</li>
-                        </ul>
+                        <?= view('partials/property_stats', ['p' => $property, 'full' => true]) ?>
                     </div>
 
                     <?php if (trim(strip_tags($safeDescription)) !== ''): ?>
