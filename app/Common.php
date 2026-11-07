@@ -48,7 +48,9 @@ if (! function_exists('thumb_url')) {
 
         $ext = function_exists('imagewebp') ? 'webp' : 'jpg';
 
-        return base_url('img/' . $folder . '/' . $width . '/' . rawurlencode($file) . '.' . $ext);
+        // ?v=2: las primeras miniaturas (sin reducir) quedaron guardadas un año en
+        // los navegadores; con otra URL piden la versión corregida.
+        return base_url('img/' . $folder . '/' . $width . '/' . rawurlencode($file) . '.' . $ext) . '?v=2';
     }
 }
 

@@ -2,6 +2,12 @@
 
 <?= $this->section('styles') ?>
 <link rel="stylesheet" href="<?= base_url('css/layerslider.css') ?>">
+<?php // La primera foto del carrusel es la imagen principal (LCP): descargarla primero ?>
+<?php foreach (['pimage', 'pimage1', 'pimage2', 'pimage3', 'pimage4'] as $firstSlide): ?>
+<?php if (! empty($property[$firstSlide])): ?>
+<link rel="preload" as="image" href="<?= esc(thumb_url('property', $property[$firstSlide], 1600)) ?>" fetchpriority="high">
+<?php break; endif ?>
+<?php endforeach ?>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
