@@ -58,11 +58,14 @@ class Thumb extends BaseController
 
         // Solo se reduce, nunca se agranda
         if (imagesx($image) > $width) {
-            $scaled = imagescale($image, $width, -1, IMG_BICUBIC);
-            if ($scaled) {
+            $scaled = $this->resize($image, $width);
+            if ($scaled === null) {
                 imagedestroy($image);
-                $image = $scaled;
+
+                return $fallback;
             }
+            imagedestroy($image);
+            $image = $scaled;
         }
 
         ob_start();
@@ -95,6 +98,38 @@ class Thumb extends BaseController
             ->setContentType($mime)
             ->setHeader('Cache-Control', 'public, max-age=31536000, immutable')
             ->setBody($data);
+    }
+
+    /**
+     * Reduce a $width de ancho conservando la proporción.
+     *
+     * Se usa imagecopyresampled (disponible en cualquier GD): imagescale() con
+     * IMG_BICUBIC devolvía la imagen sin reducir en el GD de Hostinger, y las
+     * "miniaturas" de 800 px salían de 3840 px.
+     */
+    private function resize(\GdImage $image, int $width): ?\GdImage
+    {
+        $srcW   = imagesx($image);
+        $srcH   = imagesy($image);
+        $height = max(1, (int) round($srcH * $width / $srcW));
+
+        $dest = imagecreatetruecolor($width, $height);
+        if ($dest === false) {
+            return null;
+        }
+
+        // Conservar la transparencia de PNG/GIF
+        imagealphablending($dest, false);
+        imagesavealpha($dest, true);
+        imagefill($dest, 0, 0, imagecolorallocatealpha($dest, 0, 0, 0, 127));
+
+        if (! imagecopyresampled($dest, $image, 0, 0, 0, 0, $width, $height, $srcW, $srcH) || imagesx($dest) !== $width) {
+            imagedestroy($dest);
+
+            return null;
+        }
+
+        return $dest;
     }
 
     /** Las fotos del celular guardan su giro en EXIF; GD lo ignora y saldrían de lado. */
