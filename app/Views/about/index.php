@@ -15,7 +15,7 @@
         <div class="row align-items-center">
             <div class="col-lg-6">
                 <h2 class="text-secondary mb-4"><?= esc($about['title']) ?></h2>
-                <div><?= $about['content'] ?></div>
+                <div><?= \App\Libraries\HtmlSanitizer::clean($about['content']) ?></div>
             </div>
             <?php if (! empty($about['image'])): ?>
             <div class="col-lg-6 text-center">
