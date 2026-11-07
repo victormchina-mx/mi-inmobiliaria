@@ -1,10 +1,10 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.jpg') ?>');">
+<div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.webp') ?>');">
     <div class="container">
         <div class="row">
-            <div class="col-md-6"><h2 class="page-name float-left text-white text-uppercase">Mi Perfil</h2></div>
+            <div class="col-md-6"><h1 class="h2 page-name float-left text-white text-uppercase">Mi Perfil</h1></div>
         </div>
     </div>
 </div>
@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-lg-4 text-center">
                 <?php if (! empty($user['uimage'])): ?>
-                <img src="<?= base_url('uploads/user/' . esc($user['uimage'])) ?>" alt="Perfil"
+                <img src="<?= esc(thumb_url('user', $user['uimage'], 200)) ?>" alt="Perfil"
                      class="rounded-circle mb-3" width="150" height="150" style="object-fit:cover;">
                 <?php else: ?>
                 <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"

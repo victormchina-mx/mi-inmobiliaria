@@ -6,31 +6,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="<?= esc($metaDescription ?? 'Encuentra tu próxima propiedad en venta o renta: casas, departamentos y oficinas. Real Estate, tu aliado de confianza en bienes raíces.') ?>">
 <link rel="canonical" href="<?= current_url() ?>">
+<?php if (! empty($noindex)): ?>
+<meta name="robots" content="noindex, follow">
+<?php endif ?>
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Real Estate">
+<meta property="og:site_name" content="Real Estate by Vick">
+<meta property="og:locale" content="es_MX">
 <meta property="og:title" content="<?= esc($pageTitle ?? 'Real Estate') ?>">
 <meta property="og:description" content="<?= esc($metaDescription ?? 'Encuentra tu próxima propiedad en venta o renta: casas, departamentos y oficinas.') ?>">
 <meta property="og:url" content="<?= current_url() ?>">
 <meta property="og:image" content="<?= $ogImage ?? base_url('images/banner/rshmpg.jpg') ?>">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="shortcut icon" type="image/png" href="/favicon.ico">
-<link rel="shortcut icon" href="<?= base_url('images/favicon.ico') ?>">
+<link rel="icon" href="<?= base_url('favicon.ico') ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- Íconos Material Symbols (los mismos de la app móvil); solo se descargan los usados -->
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,300..400,0,0&icon_names=balcony,bathtub,bed,countertops,key,sell,square_foot,weekend&display=block" rel="stylesheet">
 <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
-<link rel="stylesheet" href="<?= base_url('css/bootstrap-slider.css') ?>">
-<link rel="stylesheet" href="<?= base_url('css/jquery-ui.css') ?>">
 <link rel="stylesheet" href="<?= asset_url('css/color.css') ?>" id="color-change">
-<link rel="stylesheet" href="<?= base_url('css/owl.carousel.min.css') ?>">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-<link rel="stylesheet" href="<?= base_url('fonts/flaticon/flaticon.css') ?>">
+<link rel="stylesheet" href="<?= base_url('css/owl.carousel.min.css') ?>" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="<?= base_url('css/owl.carousel.min.css') ?>"></noscript>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"></noscript>
+<link rel="stylesheet" href="<?= base_url('fonts/flaticon/flaticon.css') ?>" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="<?= base_url('fonts/flaticon/flaticon.css') ?>"></noscript>
 <link rel="stylesheet" href="<?= asset_url('css/style.css') ?>">
 <link rel="stylesheet" href="<?= asset_url('css/file-upload.css') ?>">
 <?= $this->renderSection('styles') ?>
+<?= $this->renderSection('schema') ?>
 <title><?= esc($pageTitle ?? 'Real Estate') ?> | Real Estate by Vick</title>
 </head>
 <body>
@@ -71,7 +75,7 @@
                         <div class="col-lg-12">
                             <nav class="navbar navbar-expand-lg navbar-light p-0">
                                 <a class="navbar-brand position-relative" href="<?= site_url('/') ?>">
-                                    <img class="nav-logo" src="<?= base_url('images/logo/restatelg.png') ?>" alt="Logo">
+                                    <img class="nav-logo" src="<?= base_url('images/logo/restatelg.png') ?>" alt="Real Estate by Vick">
                                 </a>
                                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
                                     <span class="navbar-toggler-icon"></span>
@@ -200,11 +204,6 @@
 <script src="<?= base_url('js/popper.min.js') ?>"></script>
 <script src="<?= base_url('js/bootstrap.min.js') ?>"></script>
 <script src="<?= base_url('js/owl.carousel.min.js') ?>"></script>
-<script src="<?= base_url('js/jquery.dependClass-0.1.js') ?>"></script>
-<script src="<?= base_url('js/draggable-0.1.js') ?>"></script>
-<script src="<?= base_url('js/tmpl.js') ?>"></script>
-<script src="<?= base_url('js/jquery.slider.js') ?>"></script>
-<script src="<?= base_url('js/wow.js') ?>"></script>
 <?= $this->renderSection('scripts') ?>
 <script src="<?= asset_url('js/custom.js') ?>"></script>
 <script src="<?= asset_url('js/file-upload.js') ?>"></script>

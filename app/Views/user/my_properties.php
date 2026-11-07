@@ -1,10 +1,10 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.jpg') ?>');">
+<div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.webp') ?>');">
     <div class="container">
         <div class="row">
-            <div class="col-md-6"><h2 class="page-name float-left text-white text-uppercase">Mis Propiedades</h2></div>
+            <div class="col-md-6"><h1 class="h2 page-name float-left text-white text-uppercase">Mis Propiedades</h1></div>
             <div class="col-md-6 text-right pt-3">
                 <a href="<?= site_url('my-properties/add') ?>" class="btn btn-success">+ Publicar Propiedad</a>
             </div>
@@ -37,7 +37,7 @@
                     <?php foreach ($properties as $p): ?>
                     <tr>
                         <td>
-                            <img src="<?= base_url('uploads/property/' . esc($p['pimage'])) ?>"
+                            <img src="<?= esc(thumb_url('property', $p['pimage'], 200)) ?>" loading="lazy" decoding="async"
                                  alt="<?= esc($p['title']) ?>" width="70" height="50" style="object-fit:cover;">
                         </td>
                         <td class="text-capitalize"><?= esc($p['title']) ?></td>

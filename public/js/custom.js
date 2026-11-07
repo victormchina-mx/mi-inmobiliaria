@@ -514,79 +514,83 @@
 		});
 	} 
 
-	// Pricing bar Filter
-	$(".filter-price").slider({ 
-		from: 0,
-		to: 1000000,
-		step: 1000,
-		smooth: true,
-		round: 0,
-		dimension: "$",
-		skin: "plastic" 
-	});
+	// Filtros con deslizador (jquery.slider): ninguna página los usa y el
+	// plugin ya no se carga; si algún día se vuelve a cargar, se activan.
+	if (typeof $.fn.slider === 'function') {
+		// Pricing bar Filter
+		$(".filter-price").slider({ 
+			from: 0,
+			to: 1000000,
+			step: 1000,
+			smooth: true,
+			round: 0,
+			dimension: "$",
+			skin: "plastic" 
+		});
 
 
 
-	// area Range
-	$("#Slider1").slider({
-	   from: 1000, 
-	   to: 100000, 
-	   step: 500, 
-	   smooth: true, 
-	   round: 0, 
-	   dimension: "&nbsp; sqft", 
-	   skin: "plastic" 
-	});
+		// area Range
+		$("#Slider1").slider({
+		   from: 1000, 
+		   to: 100000, 
+		   step: 500, 
+		   smooth: true, 
+		   round: 0, 
+		   dimension: "&nbsp; sqft", 
+		   skin: "plastic" 
+		});
 
 
 
-	//  Bads room range
-	$("#beds-room").slider({
-	   from: 1, to: 10, 
-	   step: 1,
-	   round: 1, 
-	   format: 
-	   { format: '##.0', locale: 'de' },
-		dimension: '&nbsp;', skin: "round" 
-	});
+		//  Bads room range
+		$("#beds-room").slider({
+		   from: 1, to: 10, 
+		   step: 1,
+		   round: 1, 
+		   format: 
+		   { format: '##.0', locale: 'de' },
+			dimension: '&nbsp;', skin: "round" 
+		});
 
 
 
-	//  Bath room range
-	$("#bath-room").slider({
-	   from: 1, to: 5, 
-	   step: 1,
-	   round: 1, 
-	   format: 
-	   { format: '##.0', locale: 'de' },
-		dimension: '&nbsp;', skin: "round" 
-	});
+		//  Bath room range
+		$("#bath-room").slider({
+		   from: 1, to: 5, 
+		   step: 1,
+		   round: 1, 
+		   format: 
+		   { format: '##.0', locale: 'de' },
+			dimension: '&nbsp;', skin: "round" 
+		});
 	
 
 
-	// Listed Property
-	$("#listed-property").slider({
-	   from: 50, 
-	   to: 150, 
-	   step: 10, 
-	   smooth: true, 
-	   round: 0, 
-	   dimension: "&nbsp; Min", 
-	   skin: "plastic" 
-	});
+		// Listed Property
+		$("#listed-property").slider({
+		   from: 50, 
+		   to: 150, 
+		   step: 10, 
+		   smooth: true, 
+		   round: 0, 
+		   dimension: "&nbsp; Min", 
+		   skin: "plastic" 
+		});
 	
 	
 
-	// Price
-	$("#price").slider({
-	   from: 100000, 
-	   to: 1000000, 
-	   step: 1000, 
-	   smooth: true, 
-	   round: 0, 
-	   dimension: "&nbsp; $", 
-	   skin: "plastic" 
-	});
+		// Price
+		$("#price").slider({
+		   from: 100000, 
+		   to: 1000000, 
+		   step: 1000, 
+		   smooth: true, 
+		   round: 0, 
+		   dimension: "&nbsp; $", 
+		   skin: "plastic" 
+		});
+	}
  
 
  

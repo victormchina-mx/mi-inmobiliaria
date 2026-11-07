@@ -11,7 +11,8 @@ class Agent extends BaseController
         $userModel = new UserModel();
 
         return view('agent/index', [
-            'pageTitle' => 'Agentes',
+            'pageTitle'       => 'Agentes inmobiliarios',
+            'metaDescription' => 'Conoce a nuestros agentes inmobiliarios y contáctalos directamente por teléfono o correo para comprar, vender o rentar tu propiedad.',
             'agents'    => $userModel->agents()->findAll(),
         ]);
     }

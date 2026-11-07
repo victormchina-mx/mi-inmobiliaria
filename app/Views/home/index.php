@@ -1,9 +1,45 @@
 <?= $this->extend('layouts/main') ?>
+<?= $this->section('styles') ?>
+<!-- La portada es la imagen principal (LCP): descargarla primero -->
+<link rel="preload" as="image" href="<?= base_url('images/banner/rshmpg.webp') ?>" fetchpriority="high">
+<?= $this->endSection() ?>
+<?= $this->section('schema') ?>
+<?php
+// Datos estructurados para Google: quién es el negocio y cómo contactarlo
+$organization = [
+    '@context'   => 'https://schema.org',
+    '@type'      => 'RealEstateAgent',
+    'name'       => 'Real Estate by Vick',
+    'url'        => base_url('/'),
+    'logo'       => base_url('images/logo/restatelg.png'),
+    'image'      => base_url('images/banner/rshmpg.webp'),
+    'telephone'  => '+52 55 7606 2384',
+    'email'      => 'inmobiliaria.info@vmch.net',
+    'areaServed' => ['@type' => 'Country', 'name' => 'México'],
+];
+$website = [
+    '@context'        => 'https://schema.org',
+    '@type'           => 'WebSite',
+    'name'            => 'Real Estate by Vick',
+    'url'             => base_url('/'),
+    'inLanguage'      => 'es-MX',
+    'potentialAction' => [
+        '@type'       => 'SearchAction',
+        'target'      => site_url('property/grid') . '?city={search_term_string}',
+        'query-input' => 'required name=search_term_string',
+    ],
+];
+$jsonFlags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP;
+?>
+<script type="application/ld+json"><?= json_encode($organization, $jsonFlags) ?></script>
+<script type="application/ld+json"><?= json_encode($website, $jsonFlags) ?></script>
+<?= $this->endSection() ?>
+
 <?= $this->section('content') ?>
 
 <!-- Banner -->
 <div id="hero-section" class="overlay-black w-100 slider-banner1 position-relative"
-     style="background-image: url('<?= base_url('images/banner/rshmpg.jpg') ?>'); background-size: cover; background-position: center center;">
+     style="background-image: url('<?= base_url('images/banner/rshmpg.webp') ?>'); background-size: cover; background-position: center center;">
     <div class="container h-100">
         <div class="row h-100 align-items-center">
             <div class="col-lg-10 col-xl-8">
@@ -106,7 +142,7 @@
                     <div class="col-md-6 col-lg-4 reveal-scale">
                         <div class="featured-thumb hover-zoomer mb-4">
                             <div class="overlay-black overflow-hidden position-relative">
-                                <img src="<?= base_url('uploads/property/' . esc($p['pimage'])) ?>" alt="<?= esc($p['title']) ?>" loading="lazy">
+                                <img src="<?= esc(thumb_url('property', $p['pimage'], 800)) ?>" srcset="<?= esc(thumb_srcset('property', $p['pimage'])) ?>" sizes="(min-width: 992px) 350px, (min-width: 768px) 50vw, 100vw" alt="<?= esc($p['title']) ?>" loading="lazy" decoding="async">
                                 <div class="featured bg-success text-white">Nuevo</div>
                                 <div class="sale bg-success text-white text-capitalize"><i class="ms" aria-hidden="true"><?= $p['stype'] === 'sale' ? 'sell' : 'key' ?></i>Para <?= $p['stype'] === 'sale' ? 'Venta' : 'Renta' ?></div>
                                 <div class="price text-primary"><b>$<?= number_format($p['price'], 0) ?></b> <span class="text-white"><?= esc($p['size']) ?> m²</span></div>
@@ -169,7 +205,7 @@
 
 <!-- Estadísticas -->
 <div class="full-row overlay-secondary"
-     style="background-image: url('<?= base_url('images/breadcromb.jpg') ?>'); background-size: cover;">
+     style="background-image: url('<?= base_url('images/breadcromb.webp') ?>'); background-size: cover;">
     <div class="container">
         <div class="fact-counter">
             <div class="row">

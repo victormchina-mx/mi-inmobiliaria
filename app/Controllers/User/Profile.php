@@ -16,6 +16,7 @@ class Profile extends BaseController
 
         return view('user/profile', [
             'pageTitle' => 'Mi Perfil',
+            'noindex'   => true,
             'user'      => $user,
         ]);
     }

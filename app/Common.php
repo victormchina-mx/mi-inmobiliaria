@@ -32,3 +32,33 @@ if (! function_exists('asset_url')) {
         return is_file($file) ? $url . '?v=' . filemtime($file) : $url;
     }
 }
+
+if (! function_exists('thumb_url')) {
+    /**
+     * URL de la versión reducida de una foto subida (ver App\Controllers\Thumb).
+     * $folder: property | user | about.  $width: 200 | 400 | 800 | 1600.
+     * Devuelve '' si no hay archivo. Usa WebP si el servidor puede generarlo.
+     */
+    function thumb_url(string $folder, ?string $file, int $width): string
+    {
+        $file = (string) $file;
+        if ($file === '') {
+            return '';
+        }
+
+        $ext = function_exists('imagewebp') ? 'webp' : 'jpg';
+
+        return base_url('img/' . $folder . '/' . $width . '/' . rawurlencode($file) . '.' . $ext);
+    }
+}
+
+if (! function_exists('thumb_srcset')) {
+    /** Valor para srcset: "url400 400w, url800 800w" — el navegador elige según la pantalla. */
+    function thumb_srcset(string $folder, ?string $file, array $widths = [400, 800]): string
+    {
+        return implode(', ', array_map(
+            static fn (int $w): string => thumb_url($folder, $file, $w) . ' ' . $w . 'w',
+            $widths
+        ));
+    }
+}

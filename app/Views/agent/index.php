@@ -1,10 +1,10 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.jpg') ?>');">
+<div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.webp') ?>');">
     <div class="container">
         <div class="row">
-            <div class="col-md-6"><h2 class="page-name float-left text-white text-uppercase">Agentes</h2></div>
+            <div class="col-md-6"><h1 class="h2 page-name float-left text-white text-uppercase">Agentes</h1></div>
         </div>
     </div>
 </div>
@@ -16,7 +16,7 @@
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="agent-widget p-4 shadow-one text-center hover-shadow rounded">
                     <?php if (! empty($agent['uimage'])): ?>
-                    <img src="<?= base_url('uploads/user/' . esc($agent['uimage'])) ?>"
+                    <img src="<?= esc(thumb_url('user', $agent['uimage'], 200)) ?>" loading="lazy" decoding="async"
                          alt="<?= esc($agent['uname']) ?>" class="rounded-circle mb-3" width="100" height="100"
                          style="width:100px; height:100px; object-fit:cover;">
                     <?php else: ?>

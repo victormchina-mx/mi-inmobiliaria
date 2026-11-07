@@ -17,7 +17,8 @@ class Property extends BaseController
     public function index(): string
     {
         return view('property/index', [
-            'pageTitle'  => 'Propiedades',
+            'pageTitle'       => 'Propiedades en venta y renta',
+            'metaDescription' => 'Casas, departamentos, oficinas, locales, bodegas y terrenos en venta y renta. Consulta precio, fotos, recámaras, baños y ubicación de cada propiedad.',
             'properties' => $this->propertyModel->withOwner()->available()->orderBy('created_at', 'DESC')->findAll(),
         ]);
     }
@@ -31,8 +32,10 @@ class Property extends BaseController
         }
 
         return view('property/detail', [
-            'pageTitle' => $property['title'], // el layout lo escapa
-            'property'  => $property,
+            'pageTitle'       => $property['title'], // el layout lo escapa
+            'metaDescription' => $this->describe($property),
+            'ogImage'         => ! empty($property['pimage']) ? base_url('uploads/property/' . $property['pimage']) : null,
+            'property'        => $property,
             'featured'  => $this->propertyModel->withOwner()->featured()->findAll(),
         ]);
     }
@@ -56,6 +59,8 @@ class Property extends BaseController
 
         return view('property/grid', [
             'pageTitle'  => 'Buscar Propiedades',
+            // Resultados de búsqueda: Google no debe indexar cada combinación de filtros
+            'noindex'    => true,
             'properties' => $properties,
             'filters'    => $filters,
         ]);
@@ -68,8 +73,43 @@ class Property extends BaseController
 
         return view('property/by_state', [
             'pageTitle'  => 'Propiedades en ' . $state, // el layout lo escapa
+            'metaDescription' => 'Propiedades en venta y renta en ' . $state . ': casas, departamentos, oficinas y más, con fotos, precios y ubicación.',
             'state'      => $state,
             'properties' => $this->propertyModel->withOwner()->available()->byState($state)->findAll(),
         ]);
+    }
+
+    /**
+     * Descripción para buscadores y redes sociales (máx. ~160 caracteres):
+     * "Casa en venta en Zinacantepec, Metepec: 3 recámaras, 2 baños, 200 m². $2,000,000."
+     * seguida del inicio de la descripción de la propiedad, si cabe.
+     */
+    private function describe(array $p): string
+    {
+        $operation = ($p['stype'] ?? '') === 'rent' ? 'renta' : 'venta';
+        $where     = implode(', ', array_filter([trim((string) ($p['location'] ?? '')), trim((string) ($p['city'] ?? ''))]));
+
+        $parts = [];
+        if ((int) ($p['bedroom'] ?? 0) > 0) {
+            $parts[] = (int) $p['bedroom'] . ((int) $p['bedroom'] === 1 ? ' recámara' : ' recámaras');
+        }
+        if ((int) ($p['bathroom'] ?? 0) > 0) {
+            $parts[] = (int) $p['bathroom'] . ((int) $p['bathroom'] === 1 ? ' baño' : ' baños');
+        }
+        if ((int) ($p['size'] ?? 0) > 0) {
+            $parts[] = (int) $p['size'] . ' m²';
+        }
+
+        $text = \App\Libraries\Labels::propertyType($p['type'] ?? '') . ' en ' . $operation
+            . ($where !== '' ? ' en ' . $where : '')
+            . ($parts ? ': ' . implode(', ', $parts) : '')
+            . '. Precio: $' . number_format((float) ($p['price'] ?? 0), 0) . '.';
+
+        $content = trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags((string) ($p['pcontent'] ?? '')), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+        if ($content !== '') {
+            $text .= ' ' . $content;
+        }
+
+        return mb_strlen($text) > 160 ? rtrim(mb_substr($text, 0, 157)) . '...' : $text;
     }
 }

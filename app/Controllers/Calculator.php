@@ -7,7 +7,8 @@ class Calculator extends BaseController
     public function index(): string
     {
         return view('calculator/index', [
-            'pageTitle' => 'Calculadora de Hipoteca',
+            'pageTitle'       => 'Calculadora de hipoteca',
+            'metaDescription' => 'Calcula la mensualidad de tu crédito hipotecario según el monto del préstamo, el plazo en meses y la tasa de interés anual.',
             'result'    => null,
         ]);
     }
@@ -26,7 +27,8 @@ class Calculator extends BaseController
         }
 
         return view('calculator/index', [
-            'pageTitle' => 'Calculadora de Hipoteca',
+            'pageTitle'       => 'Calculadora de hipoteca',
+            'metaDescription' => 'Calcula la mensualidad de tu crédito hipotecario según el monto del préstamo, el plazo en meses y la tasa de interés anual.',
             'result'    => $result,
             'amount'    => $amount,
             'months'    => $months,

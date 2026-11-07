@@ -60,7 +60,7 @@
 ?>
 <script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
 
-<div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.jpg') ?>');">
+<div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.webp') ?>');">
     <div class="container">
         <div class="row">
             <div class="col-md-6"><h2 class="page-name float-left text-white text-uppercase">Detalle de Propiedad</h2></div>
@@ -89,7 +89,7 @@
                             <?php foreach (['pimage','pimage1','pimage2','pimage3','pimage4'] as $img): ?>
                             <?php if (! empty($property[$img])): ?>
                             <div class="ls-slide" data-ls="duration:7500; transition2d:5; kenburnszoom:in; kenburnsscale:1.2;">
-                                <img width="1920" height="1080" src="<?= base_url('uploads/property/' . esc($property[$img])) ?>" class="ls-bg" alt="<?= esc($property['title']) ?>">
+                                <img width="1600" height="900" src="<?= esc(thumb_url('property', $property[$img], 1600)) ?>" class="ls-bg" alt="<?= esc($property['title']) ?>">
                             </div>
                             <?php endif ?>
                             <?php endforeach ?>
@@ -103,7 +103,7 @@
                         <div class="bg-success d-table px-3 py-2 rounded text-white text-capitalize">
                             <i class="ms" aria-hidden="true"><?= $property['stype'] === 'sale' ? 'sell' : 'key' ?></i>Para <?= $property['stype'] === 'sale' ? 'Venta' : 'Renta' ?>
                         </div>
-                        <h5 class="mt-2 text-secondary text-capitalize"><?= esc($property['title']) ?></h5>
+                        <h1 class="h5 mt-2 text-secondary text-capitalize"><?= esc($property['title']) ?></h1>
                         <span class="d-block text-capitalize"><i class="fas fa-map-marker-alt text-success"></i> <?= esc($property['location']) ?></span>
                     </div>
                     <div class="col-md-6">
@@ -154,19 +154,19 @@
                         <?php if (! empty($property['mapimage'])): ?>
                         <button class="bg-gray py-3 px-4 mb-1 w-100 text-left rounded" type="button" data-toggle="collapse" data-target="#plano1">Plano Principal</button>
                         <div id="plano1" class="collapse show p-4">
-                            <img src="<?= base_url('uploads/property/' . esc($property['mapimage'])) ?>" alt="Plano" class="img-fluid">
+                            <img src="<?= esc(thumb_url('property', $property['mapimage'], 1600)) ?>" alt="Plano" loading="lazy" decoding="async" class="img-fluid">
                         </div>
                         <?php endif ?>
                         <?php if (! empty($property['topmapimage'])): ?>
                         <button class="bg-gray py-3 px-4 mb-1 w-100 text-left rounded collapsed" type="button" data-toggle="collapse" data-target="#plano2">Planta Alta</button>
                         <div id="plano2" class="collapse p-4">
-                            <img src="<?= base_url('uploads/property/' . esc($property['topmapimage'])) ?>" alt="Planta alta" class="img-fluid">
+                            <img src="<?= esc(thumb_url('property', $property['topmapimage'], 1600)) ?>" alt="Planta alta" loading="lazy" decoding="async" class="img-fluid">
                         </div>
                         <?php endif ?>
                         <?php if (! empty($property['groundmapimage'])): ?>
                         <button class="bg-gray py-3 px-4 mb-1 w-100 text-left rounded collapsed" type="button" data-toggle="collapse" data-target="#plano3">Planta Baja</button>
                         <div id="plano3" class="collapse p-4">
-                            <img src="<?= base_url('uploads/property/' . esc($property['groundmapimage'])) ?>" alt="Planta baja" class="img-fluid">
+                            <img src="<?= esc(thumb_url('property', $property['groundmapimage'], 1600)) ?>" alt="Planta baja" loading="lazy" decoding="async" class="img-fluid">
                         </div>
                         <?php endif ?>
                     </div>
@@ -176,7 +176,7 @@
                     <div class="agent-contact">
                         <div class="row">
                             <div class="col-sm-4 col-lg-3">
-                                <img src="<?= base_url('uploads/user/' . esc($property['uimage'])) ?>" alt="<?= esc($property['uname']) ?>" height="200" width="170">
+                                <img src="<?= esc(thumb_url('user', $property['uimage'], 200)) ?>" loading="lazy" decoding="async" alt="<?= esc($property['uname']) ?>" height="200" width="170">
                             </div>
                             <div class="col-sm-8 col-lg-9">
                                 <div class="agent-data mt-sm-20">
@@ -217,7 +217,7 @@
                 <ul class="property_list_widget">
                     <?php foreach ($featured as $fp): ?>
                     <li>
-                        <img src="<?= base_url('uploads/property/' . esc($fp['pimage'])) ?>" alt="<?= esc($fp['title']) ?>">
+                        <img src="<?= esc(thumb_url('property', $fp['pimage'], 200)) ?>" alt="<?= esc($fp['title']) ?>" loading="lazy" decoding="async">
                         <h6 class="text-secondary hover-text-success text-capitalize">
                             <a href="<?= site_url('property/' . $fp['pid']) ?>"><?= esc($fp['title']) ?></a>
                         </h6>
