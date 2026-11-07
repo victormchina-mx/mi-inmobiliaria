@@ -4328,3 +4328,40 @@ table td, table th {
     margin-bottom: 24px;
   }
 }
+
+/* ================================================================
+   Íconos Material Symbols (.ms) — mismos que la app móvil
+   <i class="ms" aria-hidden="true">bed</i>
+   ================================================================ */
+.ms {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.25em;
+  line-height: 1;
+  display: inline-block;
+  vertical-align: -0.22em;
+  letter-spacing: normal;
+  text-transform: none; /* las etiquetas usan text-capitalize: rompería el ícono */
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  margin-right: 4px;
+  overflow: hidden;
+  width: 1em;            /* reserva el espacio mientras carga la fuente */
+}
+/* Características de la propiedad: ícono dorado junto al número */
+.property-quantity li .ms,
+.featured-thumb .quantity li .ms {
+  font-size: 18px;
+  color: var(--theme-primary-color);
+  vertical-align: -4px;
+}
+.property-quantity li .ms {
+  font-size: 22px;
+  vertical-align: -5px;
+}
+

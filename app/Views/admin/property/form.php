@@ -171,7 +171,7 @@
                             </div>
                         </div>
 
-                        <?php foreach (['bed'=>['bedroom','Cuartos'],'bath'=>['bathroom','Baños'],'balc'=>['balcony','Balcones'],'kitc'=>['kitchen','Cocina'],'hall'=>['hall','Sala']] as $name => [$field, $label]): ?>
+                        <?php foreach (['bed'=>['bedroom','Recámaras'],'bath'=>['bathroom','Baños'],'balc'=>['balcony','Balcones'],'kitc'=>['kitchen','Cocina'],'hall'=>['hall','Sala']] as $name => [$field, $label]): ?>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label><?= $label ?></label>

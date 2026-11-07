@@ -17,7 +17,7 @@
                 <div class="featured-thumb hover-zoomer">
                     <div class="overlay-black overflow-hidden position-relative">
                         <img src="<?= base_url('uploads/property/' . esc($p['pimage'])) ?>" alt="<?= esc($p['title']) ?>">
-                        <div class="sale bg-success text-white text-capitalize">Para <?= $p['stype'] === 'sale' ? 'Venta' : 'Renta' ?></div>
+                        <div class="sale bg-success text-white text-capitalize"><i class="ms" aria-hidden="true"><?= $p['stype'] === 'sale' ? 'sell' : 'key' ?></i>Para <?= $p['stype'] === 'sale' ? 'Venta' : 'Renta' ?></div>
                         <div class="price text-primary"><b>$<?= number_format($p['price'], 0) ?></b></div>
                     </div>
                     <div class="featured-thumb-data shadow-one">

@@ -108,7 +108,7 @@
                             <div class="overlay-black overflow-hidden position-relative">
                                 <img src="<?= base_url('uploads/property/' . esc($p['pimage'])) ?>" alt="<?= esc($p['title']) ?>" loading="lazy">
                                 <div class="featured bg-success text-white">Nuevo</div>
-                                <div class="sale bg-success text-white text-capitalize">Para <?= esc($p['stype'] === 'sale' ? 'Venta' : 'Renta') ?></div>
+                                <div class="sale bg-success text-white text-capitalize"><i class="ms" aria-hidden="true"><?= $p['stype'] === 'sale' ? 'sell' : 'key' ?></i>Para <?= $p['stype'] === 'sale' ? 'Venta' : 'Renta' ?></div>
                                 <div class="price text-primary"><b>$<?= number_format($p['price'], 0) ?></b> <span class="text-white"><?= esc($p['size']) ?> m²</span></div>
                             </div>
                             <div class="featured-thumb-data shadow-one">
@@ -119,13 +119,7 @@
                                     <span class="location text-capitalize"><i class="fas fa-map-marker-alt text-success"></i> <?= esc($p['location']) ?></span>
                                 </div>
                                 <div class="bg-gray quantity px-4 pt-4">
-                                    <ul>
-                                        <li><span><?= esc($p['size']) ?></span> m²</li>
-                                        <li><span><?= esc($p['bedroom']) ?></span> Cuartos</li>
-                                        <li><span><?= esc($p['bathroom']) ?></span> Baños</li>
-                                        <li><span><?= esc($p['kitchen']) ?></span> Cocina</li>
-                                        <li><span><?= esc($p['balcony']) ?></span> Balcón</li>
-                                    </ul>
+                                    <?= view('partials/property_stats', ['p' => $p]) ?>
                                 </div>
                                 <div class="p-4 d-inline-block w-100">
                                     <div class="float-left text-capitalize"><i class="fas fa-user text-success mr-1"></i>Por: <?= esc($p['uname']) ?></div>
