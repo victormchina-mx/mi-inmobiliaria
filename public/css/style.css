@@ -4365,3 +4365,19 @@ table td, table th {
   vertical-align: -5px;
 }
 
+/* Foto de las tarjetas de propiedad: todo el recuadro lleva al detalle.
+   Queda encima del degradado (::before), la etiqueta y el precio (z-index 99). */
+.featured-thumb .thumb-link {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+}
+
+/* Cuadros de "Lo que hacemos" que son enlaces: mismo aspecto que los demás */
+a.service-link,
+a.service-link:hover,
+a.service-link:focus {
+  color: inherit;
+  text-decoration: none;
+}
+

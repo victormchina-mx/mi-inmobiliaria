@@ -75,11 +75,11 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 reveal-up reveal-delay-3">
-                    <div class="p-4 text-center hover-bg-white hover-shadow rounded mb-4 transation-3s">
+                    <a href="<?= site_url('property') ?>" class="d-block service-link p-4 text-center hover-bg-white hover-shadow rounded mb-4 transation-3s">
                         <i class="flaticon-list text-success flat-medium"></i>
                         <h5 class="text-secondary py-3 m-0">Listado de Propiedades</h5>
                         <p>Catálogo completo de propiedades disponibles.</p>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-lg-3 col-md-6 reveal-up reveal-delay-4">
                     <div class="p-4 text-center hover-bg-white hover-shadow rounded mb-4 transation-3s">
@@ -110,6 +110,7 @@
                                 <div class="featured bg-success text-white">Nuevo</div>
                                 <div class="sale bg-success text-white text-capitalize"><i class="ms" aria-hidden="true"><?= $p['stype'] === 'sale' ? 'sell' : 'key' ?></i>Para <?= $p['stype'] === 'sale' ? 'Venta' : 'Renta' ?></div>
                                 <div class="price text-primary"><b>$<?= number_format($p['price'], 0) ?></b> <span class="text-white"><?= esc($p['size']) ?> m²</span></div>
+                                <a href="<?= site_url('property/' . $p['pid']) ?>" class="thumb-link" tabindex="-1" aria-hidden="true"></a>
                             </div>
                             <div class="featured-thumb-data shadow-one">
                                 <div class="p-3">
