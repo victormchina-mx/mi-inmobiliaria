@@ -7,8 +7,8 @@
 <link rel="stylesheet" href="<?= base_url('admin/assets/css/bootstrap.min.css') ?>">
 <link rel="stylesheet" href="<?= base_url('admin/assets/css/font-awesome.min.css') ?>">
 <link rel="stylesheet" href="<?= base_url('admin/assets/css/feathericon.min.css') ?>">
-<link rel="stylesheet" href="<?= base_url('admin/assets/css/style.css') ?>">
-<link rel="stylesheet" href="<?= base_url('css/file-upload.css') ?>">
+<link rel="stylesheet" href="<?= asset_url('admin/assets/css/style.css') ?>">
+<link rel="stylesheet" href="<?= asset_url('css/file-upload.css') ?>">
 <?= $this->renderSection('styles') ?>
 <title><?= esc($pageTitle ?? 'Admin') ?> | Panel de Administración</title>
 </head>
@@ -113,8 +113,8 @@
 <script src="<?= base_url('admin/assets/js/jquery-3.2.1.min.js') ?>"></script>
 <script src="<?= base_url('admin/assets/js/popper.min.js') ?>"></script>
 <script src="<?= base_url('admin/assets/js/bootstrap.min.js') ?>"></script>
-<script src="<?= base_url('admin/assets/js/script.js') ?>"></script>
-<script src="<?= base_url('js/file-upload.js') ?>"></script>
+<script src="<?= asset_url('admin/assets/js/script.js') ?>"></script>
+<script src="<?= asset_url('js/file-upload.js') ?>"></script>
 <?= $this->renderSection('scripts') ?>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('styles') ?>
-<link rel="stylesheet" href="<?= base_url('css/login.css') ?>">
+<link rel="stylesheet" href="<?= asset_url('css/login.css') ?>">
 <?= $this->endSection() ?>
 <?= $this->section('content') ?>
 

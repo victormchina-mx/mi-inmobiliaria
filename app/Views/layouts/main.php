@@ -23,13 +23,13 @@
 <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
 <link rel="stylesheet" href="<?= base_url('css/bootstrap-slider.css') ?>">
 <link rel="stylesheet" href="<?= base_url('css/jquery-ui.css') ?>">
-<link rel="stylesheet" href="<?= base_url('css/color.css') ?>" id="color-change">
+<link rel="stylesheet" href="<?= asset_url('css/color.css') ?>" id="color-change">
 <link rel="stylesheet" href="<?= base_url('css/owl.carousel.min.css') ?>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 <link rel="stylesheet" href="<?= base_url('fonts/flaticon/flaticon.css') ?>">
-<link rel="stylesheet" href="<?= base_url('css/style.css') ?>">
-<link rel="stylesheet" href="<?= base_url('css/file-upload.css') ?>">
+<link rel="stylesheet" href="<?= asset_url('css/style.css') ?>">
+<link rel="stylesheet" href="<?= asset_url('css/file-upload.css') ?>">
 <?= $this->renderSection('styles') ?>
 <title><?= esc($pageTitle ?? 'Real Estate') ?> | Real Estate by Vick</title>
 </head>
@@ -206,7 +206,7 @@
 <script src="<?= base_url('js/jquery.slider.js') ?>"></script>
 <script src="<?= base_url('js/wow.js') ?>"></script>
 <?= $this->renderSection('scripts') ?>
-<script src="<?= base_url('js/custom.js') ?>"></script>
-<script src="<?= base_url('js/file-upload.js') ?>"></script>
+<script src="<?= asset_url('js/custom.js') ?>"></script>
+<script src="<?= asset_url('js/file-upload.js') ?>"></script>
 </body>
 </html>
