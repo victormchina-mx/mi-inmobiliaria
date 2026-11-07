@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.jpg') ?>');">
+<div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.webp') ?>');">
     <div class="container">
         <div class="row">
             <div class="col-md-12"><h1 class="h2 page-name text-white text-uppercase">Propiedades en <?= esc($state) ?></h1></div>
@@ -16,7 +16,7 @@
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="featured-thumb hover-zoomer">
                     <div class="overlay-black overflow-hidden position-relative">
-                        <img src="<?= base_url('uploads/property/' . esc($p['pimage'])) ?>" alt="<?= esc($p['title']) ?>">
+                        <img src="<?= esc(thumb_url('property', $p['pimage'], 800)) ?>" srcset="<?= esc(thumb_srcset('property', $p['pimage'])) ?>" sizes="(min-width: 992px) 350px, (min-width: 768px) 50vw, 100vw" alt="<?= esc($p['title']) ?>" loading="lazy" decoding="async">
                         <div class="sale bg-success text-white text-capitalize"><i class="ms" aria-hidden="true"><?= $p['stype'] === 'sale' ? 'sell' : 'key' ?></i>Para <?= $p['stype'] === 'sale' ? 'Venta' : 'Renta' ?></div>
                         <div class="price text-primary"><b>$<?= number_format($p['price'], 0) ?></b></div>
                         <a href="<?= site_url('property/' . $p['pid']) ?>" class="thumb-link" tabindex="-1" aria-hidden="true"></a>

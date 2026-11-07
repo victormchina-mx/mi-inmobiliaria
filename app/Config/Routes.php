@@ -7,6 +7,8 @@ use CodeIgniter\Router\RouteCollection;
 // ─── Rutas públicas ──────────────────────────────────────────────────────────
 $routes->get('/', 'Home::index');
 $routes->get('sitemap.xml', 'Sitemap::index');
+// Versiones reducidas de las fotos (se generan la primera vez y luego son archivos estáticos)
+$routes->get('img/(:segment)/(:num)/(:segment)', 'Thumb::show/$1/$2/$3');
 $routes->get('property', 'Property::index');
 $routes->get('property/grid', 'Property::grid');
 $routes->post('property/grid', 'Property::grid');

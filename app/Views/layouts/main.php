@@ -24,13 +24,13 @@
 <!-- Íconos Material Symbols (los mismos de la app móvil); solo se descargan los usados -->
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,300..400,0,0&icon_names=balcony,bathtub,bed,countertops,key,sell,square_foot,weekend&display=block" rel="stylesheet">
 <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
-<link rel="stylesheet" href="<?= base_url('css/bootstrap-slider.css') ?>">
-<link rel="stylesheet" href="<?= base_url('css/jquery-ui.css') ?>">
 <link rel="stylesheet" href="<?= asset_url('css/color.css') ?>" id="color-change">
-<link rel="stylesheet" href="<?= base_url('css/owl.carousel.min.css') ?>">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-<link rel="stylesheet" href="<?= base_url('fonts/flaticon/flaticon.css') ?>">
+<link rel="stylesheet" href="<?= base_url('css/owl.carousel.min.css') ?>" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="<?= base_url('css/owl.carousel.min.css') ?>"></noscript>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"></noscript>
+<link rel="stylesheet" href="<?= base_url('fonts/flaticon/flaticon.css') ?>" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="<?= base_url('fonts/flaticon/flaticon.css') ?>"></noscript>
 <link rel="stylesheet" href="<?= asset_url('css/style.css') ?>">
 <link rel="stylesheet" href="<?= asset_url('css/file-upload.css') ?>">
 <?= $this->renderSection('styles') ?>
@@ -204,11 +204,6 @@
 <script src="<?= base_url('js/popper.min.js') ?>"></script>
 <script src="<?= base_url('js/bootstrap.min.js') ?>"></script>
 <script src="<?= base_url('js/owl.carousel.min.js') ?>"></script>
-<script src="<?= base_url('js/jquery.dependClass-0.1.js') ?>"></script>
-<script src="<?= base_url('js/draggable-0.1.js') ?>"></script>
-<script src="<?= base_url('js/tmpl.js') ?>"></script>
-<script src="<?= base_url('js/jquery.slider.js') ?>"></script>
-<script src="<?= base_url('js/wow.js') ?>"></script>
 <?= $this->renderSection('scripts') ?>
 <script src="<?= asset_url('js/custom.js') ?>"></script>
 <script src="<?= asset_url('js/file-upload.js') ?>"></script>

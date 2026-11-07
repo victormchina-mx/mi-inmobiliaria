@@ -15,3 +15,9 @@
 
 # Sin listado de archivos de la carpeta
 Options -Indexes
+
+# Las fotos subidas tienen nombres únicos (aleatorios) que nunca se reutilizan:
+# el navegador puede guardarlas un año sin volver a preguntar.
+<IfModule mod_headers.c>
+	Header set Cache-Control "public, max-age=31536000, immutable"
+</IfModule>

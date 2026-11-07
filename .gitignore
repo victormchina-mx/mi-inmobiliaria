@@ -9,6 +9,9 @@ writable/debugbar/*
 # ejecutar scripts dentro de la carpeta de subidas
 public/uploads/*
 !public/uploads/.htaccess
+# Miniaturas generadas automáticamente (se regeneran solas si se borran)
+public/img/*
+!public/img/.htaccess
 *.DS_Store
 
 # Respaldos manuales y basura de macOS
