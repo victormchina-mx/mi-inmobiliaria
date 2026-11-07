@@ -46,7 +46,7 @@
                         </div>
                         <div class="p-4 d-inline-block w-100">
                             <div class="float-left"><i class="fas fa-user text-success mr-1"></i><?= esc($p['uname']) ?></div>
-                            <div class="float-right text-capitalize"><span class="badge badge-secondary"><?= esc($p['type']) ?></span></div>
+                            <div class="float-right text-capitalize"><span class="badge badge-secondary"><?= esc(\App\Libraries\Labels::propertyType($p['type'])) ?></span></div>
                         </div>
                     </div>
                 </div>

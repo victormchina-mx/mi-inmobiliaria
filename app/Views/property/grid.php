@@ -17,7 +17,7 @@
                 <div class="col-md-3">
                     <select class="form-control mb-2" name="type">
                         <option value="">Tipo de Propiedad</option>
-                        <?php foreach (['apartment'=>'Departamento','flat'=>'Flat','building'=>'Edificio','house'=>'Casa','villa'=>'Villa','office'=>'Oficina'] as $val => $label): ?>
+                        <?php foreach (\App\Libraries\Labels::PROPERTY_TYPES as $val => $label): ?>
                         <option value="<?= $val ?>" <?= ($filters['type'] ?? '') === $val ? 'selected' : '' ?>><?= $label ?></option>
                         <?php endforeach ?>
                     </select>

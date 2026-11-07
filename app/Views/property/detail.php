@@ -136,7 +136,7 @@
                             <tbody>
                                 <tr>
                                     <td>BHK:</td><td class="text-capitalize"><?= esc($property['bhk']) ?></td>
-                                    <td>Tipo:</td><td class="text-capitalize"><?= esc($property['type']) ?></td>
+                                    <td>Tipo:</td><td><?= esc(\App\Libraries\Labels::propertyType($property['type'])) ?></td>
                                 </tr>
                                 <tr>
                                     <td>Piso:</td><td class="text-capitalize"><?= esc($property['floor']) ?></td>

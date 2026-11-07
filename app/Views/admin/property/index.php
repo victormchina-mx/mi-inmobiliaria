@@ -42,7 +42,7 @@
                                          alt="" width="60" height="45" style="object-fit:cover; border-radius:4px;">
                                 </td>
                                 <td class="text-capitalize"><?= esc($p['title']) ?></td>
-                                <td class="text-capitalize"><?= esc($p['type']) ?></td>
+                                <td><?= esc(\App\Libraries\Labels::propertyType($p['type'])) ?></td>
                                 <td><?= esc($p['bhk']) ?></td>
                                 <td>
                                     <span class="badge badge-<?= $p['stype'] === 'sale' ? 'success' : 'info' ?>">

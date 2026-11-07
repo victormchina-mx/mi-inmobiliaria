@@ -36,7 +36,7 @@
                                 <td><?= esc($u['uname']) ?></td>
                                 <td><?= esc($u['uemail']) ?></td>
                                 <td><?= esc($u['uphone']) ?></td>
-                                <td class="text-capitalize"><?= esc($u['utype']) ?></td>
+                                <td><?= esc(\App\Libraries\Labels::userType($u['utype'])) ?></td>
                                 <td>
                                     <?php
                                     [$editUrl, $deleteUrl] = match($type) {

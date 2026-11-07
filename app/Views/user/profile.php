@@ -21,7 +21,7 @@
                      style="width:150px;height:150px;"><i class="fas fa-user fa-3x text-white"></i></div>
                 <?php endif ?>
                 <h4 class="text-secondary"><?= esc($user['uname']) ?></h4>
-                <p class="text-muted text-capitalize"><?= esc($user['utype']) ?></p>
+                <p class="text-muted"><?= esc(\App\Libraries\Labels::userType($user['utype'])) ?></p>
                 <p><?= esc($user['uemail']) ?></p>
                 <p><?= esc($user['uphone']) ?></p>
                 <a href="<?= site_url('my-properties') ?>" class="btn btn-success btn-sm">Mis Propiedades</a>

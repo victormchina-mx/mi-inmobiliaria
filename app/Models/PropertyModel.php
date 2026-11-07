@@ -71,7 +71,13 @@ class PropertyModel extends Model
             $this->where('property.stype', $filters['stype']);
         }
         if (! empty($filters['city'])) {
-            $this->where('property.city', $filters['city']);
+            // El campo dice "Ciudad, colonia...": coincidencia parcial en
+            // ciudad, ubicación (colonia/calle) o estado. like() escapa % y _.
+            $this->groupStart()
+                ->like('property.city', $filters['city'])
+                ->orLike('property.location', $filters['city'])
+                ->orLike('property.state', $filters['city'])
+                ->groupEnd();
         }
 
         return $this;
