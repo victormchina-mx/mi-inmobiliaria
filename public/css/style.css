@@ -4512,7 +4512,7 @@ a.service-link:focus {
 .loc-back:hover, .loc-back:focus { color: #B07D4F; text-decoration: none; }
 .loc-address { display: flex; align-items: center; gap: 12px; text-align: right; }
 .loc-address strong { display: block; font-size: 18px; line-height: 1.25; color: var(--theme-secondary-color); }
-.loc-address span { display: block; font-size: 14px; color: #6B7280; }
+.loc-address div span { display: block; font-size: 14px; color: #6B7280; }
 .loc-address__pin {
   width: 42px; height: 42px; flex: none; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
@@ -4530,13 +4530,15 @@ a.service-link:focus {
 /* Tono más sobrio que el de OpenStreetMap, a juego con el sitio */
 .loc-map .leaflet-tile-pane { filter: saturate(.6) contrast(.97) brightness(1.03); }
 .loc-map .leaflet-control-attribution { font-size: 11px; background: rgba(255, 255, 255, .85); }
-.loc-map .leaflet-bar { border: 0; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 14px rgba(15, 23, 42, .18); }
-.loc-map .leaflet-bar a {
+/* leaflet.css se carga después: selectores más específicos */
+.loc-map .leaflet-control.leaflet-bar { border: 0; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 14px rgba(15, 23, 42, .18); }
+.loc-map .leaflet-control.leaflet-bar a {
   width: 40px; height: 40px; line-height: 40px; display: flex; align-items: center; justify-content: center;
   color: var(--theme-secondary-color); font-size: 20px; font-weight: 400; border-bottom-color: #eee;
 }
-.loc-map .leaflet-bar a:hover, .loc-map .leaflet-bar a:focus { background: #FBF7EF; color: #B07D4F; }
-.loc-map .leaflet-bar a .ms { font-size: 20px; }
+.loc-map .leaflet-control.leaflet-bar a:hover, .loc-map .leaflet-control.leaflet-bar a:focus { background: #FBF7EF; color: #B07D4F; }
+.loc-map .leaflet-control.leaflet-bar a .ms { font-size: 20px; }
+.loc-map .leaflet-control.leaflet-bar a:last-child { border-bottom: 0; }
 .loc-map .leaflet-top.leaflet-right { margin: 6px; }
 .loc-map:fullscreen { border-radius: 0; height: 100%; }
 .loc-marker { filter: drop-shadow(0 6px 8px rgba(0, 0, 0, .3)); }
@@ -4667,7 +4669,8 @@ a.service-link:focus {
     position: relative; left: auto; top: auto; width: auto; display: flex; margin-top: 16px;
     border: 1px solid rgba(15, 23, 42, .06); box-shadow: 0 6px 20px -10px rgba(15, 23, 42, .3);
   }
-  .loc-card__img { width: 112px; height: auto; flex: none; }
+  .loc-card__img { width: 112px; height: auto; min-height: 104px; flex: none; }
+  .loc-card__img img { position: absolute; inset: 0; }
   .loc-card__badge, .loc-card__btns { display: none; }
   .loc-card__body { padding: 12px 14px; min-width: 0; }
   .loc-card__price { font-size: 18px; }
@@ -4700,6 +4703,9 @@ a.service-link:focus {
   background: rgba(201, 169, 110, .15); color: #B07D4F; font-size: 15px;
 }
 .loc-link__ic .ms { margin: 0; }
-.loc-link__txt { border-bottom: 1px dashed rgba(15, 23, 42, .35); line-height: 1.4; }
-.loc-link:hover .loc-link__txt, .loc-link:focus .loc-link__txt { border-bottom-color: var(--theme-primary-color); }
+.loc-link__txt {
+  line-height: 1.4; text-decoration: underline dashed rgba(15, 23, 42, .35);
+  text-decoration-thickness: 1px; text-underline-offset: 4px;
+}
+.loc-link:hover .loc-link__txt, .loc-link:focus .loc-link__txt { text-decoration-color: var(--theme-primary-color); }
 .loc-link__cta { flex: none; font-size: 12px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; color: #B07D4F; white-space: nowrap; }

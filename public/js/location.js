@@ -113,7 +113,7 @@
                 radius: radius, color: GOLD, weight: 2, opacity: 0.9,
                 fillColor: GOLD, fillOpacity: 0.16, interactive: false
             }).addTo(map);
-            bounds = circle.getBounds();
+            bounds = center.toBounds(radius * 2); // circle.getBounds() requiere que el mapa ya tenga vista
 
             if (label) {
                 // Etiqueta en el borde inferior del círculo
