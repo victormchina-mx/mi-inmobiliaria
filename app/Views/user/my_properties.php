@@ -1,4 +1,8 @@
 <?= $this->extend('layouts/main') ?>
+
+<?= $this->section('styles') ?>
+<?= view('partials/banner_preload') ?>
+<?= $this->endSection() ?>
 <?= $this->section('content') ?>
 
 <div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.webp') ?>');">
