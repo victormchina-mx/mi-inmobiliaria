@@ -29,6 +29,7 @@ class Geocoder
     private const TIMEOUT    = 5;
     private const TTL_FOUND  = 90 * DAY;
     private const TTL_MISS   = DAY;
+    private const TTL_DOWN   = 10 * MINUTE; // Nominatim no respondió: no reintentar en cada visita
 
     /**
      * @return array{lat: float, lng: float, level: string, bbox: list<float>|null}|null
@@ -38,6 +39,9 @@ class Geocoder
     {
         foreach (self::queries($property) as $level => $query) {
             $hit = $this->search($query);
+            if ($hit === false) {
+                return null; // sin conexión: no seguir esperando con los demás niveles
+            }
             if ($hit !== null) {
                 return $hit + ['level' => $level];
             }
@@ -92,9 +96,16 @@ class Geocoder
         return trim(preg_replace('/\s+/u', ' ', (string) $value));
     }
 
-    /** @return array{lat: float, lng: float, bbox: list<float>|null}|null */
-    private function search(string $query): ?array
+    /**
+     * @return array{lat: float, lng: float, bbox: list<float>|null}|false|null
+     *         null = no se encontró; false = Nominatim no respondió
+     */
+    private function search(string $query): array|false|null
     {
+        if (cache('geo_down') !== null) {
+            return false;
+        }
+
         $key    = 'geo_' . md5(mb_strtolower($query));
         $cached = cache($key);
 
@@ -104,12 +115,16 @@ class Geocoder
 
         $place = $this->request($query);
 
-        // Un error de red no se guarda como "no encontrado": se reintenta la próxima vez
-        if ($place !== false) {
-            cache()->save($key, ['found' => $place !== null, 'place' => $place], $place !== null ? self::TTL_FOUND : self::TTL_MISS);
+        if ($place === false) {
+            // Un error de red no se guarda como "no encontrado"; se reintenta en unos minutos
+            cache()->save('geo_down', 1, self::TTL_DOWN);
+
+            return false;
         }
 
-        return $place ?: null;
+        cache()->save($key, ['found' => $place !== null, 'place' => $place], $place !== null ? self::TTL_FOUND : self::TTL_MISS);
+
+        return $place;
     }
 
     /**
