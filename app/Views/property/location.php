@@ -101,7 +101,8 @@ $facts  = array_filter([
             <div class="loc-map__canvas" id="loc-map" role="region" aria-label="Mapa de la ubicación"
                  data-lat="<?= esc((string) $place['lat'], 'attr') ?>" data-lng="<?= esc((string) $place['lng'], 'attr') ?>"
                  data-level="<?= esc($level, 'attr') ?>" data-label="<?= esc($zoneLabel, 'attr') ?>"
-                 data-bbox="<?= esc(json_encode($place['bbox']), 'attr') ?>"></div>
+                 data-bbox="<?= esc(json_encode($place['bbox']), 'attr') ?>"
+                 data-nearby="<?= site_url('property/' . $property['pid'] . '/cerca') ?>"></div>
             <?php else: ?>
             <div class="loc-map__canvas loc-empty">
                 <span class="loc-empty__ic" aria-hidden="true"><i class="ms">map</i></span>

@@ -3,8 +3,10 @@
 namespace App\Controllers;
 
 use App\Libraries\Geocoder;
+use App\Libraries\NearbyPlaces;
 use App\Models\PropertyModel;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\ResponseInterface;
 
 class Property extends BaseController
 {
@@ -65,6 +67,54 @@ class Property extends BaseController
             'address'         => $address,
             'place'           => $address !== '' ? (new Geocoder())->locate($property) : null,
         ]);
+    }
+
+    /**
+     * "Lo que hay cerca" (JSON): lo pide public/js/nearby.js desde el detalle
+     * y public/js/location.js desde la página de ubicación, después de cargar
+     * la página, para no hacerla más lenta.
+     *
+     * Respuesta: {ok, html (partials/nearby), places [{name, cat, type, dist, min, lat, lng}], categories}
+     * ok=false si no se pudo ubicar la zona (o solo el estado) o no hay lugares.
+     */
+    public function nearby(int $pid): ResponseInterface
+    {
+        $property = $this->propertyModel->available()->find($pid);
+        $none     = $this->response->setJSON(['ok' => false])->setHeader('Cache-Control', 'public, max-age=600');
+
+        if (! $property) {
+            return $none->setStatusCode(404);
+        }
+
+        $place = Geocoder::address($property) !== '' ? (new Geocoder())->locate($property) : null;
+
+        // Con solo el estado, las distancias desde su centro no dirían nada
+        if (! $place || $place['level'] === 'state') {
+            return $none;
+        }
+
+        $places = (new NearbyPlaces())->around($place['lat'], $place['lng']);
+        if (! $places) {
+            return $none;
+        }
+
+        $zone = trim((string) ($place['level'] === 'location' ? $property['location'] : $property['city']));
+
+        return $this->response
+            ->setHeader('Cache-Control', 'public, max-age=3600')
+            ->setJSON([
+                'ok'         => true,
+                'html'       => view('partials/nearby', [
+                    'places'  => $places,
+                    'counts'  => NearbyPlaces::counts($places),
+                    'summary' => NearbyPlaces::summary($places, $zone),
+                    'mapUrl'  => site_url('property/' . $pid . '/ubicacion'),
+                    'level'   => $place['level'],
+                    'zone'    => $zone,
+                ]),
+                'places'     => $places,
+                'categories' => NearbyPlaces::CATEGORIES,
+            ]);
     }
 
     public function grid(): string
