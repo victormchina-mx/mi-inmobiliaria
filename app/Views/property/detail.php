@@ -9,6 +9,7 @@ $galleryPhotos = array_values(array_filter(array_map(
 $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
 ?>
 <?= $this->section('styles') ?>
+<?= view('partials/banner_preload') ?>
 <?php if ($galleryPhotos): ?>
 <?php // La primera foto es la imagen principal (LCP): se descarga primero, en el tamaño que elegirá el navegador ?>
 <link rel="preload" as="image" imagesrcset="<?= esc(thumb_srcset('property', $galleryPhotos[0], [800, 1600])) ?>" imagesizes="<?= esc($gallerySizes) ?>" fetchpriority="high">

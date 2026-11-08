@@ -1,5 +1,6 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('styles') ?>
+<?= view('partials/banner_preload') ?>
 <link rel="stylesheet" href="<?= base_url('js/tinymce/init-tinymce.min.js') ?>">
 <link rel="stylesheet" href="<?= base_url('admin/assets/css/select2.min.css') ?>">
 <style>

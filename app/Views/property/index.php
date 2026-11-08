@@ -1,4 +1,8 @@
 <?= $this->extend('layouts/main') ?>
+
+<?= $this->section('styles') ?>
+<?= view('partials/banner_preload') ?>
+<?= $this->endSection() ?>
 <?= $this->section('content') ?>
 
 <!-- Breadcrumb -->
