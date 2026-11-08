@@ -2,6 +2,7 @@
 
 namespace App\Controllers\User;
 
+use App\Libraries\PropertyLocation;
 use App\Controllers\BaseController;
 use App\Libraries\HtmlSanitizer;
 use App\Models\CityModel;
@@ -90,7 +91,7 @@ class MyProperty extends BaseController
             'mapimage'       => $images['mapimage'],
             'topmapimage'    => $images['topmapimage'],
             'groundmapimage' => $images['groundmapimage'],
-        ]);
+        ] + PropertyLocation::fromRequest($this->request));
 
         return redirect()->to('my-properties')->with('success', 'Propiedad publicada correctamente.');
     }
@@ -168,7 +169,7 @@ class MyProperty extends BaseController
             'mapimage'       => $images['mapimage'],
             'topmapimage'    => $images['topmapimage'],
             'groundmapimage' => $images['groundmapimage'],
-        ]);
+        ] + PropertyLocation::fromRequest($this->request));
 
         return redirect()->to('my-properties')->with('success', 'Propiedad actualizada correctamente.');
     }

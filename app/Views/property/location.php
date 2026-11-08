@@ -8,26 +8,33 @@
  * Controlador: Property::location · Ubicación en el mapa: App\Libraries\Geocoder
  * Estilos: .loc-* en public/css/style.css · Mapa: public/js/location.js
  *
+ * $place: el punto marcado por el anunciante (level 'exact' o 'approx',
+ * App\Libraries\PropertyLocation) o, si no hay, la zona que encontró
+ * Geocoder ('location', 'city' o 'state').
  * $place es null si no se pudo ubicar la dirección: entonces no hay mapa,
  * solo el aviso y los enlaces (Google Maps busca el texto por su cuenta).
  */
 $detailUrl  = site_url('property/' . $property['pid']);
 $searchText = $address . ', México';
-$gmapsUrl   = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($searchText);
-$routeUrl   = 'https://www.google.com/maps/dir/?api=1&destination=' . rawurlencode($searchText);
+// Con el punto exacto, Google Maps va a las coordenadas; si no, busca la dirección escrita
+$target     = ($place['level'] ?? null) === 'exact' ? $place['lat'] . ',' . $place['lng'] : $searchText;
+$gmapsUrl   = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($target);
+$routeUrl   = 'https://www.google.com/maps/dir/?api=1&destination=' . rawurlencode($target);
 $wazeUrl    = $place
     ? 'https://waze.com/ul?ll=' . $place['lat'] . ',' . $place['lng'] . '&navigate=yes'
     : 'https://waze.com/ul?q=' . rawurlencode($searchText) . '&navigate=yes';
 
 $level = $place['level'] ?? null;
 $zoneLabel = match ($level) {
-    'location' => 'Zona aproximada',
+    'exact'    => '',
+    'approx', 'location' => 'Zona aproximada',
     'city'     => 'Ciudad / municipio',
     'state'    => 'Estado',
     default    => '',
 };
 $noteText = match ($level) {
-    'location' => 'Por seguridad mostramos la zona de la propiedad, no el domicilio exacto. El anunciante te comparte la dirección y agenda la visita cuando lo contactas.',
+    'exact'    => 'Esta es la ubicación de la propiedad indicada por el anunciante. Contáctalo para agendar tu visita.',
+    'approx', 'location' => 'Por seguridad mostramos la zona de la propiedad, no el domicilio exacto. El anunciante te comparte la dirección y agenda la visita cuando lo contactas.',
     'city'     => 'Mostramos la ciudad o municipio donde se encuentra la propiedad. El anunciante te comparte la dirección exacta y agenda la visita cuando lo contactas.',
     'state'    => 'Mostramos el estado donde se encuentra la propiedad. El anunciante te comparte la dirección exacta y agenda la visita cuando lo contactas.',
     default    => 'No pudimos ubicar esta dirección en el mapa. Puedes buscarla en Google Maps o pedirle la ubicación al anunciante.',
@@ -101,6 +108,7 @@ $facts  = array_filter([
             <div class="loc-map__canvas" id="loc-map" role="region" aria-label="Mapa de la ubicación"
                  data-lat="<?= esc((string) $place['lat'], 'attr') ?>" data-lng="<?= esc((string) $place['lng'], 'attr') ?>"
                  data-level="<?= esc($level, 'attr') ?>" data-label="<?= esc($zoneLabel, 'attr') ?>"
+                 data-radius="<?= \App\Libraries\PropertyLocation::APPROX_RADIUS ?>"
                  data-bbox="<?= esc(json_encode($place['bbox']), 'attr') ?>"
                  data-nearby="<?= site_url('property/' . $property['pid'] . '/cerca') ?>"></div>
             <?php else: ?>
@@ -167,7 +175,7 @@ $facts  = array_filter([
             <div class="loc-note">
                 <i class="ms" aria-hidden="true">info</i>
                 <div>
-                    <strong><?= $place ? 'Ubicación aproximada' : 'Ubicación no disponible' ?></strong>
+                    <strong><?= match (true) { $level === 'exact' => 'Ubicación exacta', $place !== null => 'Ubicación aproximada', default => 'Ubicación no disponible' } ?></strong>
                     <p><?= $noteText ?></p>
                     <a href="<?= $detailUrl ?>#contactar" class="loc-btn loc-btn--dark"><i class="ms" aria-hidden="true">mail</i>Contactar al anunciante</a>
                 </div>

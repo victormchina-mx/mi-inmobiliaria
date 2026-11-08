@@ -1,6 +1,8 @@
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('styles') ?>
+<link rel="stylesheet" href="<?= asset_url('lib/leaflet/leaflet.css') ?>">
+<link rel="stylesheet" href="<?= asset_url('css/location-picker.css') ?>">
 <link rel="stylesheet" href="<?= base_url('admin/assets/css/select2.min.css') ?>">
 <style>
 /* ── Select2 ajuste al tema admin ── */
@@ -265,6 +267,9 @@
                                 <small class="form-text text-muted">Se detecta automáticamente según la ciudad.</small>
                             </div>
                         </div>
+
+                        <!-- Punto exacto en el mapa (App\Libraries\PropertyLocation) -->
+                        <?= view('partials/location_picker', ['property' => $property ?? []]) ?>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Descripción</label>
@@ -311,6 +316,8 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
+<script src="<?= asset_url('lib/leaflet/leaflet.js') ?>"></script>
+<script src="<?= asset_url('js/location-picker.js') ?>"></script>
 <script src="<?= base_url('admin/assets/js/select2.min.js') ?>"></script>
 <script>
 (function ($) {

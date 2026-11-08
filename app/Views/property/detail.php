@@ -68,6 +68,11 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
             'unitCode' => 'MTK',
         ],
     ];
+    // Coordenadas solo si el anunciante eligió mostrar la ubicación exacta
+    $publicPoint = \App\Libraries\PropertyLocation::public($property);
+    if (($publicPoint['level'] ?? null) === 'exact') {
+        $schema['geo'] = ['@type' => 'GeoCoordinates', 'latitude' => $publicPoint['lat'], 'longitude' => $publicPoint['lng']];
+    }
 ?>
 <script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
 
