@@ -14,6 +14,7 @@ $routes->get('property/grid', 'Property::grid');
 $routes->post('property/grid', 'Property::grid');
 $routes->get('property/state/(:num)', 'Property::byState/$1');
 $routes->get('property/(:num)', 'Property::show/$1');
+$routes->get('property/(:num)/ubicacion', 'Property::location/$1');
 $routes->get('agents', 'Agent::index');
 $routes->get('about', 'About::index');
 $routes->get('contact', 'Contact::index');

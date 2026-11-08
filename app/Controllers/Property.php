@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\Geocoder;
 use App\Models\PropertyModel;
 use CodeIgniter\HTTP\RedirectResponse;
 
@@ -37,6 +38,32 @@ class Property extends BaseController
             'ogImage'         => ! empty($property['pimage']) ? base_url('uploads/property/' . $property['pimage']) : null,
             'property'        => $property,
             'featured'  => $this->propertyModel->withOwner()->featured()->findAll(),
+        ]);
+    }
+
+    /**
+     * Página "Ubicación": mapa con la zona aproximada de la propiedad
+     * (las propiedades no guardan coordenadas; ver App\Libraries\Geocoder).
+     */
+    public function location(int $pid): string|RedirectResponse
+    {
+        $property = $this->propertyModel->withOwner()->available()->find($pid);
+
+        if (! $property) {
+            return redirect()->to('property')->with('error', 'Propiedad no encontrada.');
+        }
+
+        $address = Geocoder::address($property);
+
+        return view('property/location', [
+            'pageTitle'       => 'Ubicación de ' . $property['title'], // el layout lo escapa
+            'metaDescription' => 'Ubicación de ' . $property['title'] . ($address !== '' ? ' en ' . $address : '') . ': mapa de la zona, cómo llegar y contacto.',
+            // Complemento del detalle: que Google indexe el detalle, no esta página
+            'noindex'         => true,
+            'ogImage'         => ! empty($property['pimage']) ? base_url('uploads/property/' . $property['pimage']) : null,
+            'property'        => $property,
+            'address'         => $address,
+            'place'           => $address !== '' ? (new Geocoder())->locate($property) : null,
         ]);
     }
 

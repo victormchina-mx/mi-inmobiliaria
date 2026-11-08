@@ -145,7 +145,14 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
                             <i class="ms" aria-hidden="true"><?= $property['stype'] === 'sale' ? 'sell' : 'key' ?></i>Para <?= $property['stype'] === 'sale' ? 'Venta' : 'Renta' ?>
                         </div>
                         <h1 class="h5 mt-2 text-secondary text-capitalize"><?= esc($property['title']) ?></h1>
-                        <span class="d-block text-capitalize"><i class="fas fa-map-marker-alt text-success"></i> <?= esc($property['location']) ?></span>
+                        <?php $fullAddress = \App\Libraries\Geocoder::address($property); ?>
+                        <?php if ($fullAddress !== ''): ?>
+                        <a href="<?= site_url('property/' . $property['pid'] . '/ubicacion') ?>" class="loc-link" title="Ver la ubicación en el mapa">
+                            <span class="loc-link__ic" aria-hidden="true"><i class="ms">location_on</i></span>
+                            <span class="loc-link__txt text-capitalize"><?= esc($fullAddress) ?></span>
+                            <span class="loc-link__cta">Ver mapa <span aria-hidden="true">→</span></span>
+                        </a>
+                        <?php endif ?>
                     </div>
                     <div class="col-md-6">
                         <div class="text-success h5 my-2 text-md-right">$<?= number_format($property['price'], 0) ?></div>
@@ -213,7 +220,7 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
                     </div>
 
                     <!-- Contacto con el agente -->
-                    <h5 class="mt-5 mb-4 text-secondary double-down-line-left position-relative">Contactar Agente</h5>
+                    <h5 class="mt-5 mb-4 text-secondary double-down-line-left position-relative" id="contactar">Contactar Agente</h5>
                     <div class="agent-contact">
                         <div class="row">
                             <div class="col-sm-4 col-lg-3">
