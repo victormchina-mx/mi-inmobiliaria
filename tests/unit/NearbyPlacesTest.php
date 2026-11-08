@@ -94,4 +94,12 @@ final class NearbyPlacesTest extends CIUnitTestCase
         $this->assertStringContainsString('(around:1000,19.452900,-99.175500)', $query);
         $this->assertStringStartsWith('[out:json]', $query);
     }
+
+    public function testElementsRejectsOverpassErrors(): void
+    {
+        $this->assertSame([['id' => 1]], NearbyPlaces::elements('{"elements":[{"id":1}]}'));
+        $this->assertSame([], NearbyPlaces::elements('{"elements":[]}'));
+        $this->assertNull(NearbyPlaces::elements('{"elements":[],"remark":"runtime error: Query timed out in \\"query\\" at line 1 after 21 seconds."}'));
+        $this->assertNull(NearbyPlaces::elements('<html>Too Many Requests</html>'));
+    }
 }

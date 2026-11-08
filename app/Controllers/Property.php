@@ -80,7 +80,8 @@ class Property extends BaseController
     public function nearby(int $pid): ResponseInterface
     {
         $property = $this->propertyModel->available()->find($pid);
-        $none     = $this->response->setJSON(['ok' => false])->setHeader('Cache-Control', 'public, max-age=600');
+        // Sin datos: que el navegador no lo guarde, para mostrar el cuadro en cuanto haya
+        $none     = $this->response->setJSON(['ok' => false])->setHeader('Cache-Control', 'no-store');
 
         if (! $property) {
             return $none->setStatusCode(404);

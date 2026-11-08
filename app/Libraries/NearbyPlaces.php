@@ -27,10 +27,21 @@ class NearbyPlaces
     /** Metros por minuto caminando (4.8 km/h). */
     private const WALK = 80;
 
-    private const ENDPOINT   = 'https://overpass-api.de/api/interpreter';
+    /**
+     * Servidores públicos de Overpass, en orden. Si uno falla (saturado,
+     * límite de consultas: en Hostinger muchos sitios comparten la misma IP),
+     * se prueba el siguiente.
+     */
+    private const ENDPOINTS = [
+        'https://overpass-api.de/api/interpreter',
+        'https://overpass.private.coffee/api/interpreter',
+        'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
+    ];
     private const USER_AGENT = 'InmobiliariaVMCH/1.0 (+https://inmobiliaria.vmch.net)';
-    private const TIMEOUT    = 25;
+    private const TIMEOUT    = 15;  // por servidor
+    private const MAX_TIME   = 24;  // en total (PHP suele cortar a los 30 s)
     private const TTL_FOUND  = 30 * DAY;
+    private const TTL_EMPTY  = DAY;
     private const TTL_DOWN   = 10 * MINUTE;
     private const MAX_PLACES = 80;
 
@@ -56,28 +67,29 @@ class NearbyPlaces
      */
     public function around(float $lat, float $lng): ?array
     {
-        $key    = sprintf('nearby_%s_%s', number_format($lat, 4, '_', ''), number_format($lng, 4, '_', ''));
+        // "v2": ignora lo guardado por la primera versión (podía guardar como vacía una zona en la que Overpass falló)
+        $key    = sprintf('nearby2_%s_%s', number_format($lat, 4, '_', ''), number_format($lng, 4, '_', ''));
         $key    = str_replace('-', 'm', $key);
         $cached = cache($key);
 
         if (is_array($cached)) {
             return $cached;
         }
-        if (cache('nearby_down') !== null) {
+        if (cache('nearby2_down') !== null) {
             return null;
         }
 
-        $body = $this->request(self::query($lat, $lng));
-        $data = $body === null ? null : json_decode($body, true);
+        $elements = $this->request(self::query($lat, $lng));
 
-        if (! is_array($data) || ! isset($data['elements']) || ! is_array($data['elements'])) {
-            cache()->save('nearby_down', 1, self::TTL_DOWN);
+        if ($elements === null) {
+            cache()->save('nearby2_down', 1, self::TTL_DOWN);
 
             return null;
         }
 
-        $places = self::parse($data['elements'], $lat, $lng);
-        cache()->save($key, $places, self::TTL_FOUND);
+        $places = self::parse($elements, $lat, $lng);
+        // Una zona sin lugares se vuelve a consultar al día siguiente
+        cache()->save($key, $places, $places ? self::TTL_FOUND : self::TTL_EMPTY);
 
         return $places;
     }
@@ -364,27 +376,70 @@ class NearbyPlaces
         return mb_strtoupper(mb_substr($text, 0, 1)) . mb_substr($text, 1);
     }
 
-    private function request(string $query): ?string
+    /**
+     * Pregunta a los servidores de Overpass hasta que uno responda bien.
+     *
+     * @return list<array<string, mixed>>|null los elementos, o null si ninguno respondió
+     */
+    private function request(string $query): ?array
     {
-        try {
-            $response = Services::curlrequest(['timeout' => self::TIMEOUT, 'connect_timeout' => 5], null, null, false)
-                ->post(self::ENDPOINT, [
-                    'headers'     => ['User-Agent' => self::USER_AGENT, 'Accept' => 'application/json'],
+        $start = microtime(true);
+
+        foreach (self::ENDPOINTS as $endpoint) {
+            $left = self::MAX_TIME - (microtime(true) - $start);
+            if ($left < 5) {
+                break;
+            }
+
+            try {
+                $response = Services::curlrequest([
+                    'timeout'         => (int) min(self::TIMEOUT, $left),
+                    'connect_timeout' => 5,
+                ], null, null, false)->post($endpoint, [
+                    'headers'     => ['User-Agent' => self::USER_AGENT],
                     'form_params' => ['data' => $query],
                     'http_errors' => false,
                 ]);
-        } catch (Throwable $e) {
-            log_message('warning', 'NearbyPlaces: {message}', ['message' => $e->getMessage()]);
+            } catch (Throwable $e) {
+                log_message('error', 'NearbyPlaces: {endpoint}: {message}', ['endpoint' => $endpoint, 'message' => $e->getMessage()]);
 
+                continue;
+            }
+
+            $elements = self::elements((string) $response->getBody());
+
+            if ($response->getStatusCode() === 200 && $elements !== null) {
+                return $elements;
+            }
+
+            log_message('error', 'NearbyPlaces: {endpoint}: HTTP {code} {body}', [
+                'endpoint' => $endpoint,
+                'code'     => $response->getStatusCode(),
+                'body'     => mb_substr(trim(strip_tags((string) $response->getBody())), 0, 200),
+            ]);
+        }
+
+        return null;
+    }
+
+    /**
+     * Los elementos de una respuesta de Overpass, o null si no es válida.
+     * Cuando Overpass se queda sin tiempo o memoria responde 200 con un
+     * "remark" de error y la lista vacía: eso NO es "no hay lugares".
+     *
+     * @return list<array<string, mixed>>|null
+     */
+    public static function elements(string $body): ?array
+    {
+        $data = json_decode($body, true);
+
+        if (! is_array($data) || ! isset($data['elements']) || ! is_array($data['elements'])) {
+            return null;
+        }
+        if (isset($data['remark']) && preg_match('/error|timed out|out of memory/i', (string) $data['remark'])) {
             return null;
         }
 
-        if ($response->getStatusCode() !== 200) {
-            log_message('warning', 'NearbyPlaces: HTTP {code}', ['code' => $response->getStatusCode()]);
-
-            return null;
-        }
-
-        return (string) $response->getBody();
+        return $data['elements'];
     }
 }
