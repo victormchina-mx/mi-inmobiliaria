@@ -76,6 +76,36 @@
         return btn;
     }
 
+    function addPlaces(map, data) {
+        var food = 0;
+        data.places.slice(0, 50).forEach(function (p) {
+            var cat = data.categories[p.cat];
+            if (!cat || (p.cat === 'food' && ++food > 8)) { return; }
+
+            var pin = document.createElement('span');
+            pin.style.setProperty('--c', cat.color);
+            var icon = document.createElement('i');
+            icon.className = 'ms';
+            icon.setAttribute('aria-hidden', 'true');
+            icon.textContent = cat.icon;
+            pin.appendChild(icon);
+
+            var tip = document.createElement('div');
+            var name = document.createElement('b');
+            name.textContent = p.name;
+            var info = document.createElement('small');
+            info.textContent = p.type + ' · ' + (p.dist >= 1000 ? (p.dist / 1000).toFixed(1) + ' km' : p.dist + ' m') + ' · ' + p.min + ' min a pie';
+            tip.appendChild(name);
+            tip.appendChild(info);
+
+            L.marker([p.lat, p.lng], {
+                keyboard: false,
+                zIndexOffset: -100,
+                icon: L.divIcon({ className: 'nb-pin', html: pin, iconSize: [30, 30], iconAnchor: [15, 15] })
+            }).bindTooltip(tip, { direction: 'top', offset: [0, -14], className: 'nb-tip' }).addTo(map);
+        });
+    }
+
     function initMap() {
         var el = document.getElementById('loc-map');
         if (!el || typeof L === 'undefined') { return; }
@@ -139,6 +169,14 @@
                     + '<path d="M12 22l8-7 8 7v8h-5v-5h-6v5h-5z" fill="#fff"/></svg>'
             })
         }).addTo(map);
+
+        // Lugares cercanos (escuelas, parques...) como pines de colores
+        if (el.dataset.nearby && level !== 'state' && window.fetch) {
+            fetch(el.dataset.nearby, { headers: { Accept: 'application/json' } })
+                .then(function (r) { return r.ok ? r.json() : null; })
+                .then(function (data) { if (data && data.ok) { addPlaces(map, data); } })
+                .catch(function () { /* el mapa sigue sin los pines */ });
+        }
 
         // En escritorio la tarjeta tapa la parte izquierda del mapa
         function fit(animate) {

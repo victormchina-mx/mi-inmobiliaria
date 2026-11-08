@@ -18,6 +18,7 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
 
 <?= $this->section('scripts') ?>
 <script src="<?= asset_url('js/gallery.js') ?>"></script>
+<script src="<?= asset_url('js/nearby.js') ?>" defer></script>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -165,31 +166,41 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
                     <div class="bg-gray property-quantity px-4 pt-4 w-100">
                         <?= view('partials/property_stats', ['p' => $property, 'full' => true]) ?>
                     </div>
+<?php
+                    // "2nd Floor" / "2 Floor" → 2: así se puede decir "Piso 2 de 2"
+                    $floorNum = static fn ($v): ?int => preg_match('/\d+/', (string) $v, $m) ? (int) $m[0] : null;
+                    $floor    = $floorNum($property['floor'] ?? '');
+                    $floors   = $floorNum($property['totalfloor'] ?? '');
+                    $floorText = match (true) {
+                        $floor !== null && $floors !== null => $floor . ' de ' . $floors,
+                        $floor !== null                     => (string) $floor,
+                        $floors !== null                    => $floors . ($floors === 1 ? ' piso' : ' pisos'),
+                        default                             => '',
+                    };
+                    ?>
+                    <div class="facts">
+                        <span><i class="ms" aria-hidden="true">home</i>Tipo: <b><?= esc(\App\Libraries\Labels::propertyType($property['type'])) ?></b></span>
+                        <?php if ($floorText !== ''): ?>
+                        <span><i class="ms" aria-hidden="true">stairs</i><?= $floor !== null ? 'Piso' : 'Edificio' ?>: <b><?= esc($floorText) ?></b></span>
+                        <?php endif ?>
+                    </div>
 
                     <?php if (trim(strip_tags($safeDescription)) !== ''): ?>
                     <h4 class="text-secondary my-4">Descripción</h4>
                     <div><?= $safeDescription ?></div>
                     <?php endif; ?>
 
-                    <h5 class="mt-5 mb-4 text-secondary">Resumen de la Propiedad</h5>
-                    <div class="table-striped font-14 pb-2">
-                        <table class="w-100">
-                            <tbody>
-                                <tr>
-                                    <td>BHK:</td><td class="text-capitalize"><?= esc($property['bhk']) ?></td>
-                                    <td>Tipo:</td><td><?= esc(\App\Libraries\Labels::propertyType($property['type'])) ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Piso:</td><td class="text-capitalize"><?= esc($property['floor']) ?></td>
-                                    <td>Total pisos:</td><td class="text-capitalize"><?= esc($property['totalfloor']) ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Ciudad:</td><td class="text-capitalize"><?= esc($property['city']) ?></td>
-                                    <td>Estado:</td><td class="text-capitalize"><?= esc($property['state']) ?></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <!-- Lo que hay cerca: se carga después de la página (public/js/nearby.js, Property::nearby) -->
+                    <section class="nb nb--col mt-5" data-nearby="<?= site_url('property/' . $property['pid'] . '/cerca') ?>" aria-busy="true" aria-label="Lo que hay cerca">
+                        <div class="nb-head">
+                            <span class="nb-eyebrow">Alrededores</span>
+                            <h2 class="nb-title">Lo que hay cerca</h2>
+                            <p class="nb-sub">Buscando escuelas, parques y servicios de la zona…</p>
+                        </div>
+                        <div class="nb-skeleton" aria-hidden="true">
+                            <span></span><span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                    </section>
 
                     <?php if (trim(strip_tags($safeFeature)) !== ''): ?>
                     <h5 class="mt-5 mb-4 text-secondary">Características</h5>
