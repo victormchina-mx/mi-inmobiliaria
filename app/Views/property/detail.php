@@ -1,19 +1,22 @@
 <?= $this->extend('layouts/main') ?>
 
+<?php
+// Fotos del carrusel (las que existan, en orden)
+$galleryPhotos = array_values(array_filter(array_map(
+    static fn (string $field) => $property[$field] ?? '',
+    ['pimage', 'pimage1', 'pimage2', 'pimage3', 'pimage4']
+)));
+$gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
+?>
 <?= $this->section('styles') ?>
-<link rel="stylesheet" href="<?= base_url('css/layerslider.css') ?>">
-<?php // La primera foto del carrusel es la imagen principal (LCP): descargarla primero ?>
-<?php foreach (['pimage', 'pimage1', 'pimage2', 'pimage3', 'pimage4'] as $firstSlide): ?>
-<?php if (! empty($property[$firstSlide])): ?>
-<link rel="preload" as="image" href="<?= esc(thumb_url('property', $property[$firstSlide], 1600)) ?>" fetchpriority="high">
-<?php break; endif ?>
-<?php endforeach ?>
+<?php if ($galleryPhotos): ?>
+<?php // La primera foto es la imagen principal (LCP): se descarga primero, en el tamaño que elegirá el navegador ?>
+<link rel="preload" as="image" imagesrcset="<?= esc(thumb_srcset('property', $galleryPhotos[0], [800, 1600])) ?>" imagesizes="<?= esc($gallerySizes) ?>" fetchpriority="high">
+<?php endif ?>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script src="<?= base_url('js/greensock.js') ?>"></script>
-<script src="<?= base_url('js/layerslider.transitions.js') ?>"></script>
-<script src="<?= base_url('js/layerslider.kreaturamedia.jquery.js') ?>"></script>
+<script src="<?= asset_url('js/gallery.js') ?>"></script>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -91,15 +94,46 @@
                 <!-- Galería de imágenes -->
                 <div class="row">
                     <div class="col-md-12">
-                        <div id="single-property" style="width:100%; height:500px; margin:30px auto 50px;">
-                            <?php foreach (['pimage','pimage1','pimage2','pimage3','pimage4'] as $img): ?>
-                            <?php if (! empty($property[$img])): ?>
-                            <div class="ls-slide" data-ls="duration:7500; transition2d:5; kenburnszoom:in; kenburnsscale:1.2;">
-                                <img width="1600" height="900" src="<?= esc(thumb_url('property', $property[$img], 1600)) ?>" class="ls-bg" alt="<?= esc($property['title']) ?>">
+                        <?php if ($galleryPhotos): ?>
+                        <?php $total = count($galleryPhotos); ?>
+                        <div class="gallery" data-gallery role="region" aria-roledescription="carrusel" aria-label="Fotos de <?= esc($property['title'], 'attr') ?>">
+                            <div class="gallery__track" tabindex="0" aria-label="Desliza para ver las fotos">
+                                <?php foreach ($galleryPhotos as $i => $photo): ?>
+                                <figure class="gallery__slide" aria-label="Foto <?= $i + 1 ?> de <?= $total ?>">
+                                    <?php
+                                    $src    = esc(thumb_url('property', $photo, 1600));
+                                    $srcset = esc(thumb_srcset('property', $photo, [800, 1600]));
+                                    $alt    = esc($property['title']) . ' — foto ' . ($i + 1);
+                                    ?>
+                                    <?php if ($i === 0): ?>
+                                    <img src="<?= $src ?>" srcset="<?= $srcset ?>" sizes="<?= esc($gallerySizes) ?>"
+                                         width="1600" height="900" alt="<?= $alt ?>" fetchpriority="high" decoding="async">
+                                    <?php else: ?>
+                                    <?php // Se descarga al acercarse a ella (gallery.js); sin JS, la de <noscript> ?>
+                                    <img data-src="<?= $src ?>" data-srcset="<?= $srcset ?>" sizes="<?= esc($gallerySizes) ?>"
+                                         width="1600" height="900" alt="<?= $alt ?>" decoding="async">
+                                    <noscript><img src="<?= $src ?>" srcset="<?= $srcset ?>" sizes="<?= esc($gallerySizes) ?>"
+                                         width="1600" height="900" alt="<?= $alt ?>" loading="lazy"></noscript>
+                                    <?php endif ?>
+                                </figure>
+                                <?php endforeach ?>
+                            </div>
+                            <?php if ($total > 1): ?>
+                            <button type="button" class="gallery__nav gallery__nav--prev" data-gallery-prev aria-label="Foto anterior">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                            </button>
+                            <button type="button" class="gallery__nav gallery__nav--next" data-gallery-next aria-label="Foto siguiente">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+                            </button>
+                            <div class="gallery__count" aria-hidden="true"><span data-gallery-current>1</span> / <?= $total ?></div>
+                            <div class="gallery__dots">
+                                <?php for ($i = 0; $i < $total; $i++): ?>
+                                <button type="button" data-gallery-dot aria-label="Ver foto <?= $i + 1 ?>"<?= $i === 0 ? ' aria-current="true"' : '' ?>></button>
+                                <?php endfor ?>
                             </div>
                             <?php endif ?>
-                            <?php endforeach ?>
                         </div>
+                        <?php endif ?>
                     </div>
                 </div>
 

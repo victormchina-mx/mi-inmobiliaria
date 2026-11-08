@@ -4381,3 +4381,116 @@ a.service-link:focus {
   text-decoration: none;
 }
 
+
+/* ================================================================
+   Carrusel de fotos del detalle (reemplaza a LayerSlider)
+   Se desliza con CSS scroll-snap; public/js/gallery.js agrega
+   flechas, puntos y contador (visibles solo con .is-ready).
+   ================================================================ */
+.gallery {
+  position: relative;
+  margin: 30px 0 50px; /* el mismo espacio que tenía LayerSlider */
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--theme-secondary-color, #0F172A);
+}
+.gallery__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  aspect-ratio: 16 / 9;
+  max-height: 520px;
+}
+.gallery__track::-webkit-scrollbar { display: none; }
+.gallery__track:focus-visible { outline: 3px solid var(--theme-primary-color, #C9A96E); outline-offset: -3px; }
+.gallery__slide {
+  flex: 0 0 100%;
+  margin: 0;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+.gallery__slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.gallery__nav,
+.gallery__count,
+.gallery__dots { display: none; }
+.gallery.is-ready .gallery__nav,
+.gallery.is-ready .gallery__count,
+.gallery.is-ready .gallery__dots { display: flex; }
+.gallery__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, .6);
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s, opacity .2s;
+}
+.gallery__nav svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.gallery__nav:hover,
+.gallery__nav:focus-visible { background: var(--theme-primary-color, #C9A96E); outline: none; }
+.gallery__nav:disabled { opacity: 0; pointer-events: none; }
+.gallery__nav--prev { left: 12px; }
+.gallery__nav--next { right: 12px; }
+.gallery__count {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, .6);
+  color: #fff;
+  font-size: 13px;
+  line-height: 20px;
+}
+.gallery__dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  justify-content: center;
+  gap: 4px;
+}
+.gallery__dots button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.gallery__dots button::before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  margin: auto;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .6);
+  box-shadow: 0 0 2px rgba(0, 0, 0, .5);
+  transition: background .2s, transform .2s;
+}
+.gallery__dots button[aria-current="true"]::before {
+  background: var(--theme-primary-color, #C9A96E);
+  transform: scale(1.2);
+}
+@media (max-width: 575px) {
+  .gallery__nav { width: 38px; height: 38px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery__track { scroll-behavior: auto; }
+}
