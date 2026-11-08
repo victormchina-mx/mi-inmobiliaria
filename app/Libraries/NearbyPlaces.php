@@ -38,7 +38,7 @@ class NearbyPlaces
         'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
     ];
     private const USER_AGENT = 'InmobiliariaVMCH/1.0 (+https://inmobiliaria.vmch.net)';
-    private const TIMEOUT    = 15;  // por servidor
+    private const TIMEOUT    = 12;  // por servidor
     private const MAX_TIME   = 24;  // en total (PHP suele cortar a los 30 s)
     private const TTL_FOUND  = 30 * DAY;
     private const TTL_EMPTY  = DAY;
@@ -94,20 +94,31 @@ class NearbyPlaces
         return $places;
     }
 
-    /** Consulta Overpass QL: lugares con nombre de las categorías de arriba. */
+    /**
+     * Consulta Overpass QL: lugares con nombre de las categorías de arriba.
+     *
+     * Busca en un cuadrado de ±RADIUS alrededor del punto ([bbox]) y no en
+     * un círculo (around): Overpass resuelve el cuadrado con sus índices en
+     * 1–2 s, mientras que "around" con estos filtros tardaba más de 15 s y
+     * los servidores públicos cortaban la consulta. Lo que queda en las
+     * esquinas (a más de RADIUS) lo descarta parse().
+     * Solo nodos y vías (nw): las relaciones son pocas y muy lentas.
+     */
     public static function query(float $lat, float $lng): string
     {
-        $around = sprintf('(around:%d,%.6F,%.6F)', self::RADIUS, $lat, $lng);
+        $dLat = self::RADIUS / 111320;
+        $dLng = self::RADIUS / (111320 * max(0.2, cos(deg2rad($lat))));
+        $bbox = sprintf('%.6F,%.6F,%.6F,%.6F', $lat - $dLat, $lng - $dLng, $lat + $dLat, $lng + $dLng);
 
-        return '[out:json][timeout:20];('
-            . "nwr{$around}[amenity~\"^(school|kindergarten|college|university|library|theatre|arts_centre|hospital|clinic|doctors|pharmacy|marketplace|restaurant|cafe)$\"][name];"
-            . "nwr{$around}[leisure~\"^(park|garden|playground)$\"][name];"
-            . "nwr{$around}[tourism~\"^(museum|gallery)$\"][name];"
-            . "nwr{$around}[historic~\"^(monument|memorial|archaeological_site|building|church|castle|ruins|tree)$\"][name];"
-            . "nwr{$around}[shop~\"^(supermarket|mall|department_store)$\"][name];"
-            . "nwr{$around}[railway~\"^(station|halt)$\"][name];"
-            . "nwr{$around}[public_transport=station][name];"
-            . ');out center tags 300;';
+        return "[out:json][timeout:12][bbox:{$bbox}];("
+            . 'nw[amenity~"^(school|kindergarten|college|university|library|theatre|arts_centre|hospital|clinic|doctors|pharmacy|marketplace|restaurant|cafe)$"][name];'
+            . 'nw[leisure~"^(park|garden|playground)$"][name];'
+            . 'nw[tourism~"^(museum|gallery)$"][name];'
+            . 'nw[historic~"^(monument|memorial|archaeological_site|building|church|castle|ruins|tree)$"][name];'
+            . 'nw[shop~"^(supermarket|mall|department_store)$"][name];'
+            . 'nw[railway~"^(station|halt)$"][name];'
+            . 'nw[public_transport=station][name];'
+            . ');out tags center qt 300;';
     }
 
     /**
