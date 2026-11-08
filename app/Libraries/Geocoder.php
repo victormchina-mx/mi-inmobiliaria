@@ -51,6 +51,25 @@ class Geocoder
     }
 
     /**
+     * Busca un texto libre (el buscador del formulario de propiedades).
+     *
+     * @return array{lat: float, lng: float, bbox: list<float>|null}|null
+     */
+    public function find(string $query): ?array
+    {
+        $query = self::clean($query);
+
+        if ($query === '') {
+            return null;
+        }
+        if (! preg_match('/m[eé]xico/iu', $query)) {
+            $query .= ', México';
+        }
+
+        return $this->search($query) ?: null;
+    }
+
+    /**
      * Textos a buscar, de lo más preciso a lo más general, sin repetir
      * (si la colonia se llama igual que la ciudad, se busca una sola vez).
      *

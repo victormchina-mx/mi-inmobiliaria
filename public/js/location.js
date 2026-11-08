@@ -136,9 +136,16 @@
 
         if (level === 'state') {
             bounds = area || center.toBounds(60000);
+        } else if (level === 'exact') {
+            bounds = center.toBounds(500); // punto marcado por el anunciante: solo el marcador
         } else {
-            var radius = area ? map.distance(area.getSouthWest(), area.getNorthEast()) / 2 : 800;
-            radius = Math.max(level === 'city' ? 1500 : 450, Math.min(level === 'city' ? 8000 : 2500, radius));
+            var radius;
+            if (level === 'approx') {
+                radius = parseInt(el.dataset.radius, 10) || 300; // zona fija alrededor del punto marcado
+            } else {
+                radius = area ? map.distance(area.getSouthWest(), area.getNorthEast()) / 2 : 800;
+                radius = Math.max(level === 'city' ? 1500 : 450, Math.min(level === 'city' ? 8000 : 2500, radius));
+            }
             var circle = L.circle(center, {
                 radius: radius, color: GOLD, weight: 2, opacity: 0.9,
                 fillColor: GOLD, fillOpacity: 0.16, interactive: false
@@ -184,7 +191,7 @@
             map.fitBounds(bounds, {
                 paddingTopLeft: wide ? [400, 50] : [30, 30],
                 paddingBottomRight: [30, 50],
-                maxZoom: 16,
+                maxZoom: level === 'exact' ? 17 : 16,
                 animate: animate !== false
             });
         }

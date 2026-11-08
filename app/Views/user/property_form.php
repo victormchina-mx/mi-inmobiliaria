@@ -1,6 +1,8 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('styles') ?>
 <?= view('partials/banner_preload') ?>
+<link rel="stylesheet" href="<?= asset_url('lib/leaflet/leaflet.css') ?>">
+<link rel="stylesheet" href="<?= asset_url('css/location-picker.css') ?>">
 <link rel="stylesheet" href="<?= base_url('js/tinymce/init-tinymce.min.js') ?>">
 <link rel="stylesheet" href="<?= base_url('admin/assets/css/select2.min.css') ?>">
 <style>
@@ -185,6 +187,9 @@
                     </div>
                 </div>
 
+                        <!-- Punto exacto en el mapa (App\Libraries\PropertyLocation) -->
+                        <?= view('partials/location_picker', ['property' => $property ?? []]) ?>
+
                 <!-- Descripción y características -->
                 <div class="col-md-12">
                     <div class="form-group">
@@ -237,6 +242,8 @@
 
 <?= $this->endSection() ?>
 <?= $this->section('scripts') ?>
+<script src="<?= asset_url('lib/leaflet/leaflet.js') ?>"></script>
+<script src="<?= asset_url('js/location-picker.js') ?>"></script>
 <script src="<?= base_url('admin/assets/js/select2.min.js') ?>"></script>
 <script src="<?= base_url('js/tinymce/tinymce.min.js') ?>"></script>
 <script>

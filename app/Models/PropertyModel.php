@@ -18,6 +18,8 @@ class PropertyModel extends Model
         'feature', 'pimage', 'pimage1', 'pimage2', 'pimage3', 'pimage4',
         'uid', 'status', 'cancel_reason', 'mapimage', 'topmapimage', 'groundmapimage',
         'totalfloor', 'isFeatured',
+        // Punto en el mapa (app/Database/sql/2026-11-property-coordinates.sql)
+        'lat', 'lng', 'exact_location',
     ];
 
     protected $validationRules = [

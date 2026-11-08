@@ -4,7 +4,7 @@
  * dentro del JSON y public/js/nearby.js lo inserta en el detalle).
  *
  * Variables: $places (NearbyPlaces::parse), $counts, $summary
- * (NearbyPlaces::summary), $mapUrl, $level ('location'|'city'), $zone.
+ * (NearbyPlaces::summary), $mapUrl, $level ('exact'|'approx'|'location'|'city'), $zone.
  * Estilos: .nb-* en public/css/style.css
  */
 use App\Libraries\NearbyPlaces;
@@ -23,7 +23,11 @@ $distance = static fn (int $m): string => $m >= 1000 ? number_format($m / 1000, 
     <span class="nb-eyebrow">Alrededores</span>
     <h2 class="nb-title">Lo que hay cerca</h2>
     <p class="nb-sub">
-        Lugares a menos de <?= NearbyPlaces::RADIUS / 1000 ?> km<?= $level === 'city' && $zone !== '' ? ' del centro de ' . esc($zone) : '' ?>, unos 15 minutos caminando
+        Lugares a menos de <?= NearbyPlaces::RADIUS / 1000 ?> km<?= match (true) {
+            $level === 'exact'               => ' de la propiedad',
+            $level === 'city' && $zone !== '' => ' del centro de ' . esc($zone),
+            default                          => '',
+        } ?>, unos 15 minutos caminando
     </p>
     <a href="<?= esc($mapUrl, 'attr') ?>" class="nb-maplink"><i class="ms" aria-hidden="true">map</i>Verlos en el mapa <span aria-hidden="true">→</span></a>
 </div>
@@ -81,7 +85,7 @@ $distance = static fn (int $m): string => $m >= 1000 ? number_format($m / 1000, 
         <span class="nb-eyebrow nb-eyebrow--light">¿Por qué vivir aquí?</span>
         <h3><?= esc($summary['title']) ?></h3>
         <?php if ($summary['text'] !== ''): ?><p><?= esc($summary['text']) ?></p><?php endif ?>
-        <small class="nb-src"><i class="ms" aria-hidden="true">info</i>Datos de OpenStreetMap. Distancias aproximadas desde el centro de la zona.</small>
+        <small class="nb-src"><i class="ms" aria-hidden="true">info</i>Datos de OpenStreetMap. Distancias aproximadas desde <?= $level === 'exact' ? 'la propiedad' : 'el centro de la zona' ?>.</small>
     </div>
     <?php if ($summary['tags']): ?>
     <ul class="nb-why__tags">
@@ -92,5 +96,5 @@ $distance = static fn (int $m): string => $m >= 1000 ? number_format($m / 1000, 
     <?php endif ?>
 </div>
 <?php else: ?>
-<p class="nb-src nb-src--plain"><i class="ms" aria-hidden="true">info</i>Datos de OpenStreetMap. Distancias aproximadas desde el centro de la zona.</p>
+<p class="nb-src nb-src--plain"><i class="ms" aria-hidden="true">info</i>Datos de OpenStreetMap. Distancias aproximadas desde <?= $level === 'exact' ? 'la propiedad' : 'el centro de la zona' ?>.</p>
 <?php endif ?>

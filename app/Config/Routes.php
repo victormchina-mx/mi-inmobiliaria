@@ -16,6 +16,8 @@ $routes->get('property/state/(:num)', 'Property::byState/$1');
 $routes->get('property/(:num)', 'Property::show/$1');
 $routes->get('property/(:num)/ubicacion', 'Property::location/$1');
 $routes->get('property/(:num)/cerca', 'Property::nearby/$1');
+// Buscador de direcciones del formulario de propiedades (agente o admin con sesión)
+$routes->get('geocode', 'Geocode::search', ['filter' => 'throttle:15,60']);
 $routes->get('agents', 'Agent::index');
 $routes->get('about', 'About::index');
 $routes->get('contact', 'Contact::index');

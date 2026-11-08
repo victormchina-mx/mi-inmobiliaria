@@ -1,0 +1,61 @@
+/* ================================================================
+   "Ubicación en el mapa" del formulario de propiedades (agente y admin)
+   Vista: app/Views/partials/location_picker.php · JS: js/location-picker.js
+   Autónomo: el panel de admin no carga style.css del sitio.
+   ================================================================ */
+.lp {
+  margin: 8px 0 24px; padding: 20px; border-radius: 14px;
+  background: #FBF7EF; border: 1px solid rgba(201, 169, 110, .35);
+}
+.lp-head { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+.lp-head__ic {
+  width: 42px; height: 42px; flex: none; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(201, 169, 110, .2); color: #B07D4F;
+}
+.lp-head__ic svg { width: 22px; height: 22px; }
+.lp-title { margin: 0 0 4px; font-size: 17px; font-weight: 700; color: #0F172A; }
+.lp-help { margin: 0; font-size: 14px; color: #4B5563; }
+
+.lp-search { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.lp-q { flex: 1 1 260px; min-width: 0; height: 42px; }
+.lp-btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 42px; padding: 0 14px;
+  border: 1px solid rgba(15, 23, 42, .15); border-radius: 8px; background: #fff;
+  font-size: 14px; font-weight: 600; color: #0F172A; cursor: pointer; white-space: nowrap;
+  transition: border-color .2s, background .2s;
+}
+.lp-btn:hover, .lp-btn:focus { border-color: #C9A96E; outline: none; }
+.lp-btn:disabled { opacity: .6; cursor: wait; }
+.lp-btn--dark { background: #0F172A; border-color: #0F172A; color: #fff; }
+.lp-btn--dark:hover, .lp-btn--dark:focus { background: #1E293B; color: #fff; }
+.lp-btn svg { flex: none; }
+
+.lp-map {
+  height: 380px; border-radius: 12px; overflow: hidden; background: #F2EFE9;
+  border: 1px solid rgba(15, 23, 42, .1); cursor: crosshair;
+}
+.lp-map .leaflet-tile-pane { filter: saturate(.6) contrast(.97) brightness(1.03); }
+.lp-map .leaflet-marker-draggable { cursor: grab; }
+.lp-marker { filter: drop-shadow(0 6px 8px rgba(0, 0, 0, .3)); }
+
+.lp-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 10px 0 14px; min-height: 22px; }
+.lp-status { font-size: 13px; color: #6B7280; }
+.lp-status--ok { color: #2E7D4F; }
+.lp-status--error { color: #C0392B; }
+.lp-link { border: 0; background: none; padding: 0; font-size: 13px; font-weight: 600; color: #B07D4F; text-decoration: underline; cursor: pointer; }
+
+.lp-exact {
+  display: flex; gap: 12px; align-items: flex-start; margin: 0; padding: 14px 16px;
+  background: #fff; border: 1px solid rgba(15, 23, 42, .1); border-radius: 10px; cursor: pointer; font-weight: 400;
+}
+.lp-exact input { width: 18px; height: 18px; margin-top: 2px; flex: none; accent-color: #B07D4F; }
+.lp-exact b { display: block; color: #0F172A; font-size: 14px; }
+.lp-exact small { display: block; color: #6B7280; font-size: 13px; }
+.lp-exact:has(input:disabled) { opacity: .55; cursor: not-allowed; }
+
+@media (max-width: 575px) {
+  .lp { padding: 16px; }
+  .lp-btn { flex: 1 1 auto; justify-content: center; }
+  .lp-map { height: 300px; }
+}

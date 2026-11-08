@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Libraries\Geocoder;
 use App\Libraries\NearbyPlaces;
+use App\Libraries\PropertyLocation;
 use App\Models\PropertyModel;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -65,7 +66,7 @@ class Property extends BaseController
             'ogImage'         => ! empty($property['pimage']) ? base_url('uploads/property/' . $property['pimage']) : null,
             'property'        => $property,
             'address'         => $address,
-            'place'           => $address !== '' ? (new Geocoder())->locate($property) : null,
+            'place'           => $this->place($property),
         ]);
     }
 
@@ -87,7 +88,7 @@ class Property extends BaseController
             return $none->setStatusCode(404);
         }
 
-        $place = Geocoder::address($property) !== '' ? (new Geocoder())->locate($property) : null;
+        $place = $this->place($property);
 
         // Con solo el estado, las distancias desde su centro no dirían nada
         if (! $place || $place['level'] === 'state') {
@@ -99,7 +100,7 @@ class Property extends BaseController
             return $none;
         }
 
-        $zone = trim((string) ($place['level'] === 'location' ? $property['location'] : $property['city']));
+        $zone = trim((string) ($place['level'] === 'city' ? $property['city'] : $property['location']));
 
         return $this->response
             ->setHeader('Cache-Control', 'public, max-age=3600')
@@ -116,6 +117,19 @@ class Property extends BaseController
                 'places'     => $places,
                 'categories' => NearbyPlaces::CATEGORIES,
             ]);
+    }
+
+    /**
+     * Dónde mostrar la propiedad: el punto que marcó el anunciante (exacto o
+     * zona desplazada, ver PropertyLocation) o, si no marcó ninguno, la zona
+     * que encuentre Geocoder con la dirección escrita.
+     *
+     * @return array{lat: float, lng: float, level: string, bbox: list<float>|null}|null
+     */
+    private function place(array $property): ?array
+    {
+        return PropertyLocation::public($property)
+            ?? (Geocoder::address($property) !== '' ? (new Geocoder())->locate($property) : null);
     }
 
     public function grid(): string
