@@ -87,11 +87,13 @@ final class NearbyPlacesTest extends CIUnitTestCase
         $this->assertEqualsWithDelta(1000.8, NearbyPlaces::distance(19.0, -99.0, 19.009, -99.0), 1.0);
     }
 
-    public function testQueryUsesRadiusAndPoint(): void
+    public function testQueryUsesBoundingBoxAroundThePoint(): void
     {
         $query = NearbyPlaces::query(self::LAT, self::LNG);
 
-        $this->assertStringContainsString('(around:1000,19.452900,-99.175500)', $query);
+        // Cuadrado de ±1 km: 0.008983° de latitud; en longitud depende de la latitud
+        $this->assertStringContainsString('[bbox:19.443917,-99.185027,19.461883,-99.165973]', $query);
+        $this->assertStringNotContainsString('around', $query);
         $this->assertStringStartsWith('[out:json]', $query);
     }
 
