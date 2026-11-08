@@ -87,21 +87,32 @@ final class NearbyPlacesTest extends CIUnitTestCase
         $this->assertEqualsWithDelta(1000.8, NearbyPlaces::distance(19.0, -99.0, 19.009, -99.0), 1.0);
     }
 
-    public function testQueryUsesBoundingBoxAroundThePoint(): void
+    public function testViewboxIsASquareAroundThePoint(): void
     {
-        $query = NearbyPlaces::query(self::LAT, self::LNG);
-
-        // Cuadrado de ±1 km: 0.008983° de latitud; en longitud depende de la latitud
-        $this->assertStringContainsString('[bbox:19.443917,-99.185027,19.461883,-99.165973]', $query);
-        $this->assertStringNotContainsString('around', $query);
-        $this->assertStringStartsWith('[out:json]', $query);
+        // oeste,norte,este,sur; ±1 km: 0.008983° de latitud, en longitud depende de la latitud
+        $this->assertSame('-99.185027,19.461883,-99.165973,19.443917', NearbyPlaces::viewbox(self::LAT, self::LNG));
     }
 
-    public function testElementsRejectsOverpassErrors(): void
+    public function testFromNominatimKeepsTypeAndExtraTags(): void
     {
-        $this->assertSame([['id' => 1]], NearbyPlaces::elements('{"elements":[{"id":1}]}'));
-        $this->assertSame([], NearbyPlaces::elements('{"elements":[]}'));
-        $this->assertNull(NearbyPlaces::elements('{"elements":[],"remark":"runtime error: Query timed out in \\"query\\" at line 1 after 21 seconds."}'));
-        $this->assertNull(NearbyPlaces::elements('<html>Too Many Requests</html>'));
+        $station = NearbyPlaces::fromNominatim([
+            'lat' => '19.4550', 'lon' => '-99.1770', 'name' => 'Popotla',
+            'category' => 'railway', 'type' => 'station', 'extratags' => ['station' => 'subway'],
+        ]);
+        $this->assertSame(['railway' => 'station', 'name' => 'Popotla', 'station' => 'subway'], $station['tags']);
+
+        $places = NearbyPlaces::parse([$station], self::LAT, self::LNG);
+        $this->assertSame(['Metro Popotla', 'transit', 'Metro'], [$places[0]['name'], $places[0]['cat'], $places[0]['type']]);
+
+        $this->assertNull(NearbyPlaces::fromNominatim(['lat' => '19.4', 'lon' => '-99.1', 'name' => 'x']));
+    }
+
+    public function testLinesAndRoutesAreNotStations(): void
+    {
+        // Al buscar "subway station" Nominatim también devuelve la línea ("Línea 2")
+        $line = NearbyPlaces::fromNominatim(['lat' => '19.4535', 'lon' => '-99.1760', 'name' => 'Línea 2', 'category' => 'railway', 'type' => 'subway']);
+        $route = NearbyPlaces::fromNominatim(['lat' => '19.4535', 'lon' => '-99.1760', 'name' => 'Línea 2', 'category' => 'route', 'type' => 'subway']);
+
+        $this->assertSame([], NearbyPlaces::parse([$line, $route], self::LAT, self::LNG));
     }
 }

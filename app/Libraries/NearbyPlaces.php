@@ -8,15 +8,22 @@ use Throwable;
 /**
  * "Lo que hay cerca" de una propiedad: escuelas, parques, cultura, salud,
  * compras, transporte y restaurantes a menos de RADIUS metros, con los
- * datos de OpenStreetMap (Overpass API), y un texto automático de
+ * datos de OpenStreetMap (buscador Nominatim), y un texto automático de
  * "¿Por qué vivir aquí?" armado SOLO con esos datos.
  *
  * Las distancias se miden desde el centro de la zona que encontró
  * Geocoder (las propiedades no guardan coordenadas): son aproximadas.
  *
- * Resultados en caché 30 días por zona; si Overpass no responde se deja
- * de intentar por 10 minutos (igual que Geocoder).
- * Política de uso: https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
+ * Se busca cada tipo de lugar ("school", "park"...) dentro del cuadrado de
+ * ±RADIUS alrededor del punto. Nominatim permite UNA consulta por segundo,
+ * así que la primera visita a una zona tarda ~18 s (el detalle muestra
+ * "cargando"); el resultado se guarda 30 días por zona. Si Nominatim no
+ * responde se deja de intentar por 10 minutos.
+ * Política de uso: https://operations.osmfoundation.org/policies/nominatim/
+ *
+ * Antes se usaba Overpass API, pero desde Hostinger (IP compartida con
+ * muchos sitios) sus servidores públicos dejaban las consultas en espera
+ * y nunca respondían.
  *
  * Usan esto: Property::nearby (JSON), partials/nearby.php, public/js/nearby.js
  */
@@ -27,22 +34,26 @@ class NearbyPlaces
     /** Metros por minuto caminando (4.8 km/h). */
     private const WALK = 80;
 
-    /**
-     * Servidores públicos de Overpass, en orden. Si uno falla (saturado,
-     * límite de consultas: en Hostinger muchos sitios comparten la misma IP),
-     * se prueba el siguiente.
-     */
-    private const ENDPOINTS = [
-        'https://overpass-api.de/api/interpreter',
-        'https://overpass.private.coffee/api/interpreter',
-        'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
-    ];
+    private const ENDPOINT   = 'https://nominatim.openstreetmap.org/search';
     private const USER_AGENT = 'InmobiliariaVMCH/1.0 (+https://inmobiliaria.vmch.net)';
-    private const TIMEOUT    = 12;  // por servidor
-    private const MAX_TIME   = 24;  // en total (PHP suele cortar a los 30 s)
+    private const TIMEOUT    = 6;    // por consulta
+    private const MAX_TIME   = 24;   // en total (PHP suele cortar a los 30 s)
+    private const PAUSE      = 1.1;  // segundos entre consultas (máximo 1 por segundo)
     private const TTL_FOUND  = 30 * DAY;
-    private const TTL_EMPTY  = DAY;
+    private const TTL_RETRY  = DAY;  // zona vacía o búsqueda incompleta: se repite mañana
     private const TTL_DOWN   = 10 * MINUTE;
+
+    /**
+     * Tipos de lugar que se buscan, en orden de importancia (si se acaba el
+     * tiempo, faltan los últimos). Nominatim entiende estas palabras como
+     * "lugares de ese tipo"; cada resultado trae su tipo real y classify()
+     * descarta lo que no corresponda (p. ej. "Línea 2" al buscar estaciones).
+     */
+    private const PHRASES = [
+        'school', 'kindergarten', 'university', 'park', 'station', 'supermarket', 'marketplace',
+        'pharmacy', 'hospital', 'clinic', 'museum', 'library', 'mall', 'playground', 'theatre',
+        'restaurant', 'cafe',
+    ];
     private const MAX_PLACES = 80;
 
     /**
@@ -63,66 +74,145 @@ class NearbyPlaces
      * Lugares cerca de un punto, del más cercano al más lejano.
      *
      * @return list<array{name: string, cat: string, type: string, dist: int, min: int, lat: float, lng: float}>|null
-     *         null si Overpass no respondió
+     *         null si Nominatim no respondió (o hay otra búsqueda en curso)
      */
     public function around(float $lat, float $lng): ?array
     {
-        // "v2": ignora lo guardado por la primera versión (podía guardar como vacía una zona en la que Overpass falló)
-        $key    = sprintf('nearby2_%s_%s', number_format($lat, 4, '_', ''), number_format($lng, 4, '_', ''));
-        $key    = str_replace('-', 'm', $key);
+        // "v3": ignora lo guardado por las versiones con Overpass
+        $key    = str_replace('-', 'm', sprintf('nearby3_%s_%s', number_format($lat, 4, '_', ''), number_format($lng, 4, '_', '')));
         $cached = cache($key);
 
         if (is_array($cached)) {
             return $cached;
         }
-        if (cache('nearby2_down') !== null) {
+
+        // Una búsqueda a la vez: dos al mismo tiempo pasarían de 1 consulta por segundo
+        if (cache('nearby3_down') !== null || cache('nearby3_busy') !== null) {
             return null;
         }
+        cache()->save('nearby3_busy', 1, 40);
 
-        $elements = $this->request(self::query($lat, $lng));
+        [$elements, $complete, $answered] = $this->collect($lat, $lng);
+        cache()->delete('nearby3_busy');
 
-        if ($elements === null) {
-            cache()->save('nearby2_down', 1, self::TTL_DOWN);
+        if (! $answered) {
+            cache()->save('nearby3_down', 1, self::TTL_DOWN);
 
             return null;
         }
 
         $places = self::parse($elements, $lat, $lng);
-        // Una zona sin lugares se vuelve a consultar al día siguiente
-        cache()->save($key, $places, $places ? self::TTL_FOUND : self::TTL_EMPTY);
+        cache()->save($key, $places, $places && $complete ? self::TTL_FOUND : self::TTL_RETRY);
 
         return $places;
     }
 
-    /**
-     * Consulta Overpass QL: lugares con nombre de las categorías de arriba.
-     *
-     * Busca en un cuadrado de ±RADIUS alrededor del punto ([bbox]) y no en
-     * un círculo (around): Overpass resuelve el cuadrado con sus índices en
-     * 1–2 s, mientras que "around" con estos filtros tardaba más de 15 s y
-     * los servidores públicos cortaban la consulta. Lo que queda en las
-     * esquinas (a más de RADIUS) lo descarta parse().
-     * Solo nodos y vías (nw): las relaciones son pocas y muy lentas.
-     */
-    public static function query(float $lat, float $lng): string
+    /** Cuadrado de ±RADIUS alrededor del punto, como lo pide Nominatim: "oeste,norte,este,sur". */
+    public static function viewbox(float $lat, float $lng): string
     {
         $dLat = self::RADIUS / 111320;
         $dLng = self::RADIUS / (111320 * max(0.2, cos(deg2rad($lat))));
-        $bbox = sprintf('%.6F,%.6F,%.6F,%.6F', $lat - $dLat, $lng - $dLng, $lat + $dLat, $lng + $dLng);
 
-        return "[out:json][timeout:12][bbox:{$bbox}];("
-            . 'nw[amenity~"^(school|kindergarten|college|university|library|theatre|arts_centre|hospital|clinic|doctors|pharmacy|marketplace|restaurant|cafe)$"][name];'
-            . 'nw[leisure~"^(park|garden|playground)$"][name];'
-            . 'nw[tourism~"^(museum|gallery)$"][name];'
-            . 'nw[historic~"^(monument|memorial|archaeological_site|building|church|castle|ruins|tree)$"][name];'
-            . 'nw[shop~"^(supermarket|mall|department_store)$"][name];'
-            . 'nw[railway~"^(station|halt)$"][name];'
-            . 'nw[public_transport=station][name];'
-            . ');out tags center qt 300;';
+        return sprintf('%.6F,%.6F,%.6F,%.6F', $lng - $dLng, $lat + $dLat, $lng + $dLng, $lat - $dLat);
     }
 
     /**
-     * Convierte la respuesta de Overpass en la lista de lugares: clasifica,
+     * Un resultado de Nominatim (format=jsonv2, extratags=1) con la misma
+     * forma que usa parse(): ['lat', 'lon', 'tags' => [categoría => tipo, name, ...]].
+     */
+    public static function fromNominatim(array $result): ?array
+    {
+        $category = (string) ($result['category'] ?? '');
+        $type     = (string) ($result['type'] ?? '');
+
+        if ($category === '' || $type === '' || ! is_numeric($result['lat'] ?? null) || ! is_numeric($result['lon'] ?? null)) {
+            return null;
+        }
+
+        $extra = is_array($result['extratags'] ?? null) ? $result['extratags'] : [];
+
+        return [
+            'lat'  => (float) $result['lat'],
+            'lon'  => (float) $result['lon'],
+            'tags' => [$category => $type, 'name' => (string) ($result['name'] ?? '')] + $extra,
+        ];
+    }
+
+    /**
+     * Busca cada tipo de lugar en Nominatim, respetando 1 consulta por segundo.
+     *
+     * @return array{0: list<array<string, mixed>>, 1: bool, 2: bool}
+     *         [elementos, si se completaron todas las búsquedas, si respondió al menos una]
+     */
+    private function collect(float $lat, float $lng): array
+    {
+        $viewbox  = self::viewbox($lat, $lng);
+        $start    = microtime(true);
+        $last     = 0.0;
+        $elements = [];
+        $complete = true;
+        $answered = false;
+
+        foreach (self::PHRASES as $phrase) {
+            if (microtime(true) - $start > self::MAX_TIME - self::TIMEOUT) {
+                $complete = false;
+                break;
+            }
+
+            $wait = self::PAUSE - (microtime(true) - $last);
+            if ($last > 0 && $wait > 0) {
+                usleep((int) ($wait * 1_000_000));
+            }
+            $last = microtime(true);
+
+            try {
+                $response = Services::curlrequest(['timeout' => self::TIMEOUT, 'connect_timeout' => 4], null, null, false)
+                    ->get(self::ENDPOINT, [
+                        'headers'     => ['User-Agent' => self::USER_AGENT],
+                        'query'       => [
+                            'q'               => $phrase,
+                            'viewbox'         => $viewbox,
+                            'bounded'         => 1,
+                            'limit'           => 40,
+                            'format'          => 'jsonv2',
+                            'extratags'       => 1,
+                            'accept-language' => 'es',
+                        ],
+                        'http_errors' => false,
+                    ]);
+            } catch (Throwable $e) {
+                log_message('error', 'NearbyPlaces: "{phrase}": {message}', ['phrase' => $phrase, 'message' => $e->getMessage()]);
+                $complete = false;
+
+                continue;
+            }
+
+            $status = $response->getStatusCode();
+            $data   = json_decode((string) $response->getBody(), true);
+
+            if ($status !== 200 || ! is_array($data)) {
+                log_message('error', 'NearbyPlaces: "{phrase}": HTTP {code}', ['phrase' => $phrase, 'code' => $status]);
+                $complete = false;
+                if (in_array($status, [403, 429], true)) {
+                    break; // Nominatim pide parar
+                }
+
+                continue;
+            }
+
+            $answered = true;
+            foreach ($data as $result) {
+                if (is_array($result) && ($element = self::fromNominatim($result)) !== null) {
+                    $elements[] = $element;
+                }
+            }
+        }
+
+        return [$elements, $complete, $answered];
+    }
+
+    /**
+     * Convierte los resultados en la lista de lugares: clasifica,
      * calcula distancia y minutos a pie, quita repetidos (mismo nombre y
      * categoría: se queda el más cercano) y ordena por distancia.
      *
@@ -227,14 +317,15 @@ class NearbyPlaces
             return ['park', $parks[$leisure]];
         }
 
-        if (($tags['railway'] ?? '') !== '' || ($tags['public_transport'] ?? '') === 'station') {
+        // Solo estaciones: no las vías ni las líneas ("Línea 2")
+        if (in_array($tags['railway'] ?? '', ['station', 'halt'], true) || ($tags['public_transport'] ?? '') === 'station') {
             $station = $tags['station'] ?? '';
 
             return ['transit', match (true) {
                 $station === 'subway'                         => 'Metro',
                 $station === 'light_rail'                     => 'Tren ligero',
                 ($tags['bus'] ?? '') === 'yes' || ($tags['highway'] ?? '') === 'bus_stop' => 'Estación de autobús',
-                ($tags['railway'] ?? '') !== ''               => 'Estación de tren',
+                ($tags['train'] ?? '') === 'yes'              => 'Estación de tren',
                 default                                       => 'Estación',
             }];
         }
@@ -385,72 +476,5 @@ class NearbyPlaces
     private static function ucfirst(string $text): string
     {
         return mb_strtoupper(mb_substr($text, 0, 1)) . mb_substr($text, 1);
-    }
-
-    /**
-     * Pregunta a los servidores de Overpass hasta que uno responda bien.
-     *
-     * @return list<array<string, mixed>>|null los elementos, o null si ninguno respondió
-     */
-    private function request(string $query): ?array
-    {
-        $start = microtime(true);
-
-        foreach (self::ENDPOINTS as $endpoint) {
-            $left = self::MAX_TIME - (microtime(true) - $start);
-            if ($left < 5) {
-                break;
-            }
-
-            try {
-                $response = Services::curlrequest([
-                    'timeout'         => (int) min(self::TIMEOUT, $left),
-                    'connect_timeout' => 5,
-                ], null, null, false)->post($endpoint, [
-                    'headers'     => ['User-Agent' => self::USER_AGENT],
-                    'form_params' => ['data' => $query],
-                    'http_errors' => false,
-                ]);
-            } catch (Throwable $e) {
-                log_message('error', 'NearbyPlaces: {endpoint}: {message}', ['endpoint' => $endpoint, 'message' => $e->getMessage()]);
-
-                continue;
-            }
-
-            $elements = self::elements((string) $response->getBody());
-
-            if ($response->getStatusCode() === 200 && $elements !== null) {
-                return $elements;
-            }
-
-            log_message('error', 'NearbyPlaces: {endpoint}: HTTP {code} {body}', [
-                'endpoint' => $endpoint,
-                'code'     => $response->getStatusCode(),
-                'body'     => mb_substr(trim(strip_tags((string) $response->getBody())), 0, 200),
-            ]);
-        }
-
-        return null;
-    }
-
-    /**
-     * Los elementos de una respuesta de Overpass, o null si no es válida.
-     * Cuando Overpass se queda sin tiempo o memoria responde 200 con un
-     * "remark" de error y la lista vacía: eso NO es "no hay lugares".
-     *
-     * @return list<array<string, mixed>>|null
-     */
-    public static function elements(string $body): ?array
-    {
-        $data = json_decode($body, true);
-
-        if (! is_array($data) || ! isset($data['elements']) || ! is_array($data['elements'])) {
-            return null;
-        }
-        if (isset($data['remark']) && preg_match('/error|timed out|out of memory/i', (string) $data['remark'])) {
-            return null;
-        }
-
-        return $data['elements'];
     }
 }
