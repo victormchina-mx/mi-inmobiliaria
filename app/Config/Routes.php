@@ -60,6 +60,7 @@ $routes->group('api/v1', ['filter' => 'api-auth'], static function ($routes) {
     $routes->get('properties/(:num)', 'Api\Properties::show/$1');
     $routes->post('properties', 'Api\Properties::store');
     $routes->post('properties/(:num)', 'Api\Properties::update/$1');
+    $routes->get('geocode', 'Api\Lookups::geocode');
 });
 
 // ─── Panel de administración ──────────────────────────────────────────────────
