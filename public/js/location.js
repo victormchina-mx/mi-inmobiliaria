@@ -94,7 +94,8 @@
             var name = document.createElement('b');
             name.textContent = p.name;
             var info = document.createElement('small');
-            info.textContent = p.type + ' · ' + (p.dist >= 1000 ? (p.dist / 1000).toFixed(1) + ' km' : p.dist + ' m') + ' · ' + p.min + ' min a pie';
+            info.textContent = p.type + ' · ' + (p.dist < 50 ? 'a unos pasos'
+                : (p.dist >= 1000 ? (p.dist / 1000).toFixed(1) + ' km' : p.dist + ' m') + ' · ' + p.min + ' min a pie');
             tip.appendChild(name);
             tip.appendChild(info);
 
