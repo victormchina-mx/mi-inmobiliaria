@@ -111,6 +111,10 @@ $facts  = array_filter([
                  data-radius="<?= \App\Libraries\PropertyLocation::APPROX_RADIUS ?>"
                  data-bbox="<?= esc(json_encode($place['bbox']), 'attr') ?>"
                  data-nearby="<?= site_url('property/' . $property['pid'] . '/cerca') ?>"></div>
+            <?php // location.js lo coloca abajo a la derecha del mapa y lo muestra 2 s después de verlo ?>
+            <div class="loc-cta" data-loc-cta>
+                <?= view('partials/contact_cta', ['href' => $detailUrl . '#contactar', 'small' => true]) ?>
+            </div>
             <?php else: ?>
             <div class="loc-map__canvas loc-empty">
                 <span class="loc-empty__ic" aria-hidden="true"><i class="ms">map</i></span>
