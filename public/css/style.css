@@ -4950,3 +4950,67 @@ a.service-link:focus {
   .agent-card__actions { grid-template-columns: 1fr 1fr; }
   .ac-btn--call { grid-column: 1 / -1; }
 }
+
+/* ================================================================
+   Carrusel del detalle: "¿Te interesa esta propiedad?" sobre la
+   última foto, 2 s después de verla (public/js/gallery.js añade
+   .show-cta al carrusel).
+   ================================================================ */
+.gallery__slide { position: relative; }
+.gallery__cta {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; align-items: center; justify-content: center; padding: 24px 64px;
+  background: radial-gradient(ellipse at center, rgba(15, 23, 42, .55) 0%, rgba(15, 23, 42, .25) 70%, rgba(15, 23, 42, .1) 100%);
+  opacity: 0; visibility: hidden;
+  transition: opacity .6s ease, visibility 0s linear .6s;
+}
+.gallery.show-cta .gallery__cta { opacity: 1; visibility: visible; transition: opacity .6s ease, visibility 0s; }
+.gallery__cta-card {
+  max-width: 420px; padding: 26px 30px; text-align: center; border-radius: 18px;
+  background: rgba(15, 23, 42, .5); border: 1px solid rgba(255, 255, 255, .22);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2); backdrop-filter: blur(10px) saturate(1.2);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .55);
+  transform: translateY(28px) scale(.96); opacity: 0;
+}
+.gallery.show-cta .gallery__cta-card { animation: gallery-cta-in .7s cubic-bezier(.2, .9, .3, 1.25) .15s both; }
+.gallery__cta-title {
+  margin: 0 0 6px; font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; line-height: 1.2; color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .35);
+}
+.gallery__cta-text { margin: 0 0 18px; font-size: 15px; color: rgba(255, 255, 255, .9); }
+.gallery__cta-btn {
+  position: relative; display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 26px;
+  border-radius: 30px; background: linear-gradient(135deg, #C9A96E, #B07D4F); color: #fff;
+  font-size: 16px; font-weight: 700; box-shadow: 0 10px 24px -8px rgba(176, 125, 79, .8);
+  transition: transform .2s, filter .2s;
+}
+.gallery__cta-btn:hover, .gallery__cta-btn:focus { color: #fff; text-decoration: none; transform: translateY(-2px); filter: brightness(1.06); }
+.gallery__cta-btn::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: 0 0 0 0 rgba(201, 169, 110, .7);
+}
+.gallery.show-cta .gallery__cta-btn::after { animation: gallery-cta-pulse 1.6s ease-out .9s 2; }
+@keyframes gallery-cta-in {
+  from { opacity: 0; transform: translateY(28px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes gallery-cta-pulse {
+  from { box-shadow: 0 0 0 0 rgba(201, 169, 110, .7); }
+  to   { box-shadow: 0 0 0 18px rgba(201, 169, 110, 0); }
+}
+/* Mientras se ve el mensaje, los puntos no estorban */
+.gallery.show-cta .gallery__dots { opacity: 0; pointer-events: none; }
+.gallery__dots { transition: opacity .3s; }
+#contactar { scroll-margin-top: 110px; }
+
+@media (max-width: 575px) {
+  .gallery__cta { padding: 12px 52px; }
+  .gallery__cta-card { padding: 16px 18px; border-radius: 14px; }
+  .gallery__cta-title { font-size: 18px; margin-bottom: 4px; }
+  .gallery__cta-text { display: none; }
+  .gallery__cta-btn { height: 40px; padding: 0 18px; font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery.show-cta .gallery__cta-card { animation: none; opacity: 1; transform: none; }
+  .gallery.show-cta .gallery__cta-btn::after { animation: none; }
+}
