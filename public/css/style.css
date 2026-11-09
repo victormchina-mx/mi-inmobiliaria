@@ -5098,3 +5098,72 @@ a.service-link:focus {
   .about-contact__actions { grid-template-columns: 1fr 1fr; }
   .about-contact__actions .ac-btn--call { grid-column: 1 / -1; }
 }
+
+/* ================================================================
+   Contacto (app/Views/contact/index.php): datos + botones a la
+   izquierda, formulario a la derecha. Datos: Config\Site.
+   ================================================================ */
+.contact-info { border: 0 !important; } /* la plantilla pone borde punteado a <aside> */
+.contact-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 32px; align-items: start; }
+.contact-info {
+  position: relative; overflow: hidden; padding: 36px 32px; border-radius: 20px; color: #CBD5E1;
+  background: linear-gradient(135deg, #0F172A, #1E293B);
+}
+.contact-info::before {
+  content: ""; position: absolute; right: -90px; bottom: -90px; width: 280px; height: 280px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 169, 110, .35), transparent 70%); pointer-events: none;
+}
+.contact-info .sec-eyebrow { color: #E6CFA3; }
+.contact-info__title { margin: 0 0 10px; font-size: 34px; font-weight: 700; color: #fff; }
+.contact-info__text { margin: 0 0 26px; font-size: 15px; line-height: 1.7; color: rgba(255, 255, 255, .78) !important; }
+.contact-info__list { position: relative; list-style: none; margin: 0 0 28px; padding: 0; }
+.contact-info__list li { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.contact-info__ic {
+  width: 44px; height: 44px; flex: none; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  background: rgba(201, 169, 110, .18); color: #E6CFA3;
+}
+.contact-info__ic .ms { margin: 0; font-size: 22px; }
+.contact-info__list small { display: block; font-size: 12px; letter-spacing: .5px; text-transform: uppercase; color: #94A3B8; }
+.contact-info__list a, .contact-info__list span { color: #fff; font-weight: 600; word-break: break-word; }
+.contact-info__list a:hover { color: #E6CFA3; text-decoration: none; }
+.contact-info__actions { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.contact-info__actions .ac-btn--call { grid-column: 1 / -1; background: #fff; color: var(--theme-secondary-color); }
+.contact-info__actions .ac-btn--call:hover { color: var(--theme-secondary-color); }
+.contact-info__actions .ac-btn--mail { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .3); }
+.contact-info__actions .ac-btn--mail:hover { color: #fff; border-color: #E6CFA3; }
+.contact-info .ms { margin: 0; }
+
+.contact-form {
+  padding: 36px; border-radius: 20px; background: #fff;
+  border: 1px solid rgba(15, 23, 42, .08); box-shadow: 0 24px 50px -30px rgba(15, 23, 42, .35);
+}
+.contact-form__title { margin: 0 0 6px; font-size: 26px; font-weight: 700; color: var(--theme-secondary-color); }
+.contact-form__text { margin: 0 0 24px; color: #6B7280; }
+.contact-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+.cf-field { margin-bottom: 18px; }
+.cf-field label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 600; color: var(--theme-secondary-color); }
+.cf-field label span[aria-hidden] { color: #B07D4F; }
+.cf-optional { font-weight: 400; color: #9CA3AF; }
+.cf-field .form-control {
+  height: 50px; padding: 0 16px; border-radius: 12px; border: 1px solid rgba(15, 23, 42, .14);
+  background: #FAFAF8; font-size: 15px; transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.cf-field textarea.form-control { height: auto; min-height: 140px; padding: 14px 16px; resize: vertical; }
+.cf-field .form-control:focus { border-color: #C9A96E; background: #fff; box-shadow: 0 0 0 4px rgba(201, 169, 110, .18); outline: none; }
+.cf-submit {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 54px;
+  border: 0; border-radius: 12px; background: linear-gradient(135deg, #C9A96E, #B07D4F); color: #fff;
+  font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 12px 26px -12px rgba(176, 125, 79, .8);
+  transition: transform .2s, filter .2s;
+}
+.cf-submit:hover, .cf-submit:focus { transform: translateY(-1px); filter: brightness(1.06); outline: none; }
+.cf-note { margin: 12px 0 0; font-size: 12px; color: #9CA3AF; text-align: center; }
+
+@media (max-width: 991px) {
+  .contact-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 575px) {
+  .contact-info, .contact-form { padding: 24px 20px; border-radius: 16px; }
+  .contact-info__title { font-size: 28px; }
+  .contact-form__row { grid-template-columns: 1fr; }
+}
