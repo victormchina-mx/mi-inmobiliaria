@@ -3,6 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Libraries\PropertyLocation;
+use App\Libraries\WhyText;
 use App\Libraries\HtmlSanitizer;
 use App\Models\PropertyModel;
 
@@ -114,7 +115,7 @@ class Properties extends BaseApiController
             'totalfloor'    => $this->request->getPost('totalfl') ?? '',
             'status'        => $status,
             'cancel_reason' => $status === 'cancelled' ? $cancelReason : null,
-        ], $this->uploadImages($existing ?? []), PropertyLocation::fromRequest($this->request, true));
+        ], $this->uploadImages($existing ?? []), PropertyLocation::fromRequest($this->request, true), WhyText::fromRequest($this->request, true));
 
         if ($pid === null) {
             $data['uid']        = $uid;
@@ -189,6 +190,7 @@ class Properties extends BaseApiController
             'lat'           => isset($p['lat']) ? (float) $p['lat'] : null,
             'lng'           => isset($p['lng']) ? (float) $p['lng'] : null,
             'exact_location' => (int) ($p['exact_location'] ?? 0),
+            'why_text'      => $p['why_text'] ?? '',
             'images'        => $images,
         ];
     }

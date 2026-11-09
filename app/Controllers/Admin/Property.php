@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Libraries\PropertyLocation;
+use App\Libraries\WhyText;
 use App\Controllers\BaseController;
 use App\Models\CityModel;
 use App\Models\PropertyModel;
@@ -104,7 +105,7 @@ class Property extends BaseController
             'status'     => $this->request->getPost('status'),
             'isFeatured' => (int) $this->request->getPost('isFeatured'),
             'uid'        => (int) $this->request->getPost('uid'),
-        ] + PropertyLocation::fromRequest($this->request);
+        ] + PropertyLocation::fromRequest($this->request) + WhyText::fromRequest($this->request);
     }
 
     private function uploadImages(array $existing = []): array

@@ -4,7 +4,10 @@
  * dentro del JSON y public/js/nearby.js lo inserta en el detalle).
  *
  * Variables: $places (NearbyPlaces::parse), $counts, $summary
- * (NearbyPlaces::summary), $mapUrl, $level ('exact'|'approx'|'location'|'city'), $zone.
+ * (NearbyPlaces::summary), $custom (texto del agente, App\Libraries\WhyText),
+ * $mapUrl, $level ('exact'|'approx'|'location'|'city'|''), $zone.
+ * Sin lugares ($places vacío) solo se muestra "¿Por qué vivir aquí?" con el
+ * texto del agente.
  * Estilos: .nb-* en public/css/style.css
  */
 use App\Libraries\NearbyPlaces;
@@ -18,7 +21,13 @@ foreach ($places as $p) {
     $nearest[$p['cat']] ??= $p;
 }
 $distance = static fn (int $m): string => $m >= 1000 ? number_format($m / 1000, 1) . ' km' : $m . ' m';
+$custom   = $custom ?? '';
+
+// Título del recuadro: el de los datos; sin lugares, el nombre de la zona
+$whyTitle = $places ? $summary['title'] : ($zone !== '' ? 'Vivir en ' . $zone : 'La zona');
+$whyText  = $custom !== '' ? $custom : $summary['text'];
 ?>
+<?php if ($places): ?>
 <div class="nb-head">
     <span class="nb-eyebrow">Alrededores</span>
     <h2 class="nb-title">Lo que hay cerca</h2>
@@ -79,15 +88,21 @@ $distance = static fn (int $m): string => $m >= 1000 ? number_format($m / 1000, 
     </div>
 </div>
 
-<?php if ($summary['text'] !== '' || $summary['tags']): ?>
-<div class="nb-why">
+<?php endif ?>
+
+<?php if ($whyText !== '' || ($places && $summary['tags'])): ?>
+<div class="nb-why<?= $places ? '' : ' nb-why--solo' ?>">
     <div class="nb-why__intro">
         <span class="nb-eyebrow nb-eyebrow--light">¿Por qué vivir aquí?</span>
-        <h3><?= esc($summary['title']) ?></h3>
-        <?php if ($summary['text'] !== ''): ?><p><?= esc($summary['text']) ?></p><?php endif ?>
+        <h3><?= esc($whyTitle) ?></h3>
+        <?php if ($whyText !== ''): ?><p><?= nl2br(esc($whyText), false) ?></p><?php endif ?>
+        <?php if ($custom !== ''): ?>
+        <small class="nb-src"><i class="ms" aria-hidden="true">person</i>Descripción del anunciante.<?= $places ? ' Lugares: datos de OpenStreetMap.' : '' ?></small>
+        <?php else: ?>
         <small class="nb-src"><i class="ms" aria-hidden="true">info</i>Datos de OpenStreetMap. Distancias aproximadas desde <?= $level === 'exact' ? 'la propiedad' : 'el centro de la zona' ?>.</small>
+        <?php endif ?>
     </div>
-    <?php if ($summary['tags']): ?>
+    <?php if ($places && $summary['tags']): ?>
     <ul class="nb-why__tags">
         <?php foreach ($summary['tags'] as $tag): ?>
         <li><span aria-hidden="true"><i class="ms"><?= $tag['icon'] ?></i></span><div><b><?= esc($tag['title']) ?></b><?= esc($tag['text']) ?></div></li>
@@ -95,6 +110,6 @@ $distance = static fn (int $m): string => $m >= 1000 ? number_format($m / 1000, 
     </ul>
     <?php endif ?>
 </div>
-<?php else: ?>
+<?php elseif ($places): ?>
 <p class="nb-src nb-src--plain"><i class="ms" aria-hidden="true">info</i>Datos de OpenStreetMap. Distancias aproximadas desde <?= $level === 'exact' ? 'la propiedad' : 'el centro de la zona' ?>.</p>
 <?php endif ?>

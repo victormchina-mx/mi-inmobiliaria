@@ -203,6 +203,7 @@
                         <textarea name="feature" class="form-control tinymce" rows="4"><?= esc($property['feature'] ?? '') ?></textarea>
                     </div>
                 </div>
+                <?= view('partials/why_text_field', ['property' => $property ?? []]) ?>
 
                 <!-- Imágenes -->
                 <div class="col-md-12"><h5 class="text-secondary mt-3 mb-2">Imágenes de la Propiedad</h5></div>

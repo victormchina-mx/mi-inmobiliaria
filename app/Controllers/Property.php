@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Libraries\Geocoder;
 use App\Libraries\NearbyPlaces;
 use App\Libraries\PropertyLocation;
+use App\Libraries\WhyText;
 use App\Models\PropertyModel;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -76,7 +77,9 @@ class Property extends BaseController
      * la página, para no hacerla más lenta.
      *
      * Respuesta: {ok, html (partials/nearby), places [{name, cat, type, dist, min, lat, lng}], categories}
-     * ok=false si no se pudo ubicar la zona (o solo el estado) o no hay lugares.
+     * ok=false si no hay lugares (zona no encontrada, solo el estado, o vacía)
+     * NI texto propio del agente; con solo el texto, el cuadro muestra solo
+     * "¿Por qué vivir aquí?".
      */
     public function nearby(int $pid): ResponseInterface
     {
@@ -88,19 +91,21 @@ class Property extends BaseController
             return $none->setStatusCode(404);
         }
 
-        $place = $this->place($property);
+        $place  = $this->place($property);
+        $custom = WhyText::of($property); // texto propio del agente para "¿Por qué vivir aquí?"
+        $places = [];
 
         // Con solo el estado, las distancias desde su centro no dirían nada
-        if (! $place || $place['level'] === 'state') {
+        if ($place && $place['level'] !== 'state') {
+            $places = (new NearbyPlaces())->around($place['lat'], $place['lng']) ?? [];
+        }
+
+        // Sin lugares ni texto del agente no hay nada que mostrar
+        if (! $places && $custom === '') {
             return $none;
         }
 
-        $places = (new NearbyPlaces())->around($place['lat'], $place['lng']);
-        if (! $places) {
-            return $none;
-        }
-
-        $zone = trim((string) ($place['level'] === 'city' ? $property['city'] : $property['location']));
+        $zone = trim((string) (($place['level'] ?? '') === 'city' ? $property['city'] : ($property['location'] ?: $property['city'])));
 
         return $this->response
             ->setHeader('Cache-Control', 'public, max-age=3600')
@@ -110,8 +115,9 @@ class Property extends BaseController
                     'places'  => $places,
                     'counts'  => NearbyPlaces::counts($places),
                     'summary' => NearbyPlaces::summary($places, $zone),
+                    'custom'  => $custom,
                     'mapUrl'  => site_url('property/' . $pid . '/ubicacion'),
-                    'level'   => $place['level'],
+                    'level'   => $place['level'] ?? '',
                     'zone'    => $zone,
                 ]),
                 'places'     => $places,
