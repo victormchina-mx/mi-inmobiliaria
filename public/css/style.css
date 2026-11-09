@@ -4880,3 +4880,21 @@ a.service-link:focus {
 .leaflet-tooltip.nb-tip { border: 0; border-radius: 8px; padding: 6px 10px; box-shadow: 0 6px 16px -6px rgba(15, 23, 42, .4); font-family: inherit; }
 .nb-tip b { display: block; color: var(--theme-secondary-color); }
 .nb-tip small { color: #6B7280; }
+
+/* ================================================================
+   Detalle: secciones con el mismo encabezado que "Lo que hay cerca"
+   (etiqueta dorada + título): Descripción, Características, Planos,
+   Lo que hay cerca y Contactar al agente.
+   ================================================================ */
+.property-details .sec { margin-top: 48px; }
+.sec-head { margin-bottom: 20px; }
+.sec-eyebrow {
+  display: inline-block; margin-bottom: 6px; font-size: 12px; font-weight: 700;
+  letter-spacing: 1.4px; text-transform: uppercase; color: #B07D4F;
+}
+.sec-title { margin: 0; font-size: 26px; font-weight: 700; line-height: 1.2; color: var(--theme-secondary-color); }
+.nb-title { font-weight: 700; line-height: 1.2; }
+@media (max-width: 767px) {
+  .property-details .sec { margin-top: 40px; }
+  .sec-title { font-size: 24px; }
+}

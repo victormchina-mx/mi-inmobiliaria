@@ -190,30 +190,34 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
                         <?php endif ?>
                     </div>
 
+                    <!-- Secciones del detalle: todas con el mismo encabezado (.sec-head, igual que "Lo que hay cerca") -->
                     <?php if (trim(strip_tags($safeDescription)) !== ''): ?>
-                    <h4 class="text-secondary my-4">Descripción</h4>
-                    <div><?= $safeDescription ?></div>
+                    <section class="sec">
+                    <div class="sec-head">
+                        <span class="sec-eyebrow">La propiedad</span>
+                        <h2 class="sec-title">Descripción</h2>
+                    </div>
+                        <div><?= $safeDescription ?></div>
+                    </section>
                     <?php endif; ?>
 
                     <?php if (trim(strip_tags($safeFeature)) !== ''): ?>
-                    <h5 class="mt-5 mb-4 text-secondary">Características</h5>
-                    <div class="row"><?= $safeFeature ?></div>
+                    <section class="sec">
+                    <div class="sec-head">
+                        <span class="sec-eyebrow">Detalles</span>
+                        <h2 class="sec-title">Características</h2>
+                    </div>
+                        <div class="row"><?= $safeFeature ?></div>
+                    </section>
                     <?php endif ?>
 
-                    <!-- Lo que hay cerca: se carga después de la página (public/js/nearby.js, Property::nearby) -->
-                    <section class="nb nb--col mt-5" data-nearby="<?= site_url('property/' . $property['pid'] . '/cerca') ?>" aria-busy="true" aria-label="Lo que hay cerca">
-                        <div class="nb-head">
-                            <span class="nb-eyebrow">Alrededores</span>
-                            <h2 class="nb-title">Lo que hay cerca</h2>
-                            <p class="nb-sub">Buscando escuelas, parques y servicios de la zona…</p>
-                        </div>
-                        <div class="nb-skeleton" aria-hidden="true">
-                            <span></span><span></span><span></span><span></span><span></span><span></span>
-                        </div>
-                    </section>
-
-                    <!-- Planos -->
-                    <h5 class="mt-5 mb-4 text-secondary">Planos</h5>
+                    <!-- Planos (solo si hay alguno) -->
+                    <?php if (! empty($property['mapimage']) || ! empty($property['topmapimage']) || ! empty($property['groundmapimage'])): ?>
+                    <section class="sec">
+                    <div class="sec-head">
+                        <span class="sec-eyebrow">Distribución</span>
+                        <h2 class="sec-title">Planos</h2>
+                    </div>
                     <div class="accordion" id="accordionPlanos">
                         <?php if (! empty($property['mapimage'])): ?>
                         <button class="bg-gray py-3 px-4 mb-1 w-100 text-left rounded" type="button" data-toggle="collapse" data-target="#plano1">Plano Principal</button>
@@ -234,9 +238,27 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
                         </div>
                         <?php endif ?>
                     </div>
+                    </section>
+                    <?php endif ?>
+
+                    <!-- Lo que hay cerca: se carga después de la página (public/js/nearby.js, Property::nearby) -->
+                    <section class="nb nb--col sec" data-nearby="<?= site_url('property/' . $property['pid'] . '/cerca') ?>" aria-busy="true" aria-label="Lo que hay cerca">
+                        <div class="nb-head">
+                            <span class="nb-eyebrow">Alrededores</span>
+                            <h2 class="nb-title">Lo que hay cerca</h2>
+                            <p class="nb-sub">Buscando escuelas, parques y servicios de la zona…</p>
+                        </div>
+                        <div class="nb-skeleton" aria-hidden="true">
+                            <span></span><span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                    </section>
 
                     <!-- Contacto con el agente -->
-                    <h5 class="mt-5 mb-4 text-secondary double-down-line-left position-relative" id="contactar">Contactar Agente</h5>
+                    <section class="sec" id="contactar">
+                    <div class="sec-head">
+                        <span class="sec-eyebrow">¿Te interesa?</span>
+                        <h2 class="sec-title">Contactar al agente</h2>
+                    </div>
                     <div class="agent-contact">
                         <div class="row">
                             <div class="col-sm-4 col-lg-3">
@@ -253,6 +275,7 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
                             </div>
                         </div>
                     </div>
+                    </section>
                 </div>
             </div>
 
