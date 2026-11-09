@@ -49,6 +49,7 @@
                 <p class="contact-form__text">Te respondemos por correo o por teléfono, lo antes posible.</p>
                 <form method="post" action="<?= site_url('contact') ?>">
                     <?= csrf_field() ?>
+                    <?= view('partials/bot_trap') ?>
                     <div class="contact-form__row">
                         <div class="cf-field">
                             <label for="cf-name">Nombre <span aria-hidden="true">*</span></label>

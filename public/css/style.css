@@ -5167,3 +5167,6 @@ a.service-link:focus {
   .contact-info__title { font-size: 28px; }
   .contact-form__row { grid-template-columns: 1fr; }
 }
+
+/* Campo trampa contra robots (partials/bot_trap.php): fuera de la vista */
+.bot-trap { position: absolute !important; left: -10000px !important; top: auto; width: 1px; height: 1px; overflow: hidden; }
