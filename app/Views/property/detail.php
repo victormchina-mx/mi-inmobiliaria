@@ -195,6 +195,11 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
                     <div><?= $safeDescription ?></div>
                     <?php endif; ?>
 
+                    <?php if (trim(strip_tags($safeFeature)) !== ''): ?>
+                    <h5 class="mt-5 mb-4 text-secondary">Características</h5>
+                    <div class="row"><?= $safeFeature ?></div>
+                    <?php endif ?>
+
                     <!-- Lo que hay cerca: se carga después de la página (public/js/nearby.js, Property::nearby) -->
                     <section class="nb nb--col mt-5" data-nearby="<?= site_url('property/' . $property['pid'] . '/cerca') ?>" aria-busy="true" aria-label="Lo que hay cerca">
                         <div class="nb-head">
@@ -206,11 +211,6 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
                             <span></span><span></span><span></span><span></span><span></span><span></span>
                         </div>
                     </section>
-
-                    <?php if (trim(strip_tags($safeFeature)) !== ''): ?>
-                    <h5 class="mt-5 mb-4 text-secondary">Características</h5>
-                    <div class="row"><?= $safeFeature ?></div>
-                    <?php endif ?>
 
                     <!-- Planos -->
                     <h5 class="mt-5 mb-4 text-secondary">Planos</h5>
