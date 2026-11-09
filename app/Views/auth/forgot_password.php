@@ -22,6 +22,7 @@
 
                         <form method="post" action="<?= site_url('forgot-password') ?>">
                             <?= csrf_field() ?>
+                            <?= view('partials/bot_trap') ?>
                             <div class="form-group">
                                 <input type="email" name="email" class="form-control"
                                        placeholder="Correo electrónico *"

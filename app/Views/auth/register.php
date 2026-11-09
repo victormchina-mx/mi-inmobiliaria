@@ -19,6 +19,7 @@
 
                         <form method="post" action="<?= site_url('register') ?>" enctype="multipart/form-data">
                             <?= csrf_field() ?>
+                            <?= view('partials/bot_trap') ?>
                             <div class="form-group">
                                 <input type="text" name="uname" class="form-control" placeholder="Nombre completo *"
                                        value="<?= esc(old('uname')) ?>" required>

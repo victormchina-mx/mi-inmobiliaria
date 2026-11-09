@@ -21,7 +21,7 @@ $routes->get('geocode', 'Geocode::search', ['filter' => 'throttle:15,60']);
 $routes->get('agents', 'Agent::index');
 $routes->get('about', 'About::index');
 $routes->get('contact', 'Contact::index');
-$routes->post('contact', 'Contact::submit', ['filter' => 'throttle:5,600']);
+$routes->post('contact', 'Contact::submit', ['filter' => ['throttle:5,600', 'bottrap:3']]);
 $routes->get('calculator', 'Calculator::index');
 $routes->post('calculator', 'Calculator::calculate');
 
@@ -29,10 +29,10 @@ $routes->post('calculator', 'Calculator::calculate');
 $routes->get('login', 'Auth::login');
 $routes->post('login', 'Auth::doLogin', ['filter' => 'throttle:5,60']);
 $routes->get('register', 'Auth::register');
-$routes->post('register', 'Auth::doRegister');
+$routes->post('register', 'Auth::doRegister', ['filter' => ['throttle:5,600', 'bottrap:4']]);
 $routes->get('logout', 'Auth::logout');
 $routes->get('forgot-password', 'Auth::forgotPassword');
-$routes->post('forgot-password', 'Auth::sendResetLink', ['filter' => 'throttle:3,300']);
+$routes->post('forgot-password', 'Auth::sendResetLink', ['filter' => ['throttle:3,300', 'bottrap:2']]);
 $routes->get('reset-password/(:hash)', 'Auth::resetPassword/$1');
 $routes->post('reset-password/(:hash)', 'Auth::doResetPassword/$1', ['filter' => 'throttle:5,300']);
 
