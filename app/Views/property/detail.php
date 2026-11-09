@@ -125,14 +125,7 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
                                     <?php if ($i === $total - 1): ?>
                                     <?php // Aparece 2 s después de ver esta última foto (gallery.js) ?>
                                     <div class="gallery__cta" data-gallery-cta>
-                                        <div class="gallery__cta-card">
-                                            <p class="gallery__cta-title">¿Te interesa esta propiedad?</p>
-                                            <p class="gallery__cta-text">Habla con el agente y agenda tu visita.</p>
-                                            <a href="#contactar" class="gallery__cta-btn" data-gallery-contact>
-                                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                                                Contactar
-                                            </a>
-                                        </div>
+                                        <?= view('partials/contact_cta', ['href' => '#contactar']) ?>
                                     </div>
                                     <?php endif ?>
                                 </figure>

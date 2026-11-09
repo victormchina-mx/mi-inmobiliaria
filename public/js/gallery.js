@@ -25,6 +25,7 @@
         var current = 0;
         var onScreen = false; // el carrusel está a la vista
         var ctaTimer = null;
+        var ctaClosed = false; // el visitante lo cerró con la X: no volver a mostrarlo
 
         if (!track || slides.length === 0) { return; }
 
@@ -57,18 +58,18 @@
         // última foto; si se cambia de foto antes, no aparece. Al salir de la
         // última foto se oculta, y al volver se repite el efecto.
         function syncCta() {
-            if (!cta) { return; }
+            if (!cta || ctaClosed) { return; }
             var onLast = current === slides.length - 1;
             if (!onLast || !onScreen) {
                 clearTimeout(ctaTimer);
                 ctaTimer = null;
-                if (!onLast) { gallery.classList.remove('show-cta'); }
+                if (!onLast) { gallery.classList.remove('cta-on'); }
                 return;
             }
-            if (gallery.classList.contains('show-cta') || ctaTimer) { return; }
+            if (gallery.classList.contains('cta-on') || ctaTimer) { return; }
             ctaTimer = setTimeout(function () {
                 ctaTimer = null;
-                gallery.classList.add('show-cta');
+                gallery.classList.add('cta-on');
             }, 2000);
         }
 
@@ -81,8 +82,19 @@
             onScreen = true;
         }
 
+        // X: cerrar el mensaje (no vuelve a aparecer en esta visita)
+        var close = gallery.querySelector('[data-cta-close]');
+        if (close) {
+            close.addEventListener('click', function () {
+                ctaClosed = true;
+                clearTimeout(ctaTimer);
+                gallery.classList.remove('cta-on');
+                track.focus({ preventScroll: true });
+            });
+        }
+
         // "Contactar": bajar suavemente hasta la sección del agente
-        var contact = gallery.querySelector('[data-gallery-contact]');
+        var contact = gallery.querySelector('[data-cta-contact]');
         if (contact) {
             contact.addEventListener('click', function (e) {
                 var target = document.getElementById('contactar');

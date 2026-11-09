@@ -4952,10 +4952,61 @@ a.service-link:focus {
 }
 
 /* ================================================================
-   Carrusel del detalle: "¿Te interesa esta propiedad?" sobre la
-   última foto, 2 s después de verla (public/js/gallery.js añade
-   .show-cta al carrusel).
+   "¿Te interesa esta propiedad?" (partials/contact_cta.php)
+   - Sobre la última foto del carrusel del detalle (gallery.js)
+   - Pequeño, abajo a la derecha del mapa de Ubicación (location.js)
+   Se anima cuando un elemento que lo contiene tiene la clase .cta-on.
    ================================================================ */
+.cta-card {
+  position: relative; max-width: 420px; padding: 26px 30px; text-align: center; border-radius: 18px;
+  background: rgba(15, 23, 42, .5); border: 1px solid rgba(255, 255, 255, .22);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2); backdrop-filter: blur(10px) saturate(1.2);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .55);
+  opacity: 0; transform: translateY(28px) scale(.96);
+}
+.cta-on .cta-card { animation: cta-in .7s cubic-bezier(.2, .9, .3, 1.25) .15s both; }
+.cta-card__close {
+  position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  border: 0; border-radius: 50%; background: rgba(255, 255, 255, .16); color: #fff; cursor: pointer;
+  transition: background .2s, transform .2s;
+}
+.cta-card__close:hover, .cta-card__close:focus { background: rgba(255, 255, 255, .3); transform: rotate(90deg); outline: none; }
+.cta-card__close:focus-visible { box-shadow: 0 0 0 2px #C9A96E; }
+.cta-card__title {
+  margin: 0 0 6px; padding: 0 18px; font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; line-height: 1.2; color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .35);
+}
+.cta-card__text { margin: 0 0 18px; font-size: 15px; line-height: 1.4; color: rgba(255, 255, 255, .9); }
+.cta-card__btn {
+  position: relative; display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 26px;
+  border-radius: 30px; background: linear-gradient(135deg, #C9A96E, #B07D4F); color: #fff;
+  font-size: 16px; font-weight: 700; box-shadow: 0 10px 24px -8px rgba(176, 125, 79, .8);
+  transition: transform .2s, filter .2s;
+}
+.cta-card__btn:hover, .cta-card__btn:focus { color: #fff; text-decoration: none; transform: translateY(-2px); filter: brightness(1.06); }
+.cta-card__btn::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: 0 0 0 0 rgba(201, 169, 110, .7);
+}
+.cta-on .cta-card__btn::after { animation: cta-pulse 1.6s ease-out .9s 2; }
+@keyframes cta-in {
+  from { opacity: 0; transform: translateY(28px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes cta-pulse {
+  from { box-shadow: 0 0 0 0 rgba(201, 169, 110, .7); }
+  to   { box-shadow: 0 0 0 18px rgba(201, 169, 110, 0); }
+}
+
+/* Versión pequeña (mapa de Ubicación) */
+.cta-card--small { max-width: 250px; padding: 16px 18px 18px; border-radius: 14px; text-align: left; transform: translate(16px, 12px) scale(.96); }
+.cta-card--small .cta-card__close { top: 8px; right: 8px; width: 26px; height: 26px; }
+.cta-card--small .cta-card__title { padding: 0 26px 0 0; font-size: 17px; margin-bottom: 4px; }
+.cta-card--small .cta-card__text { font-size: 13px; margin-bottom: 12px; }
+.cta-card--small .cta-card__btn { height: 38px; padding: 0 18px; font-size: 14px; }
+
+/* Carrusel del detalle: capa sobre la última foto */
 .gallery__slide { position: relative; }
 .gallery__cta {
   position: absolute; inset: 0; z-index: 2;
@@ -4964,53 +5015,32 @@ a.service-link:focus {
   opacity: 0; visibility: hidden;
   transition: opacity .6s ease, visibility 0s linear .6s;
 }
-.gallery.show-cta .gallery__cta { opacity: 1; visibility: visible; transition: opacity .6s ease, visibility 0s; }
-.gallery__cta-card {
-  max-width: 420px; padding: 26px 30px; text-align: center; border-radius: 18px;
-  background: rgba(15, 23, 42, .5); border: 1px solid rgba(255, 255, 255, .22);
-  -webkit-backdrop-filter: blur(10px) saturate(1.2); backdrop-filter: blur(10px) saturate(1.2);
-  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .55);
-  transform: translateY(28px) scale(.96); opacity: 0;
-}
-.gallery.show-cta .gallery__cta-card { animation: gallery-cta-in .7s cubic-bezier(.2, .9, .3, 1.25) .15s both; }
-.gallery__cta-title {
-  margin: 0 0 6px; font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; line-height: 1.2; color: #fff;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, .35);
-}
-.gallery__cta-text { margin: 0 0 18px; font-size: 15px; color: rgba(255, 255, 255, .9); }
-.gallery__cta-btn {
-  position: relative; display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 26px;
-  border-radius: 30px; background: linear-gradient(135deg, #C9A96E, #B07D4F); color: #fff;
-  font-size: 16px; font-weight: 700; box-shadow: 0 10px 24px -8px rgba(176, 125, 79, .8);
-  transition: transform .2s, filter .2s;
-}
-.gallery__cta-btn:hover, .gallery__cta-btn:focus { color: #fff; text-decoration: none; transform: translateY(-2px); filter: brightness(1.06); }
-.gallery__cta-btn::after {
-  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-  box-shadow: 0 0 0 0 rgba(201, 169, 110, .7);
-}
-.gallery.show-cta .gallery__cta-btn::after { animation: gallery-cta-pulse 1.6s ease-out .9s 2; }
-@keyframes gallery-cta-in {
-  from { opacity: 0; transform: translateY(28px) scale(.96); }
-  to   { opacity: 1; transform: none; }
-}
-@keyframes gallery-cta-pulse {
-  from { box-shadow: 0 0 0 0 rgba(201, 169, 110, .7); }
-  to   { box-shadow: 0 0 0 18px rgba(201, 169, 110, 0); }
-}
-/* Mientras se ve el mensaje, los puntos no estorban */
-.gallery.show-cta .gallery__dots { opacity: 0; pointer-events: none; }
+.gallery.cta-on .gallery__cta { opacity: 1; visibility: visible; transition: opacity .6s ease, visibility 0s; }
+.gallery.cta-on .gallery__dots { opacity: 0; pointer-events: none; }
 .gallery__dots { transition: opacity .3s; }
 #contactar { scroll-margin-top: 110px; }
 
+/* Mapa de Ubicación: control abajo a la derecha (location.js) */
+.loc-cta { visibility: hidden; margin: 0 12px 10px 0 !important; }
+.loc-cta.cta-on { visibility: visible; }
+.loc-cta.is-closed { display: none; }
+/* leaflet.css pinta de azul los enlaces del mapa y cambia la letra */
+.leaflet-container .cta-card { font-family: inherit; font-size: 14px; line-height: 1.4; }
+.leaflet-container .cta-card__btn, .leaflet-container .cta-card__btn:hover, .leaflet-container .cta-card__btn:focus { color: #fff; }
+
 @media (max-width: 575px) {
   .gallery__cta { padding: 12px 52px; }
-  .gallery__cta-card { padding: 16px 18px; border-radius: 14px; }
-  .gallery__cta-title { font-size: 18px; margin-bottom: 4px; }
-  .gallery__cta-text { display: none; }
-  .gallery__cta-btn { height: 40px; padding: 0 18px; font-size: 14px; }
+  .gallery__cta .cta-card { padding: 16px 18px; border-radius: 14px; }
+  .gallery__cta .cta-card__title { font-size: 18px; margin-bottom: 8px; }
+  .gallery__cta .cta-card__text { display: none; }
+  .gallery__cta .cta-card__btn { height: 40px; padding: 0 18px; font-size: 14px; }
+  .gallery__cta .cta-card__close { top: 6px; right: 6px; width: 26px; height: 26px; }
+  .cta-card--small { max-width: 200px; padding: 12px 14px 14px; }
+  .cta-card--small .cta-card__title { font-size: 15px; }
+  .cta-card--small .cta-card__text { display: none; }
+  .cta-card--small .cta-card__btn { height: 34px; padding: 0 14px; font-size: 13px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .gallery.show-cta .gallery__cta-card { animation: none; opacity: 1; transform: none; }
-  .gallery.show-cta .gallery__cta-btn::after { animation: none; }
+  .cta-on .cta-card { animation: none; opacity: 1; transform: none; }
+  .cta-on .cta-card__btn::after { animation: none; }
 }

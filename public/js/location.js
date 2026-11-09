@@ -106,6 +106,44 @@
         });
     }
 
+    // "¿Te interesa esta propiedad?" pequeño, abajo a la derecha del mapa
+    // (encima de los créditos de OpenStreetMap). Aparece 2 s después de que
+    // el mapa queda a la vista; la X lo cierra para esta visita.
+    function addContactCta(map, el) {
+        var node = document.querySelector('[data-loc-cta]');
+        if (!node) { return; }
+
+        var Cta = L.Control.extend({
+            options: { position: 'bottomright' },
+            onAdd: function () {
+                L.DomEvent.disableClickPropagation(node);
+                L.DomEvent.disableScrollPropagation(node);
+                return node;
+            }
+        });
+        new Cta().addTo(map);
+
+        var timer = null;
+        function show() {
+            if (timer || node.classList.contains('cta-on') || node.classList.contains('is-closed')) { return; }
+            timer = setTimeout(function () { node.classList.add('cta-on'); }, 2000);
+        }
+        if ('IntersectionObserver' in window) {
+            var io = new IntersectionObserver(function (entries) {
+                if (entries[0].isIntersecting) { show(); io.disconnect(); }
+            }, { threshold: 0.5 });
+            io.observe(el);
+        } else {
+            show();
+        }
+
+        node.querySelector('[data-cta-close]').addEventListener('click', function () {
+            clearTimeout(timer);
+            node.classList.add('is-closed');
+            node.classList.remove('cta-on');
+        });
+    }
+
     function initMap() {
         var el = document.getElementById('loc-map');
         if (!el || typeof L === 'undefined') { return; }
@@ -225,6 +263,8 @@
             }
         });
         new Tools().addTo(map);
+
+        addContactCta(map, el);
 
         var resizeTimer;
         window.addEventListener('resize', function () {
