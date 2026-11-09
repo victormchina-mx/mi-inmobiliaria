@@ -20,6 +20,8 @@ class PropertyModel extends Model
         'totalfloor', 'isFeatured',
         // Punto en el mapa (app/Database/sql/2026-11-property-coordinates.sql)
         'lat', 'lng', 'exact_location',
+        // Texto propio de "¿Por qué vivir aquí?" (app/Database/sql/2026-11-property-why-text.sql)
+        'why_text',
     ];
 
     protected $validationRules = [

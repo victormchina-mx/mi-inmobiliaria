@@ -282,6 +282,7 @@
                                 <textarea name="feature" class="form-control" rows="3"><?= esc($property['feature'] ?? '') ?></textarea>
                             </div>
                         </div>
+                <?= view('partials/why_text_field', ['property' => $property ?? []]) ?>
 
                         <div class="col-md-12"><h5 class="text-secondary mt-2 mb-3">Imágenes</h5></div>
                         <?php $imgDefs = [

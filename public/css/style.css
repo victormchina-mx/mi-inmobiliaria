@@ -4850,6 +4850,8 @@ a.service-link:focus {
   background: rgba(201, 169, 110, .18); color: #E6CFA3;
 }
 .nb-why__tags b { display: block; margin-bottom: 2px; font-size: 15px; color: #fff; }
+/* Solo el texto del agente (zona sin lugares encontrados) */
+.nb-why--solo { margin-top: 0; }
 
 @media (max-width: 767px) {
   .nb-title { font-size: 24px; }
