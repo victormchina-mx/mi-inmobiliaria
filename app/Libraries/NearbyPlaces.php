@@ -83,7 +83,7 @@ class NearbyPlaces
         $cached = cache($key);
 
         if (is_array($cached)) {
-            return $cached;
+            return self::tidy($cached);
         }
 
         // Una búsqueda a la vez: dos al mismo tiempo pasarían de 1 consulta por segundo
@@ -104,7 +104,7 @@ class NearbyPlaces
         $places = self::parse($elements, $lat, $lng);
         cache()->save($key, $places, $places && $complete ? self::TTL_FOUND : self::TTL_RETRY);
 
-        return $places;
+        return self::tidy($places);
     }
 
     /** Cuadrado de ±RADIUS alrededor del punto, como lo pide Nominatim: "oeste,norte,este,sur". */
@@ -348,6 +348,64 @@ class NearbyPlaces
         return 2 * $r * asin(min(1, sqrt($a)));
     }
 
+    /** Distancia que se considera "a unos pasos" (en metros). */
+    public const STEPS = 50;
+
+    /**
+     * Nombres presentables (App\Libraries\PlaceName): sin claves CCT,
+     * comillas ni MAYÚSCULAS, con acentos; sin nombres genéricos
+     * ("Cafetería") ni lugares mal clasificados (clases de taekwondo como
+     * escuela). Se aplica al mostrar, así corrige también lo guardado.
+     *
+     * @param list<array{name: string, cat: string, type: string, dist: int, min: int, lat: float, lng: float}> $places
+     *
+     * @return list<array{name: string, cat: string, type: string, dist: int, min: int, lat: float, lng: float}>
+     */
+    public static function tidy(array $places): array
+    {
+        $tidy = [];
+
+        foreach ($places as $p) {
+            $class = PlaceName::reclassify((string) $p['name'], $p['cat'], $p['type']);
+            if ($class === null) {
+                continue;
+            }
+            [$p['cat'], $p['type']] = $class;
+
+            $p['name'] = PlaceName::clean((string) $p['name']);
+            if (PlaceName::isGeneric($p['name'], $p['type'])) {
+                continue;
+            }
+
+            // Repetidos tras limpiar ("Farmacias Guadalajara" / "Farmacia Guadalajara" no; mismo nombre sí)
+            $key = $p['cat'] . '|' . PlaceName::key($p['name']);
+            if (! isset($tidy[$key]) || $tidy[$key]['dist'] > $p['dist']) {
+                $tidy[$key] = $p;
+            }
+        }
+
+        $tidy = array_values($tidy);
+        usort($tidy, static fn ($a, $b) => $a['dist'] <=> $b['dist']);
+
+        return $tidy;
+    }
+
+    /** "A unos pasos" (menos de STEPS m), "350 m" o "1.2 km". */
+    public static function distanceLabel(int $meters): string
+    {
+        return match (true) {
+            $meters < self::STEPS => 'A unos pasos',
+            $meters >= 1000       => number_format($meters / 1000, 1) . ' km',
+            default               => $meters . ' m',
+        };
+    }
+
+    /** "a unos pasos" o "a 3 minutos" (para frases). */
+    public static function walkPhrase(array $place): string
+    {
+        return $place['dist'] < self::STEPS ? 'a unos pasos' : 'a ' . self::minutes($place['min']);
+    }
+
     /** @return array<string, int> cantidad por categoría (todas las categorías, aunque sea 0) */
     public static function counts(array $places): array
     {
@@ -382,7 +440,7 @@ class NearbyPlaces
         if (isset($nearest['transit'])) {
             $t = $nearest['transit'];
             $tags['transit'] = ['icon' => 'directions_subway', 'title' => 'Bien comunicada',
-                'text' => $t['name'] . ' a ' . self::minutes($t['min']) . ' caminando'];
+                'text' => $t['name'] . ' ' . ($t['dist'] < self::STEPS ? 'a unos pasos' : 'a ' . self::minutes($t['min']) . ' caminando')];
         }
         if ($c['shop'] + $c['health'] >= 2) {
             $types = array_values(array_unique(array_map(
@@ -429,7 +487,7 @@ class NearbyPlaces
 
         if (isset($nearest['transit'])) {
             $t = $nearest['transit'];
-            $text .= ' ' . $t['name'] . ' está a ' . self::minutes($t['min']) . ' a pie, así que moverse sin auto es fácil.';
+            $text .= ' ' . $t['name'] . ' está ' . ($t['dist'] < self::STEPS ? 'a unos pasos' : 'a ' . self::minutes($t['min']) . ' a pie') . ', así que moverse sin auto es fácil.';
         }
         if (isset($tags['family'])) {
             $text .= ' Una ubicación cómoda para familias con niños.';

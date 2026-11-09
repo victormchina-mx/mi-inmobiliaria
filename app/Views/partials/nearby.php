@@ -20,7 +20,7 @@ $nearest = [];
 foreach ($places as $p) {
     $nearest[$p['cat']] ??= $p;
 }
-$distance = static fn (int $m): string => $m >= 1000 ? number_format($m / 1000, 1) . ' km' : $m . ' m';
+$distance = [NearbyPlaces::class, 'distanceLabel'];
 $custom   = $custom ?? '';
 
 // Título del recuadro: el de los datos; sin lugares, el nombre de la zona
@@ -62,7 +62,7 @@ $whyText  = $custom !== '' ? $custom : $summary['text'];
             <span class="nb-cat__ic" aria-hidden="true"><i class="ms"><?= $cat['icon'] ?></i></span>
             <span class="nb-cat__n"><?= $counts[$key] ?></span>
             <span class="nb-cat__l"><?= $cat['label'] ?></span>
-            <span class="nb-cat__near"><?= esc($nearest[$key]['name']) ?> · <b><?= $nearest[$key]['min'] ?> min</b></span>
+            <span class="nb-cat__near"><?= esc($nearest[$key]['name']) ?> · <b><?= $nearest[$key]['dist'] < NearbyPlaces::STEPS ? 'a unos pasos' : $nearest[$key]['min'] . ' min' ?></b></span>
         </button>
         <?php endif ?>
         <?php endforeach ?>
@@ -76,7 +76,7 @@ $whyText  = $custom !== '' ? $custom : $summary['text'];
             <li data-cat="<?= $p['cat'] ?>"<?= $i >= $visible ? ' hidden' : '' ?>>
                 <span class="nb-dot" style="--c:<?= $cat['color'] ?>" aria-hidden="true"><i class="ms"><?= $cat['icon'] ?></i></span>
                 <span class="nb-place"><b><?= esc($p['name']) ?></b><small><?= esc($p['type']) ?></small></span>
-                <span class="nb-dist"><?= $distance($p['dist']) ?><small><?= $p['min'] ?> min</small></span>
+                <span class="nb-dist<?= $p['dist'] < NearbyPlaces::STEPS ? ' nb-dist--steps' : '' ?>"><?= $distance($p['dist']) ?><?php if ($p['dist'] >= NearbyPlaces::STEPS): ?><small><?= $p['min'] ?> min</small><?php endif ?></span>
             </li>
             <?php endforeach ?>
         </ul>
