@@ -4,7 +4,7 @@ use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\FeatureTestTrait;
 
 /**
- * "Todas las propiedades" y las fichas técnicas son solo para agentes y
+ * "Todas las propiedades", las fichas técnicas y la agenda son solo para agentes y
  * constructores (filtro agent-only). El filtro responde antes de llegar al
  * controlador, así que no hace falta base de datos.
  *
@@ -16,7 +16,7 @@ final class AgentAreaAccessTest extends CIUnitTestCase
 
     public static function routes(): array
     {
-        return [['agente/propiedades'], ['agente/ficha/25']];
+        return [['agente/propiedades'], ['agente/ficha/25'], ['agente/agenda'], ['agente/agenda/conflictos']];
     }
 
     /** @dataProvider routes */
