@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- Íconos Material Symbols (los mismos de la app móvil); solo se descargan los usados -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,300..400,0,0&icon_names=account_balance,apps,arrow_back,balcony,bathtub,bed,call,close_fullscreen,content_copy,countertops,directions,directions_subway,expand_more,family_restroom,home,info,key,local_hospital,location_on,mail,map,museum,my_location,navigation,open_in_full,park,person,restaurant,school,sell,share,shopping_bag,shopping_cart,square_foot,stairs,weekend&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,300..400,0,0&icon_names=account_balance,apps,arrow_back,balcony,bathtub,bed,calendar_month,call,close_fullscreen,content_copy,countertops,description,directions,directions_car,directions_subway,download,event_available,expand_more,family_restroom,home,info,key,landscape,local_hospital,location_on,mail,map,museum,my_location,navigation,open_in_full,park,person,print,restaurant,school,search,sell,share,shopping_bag,shopping_cart,square_foot,stairs,weekend&display=block" rel="stylesheet">
 <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
 <link rel="stylesheet" href="<?= asset_url('css/color.css') ?>" id="color-change">
 <link rel="stylesheet" href="<?= base_url('css/owl.carousel.min.css') ?>" media="print" onload="this.media='all'">
@@ -93,6 +93,9 @@
                                             <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item" href="<?= site_url('profile') ?>">Perfil</a></li>
                                                 <li><a class="dropdown-item" href="<?= site_url('my-properties') ?>">Mis Propiedades</a></li>
+                                                <?php if (\App\Filters\AgentOnlyFilter::allowed()): ?>
+                                                <li><a class="dropdown-item" href="<?= site_url('agente/propiedades') ?>">Todas las propiedades</a></li>
+                                                <?php endif ?>
                                                 <li><a class="dropdown-item" href="<?= site_url('logout') ?>">Cerrar Sesión</a></li>
                                             </ul>
                                         </li>

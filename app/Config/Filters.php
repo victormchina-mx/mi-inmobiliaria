@@ -40,6 +40,7 @@ class Filters extends BaseFilters
         'performance'   => PerformanceMetrics::class,
         'user-auth'     => UserAuthFilter::class,
         'bottrap'       => \App\Filters\BotTrapFilter::class,
+        'agent-only'    => \App\Filters\AgentOnlyFilter::class,
         'admin-auth'    => AdminAuthFilter::class,
         'api-auth'      => ApiAuthFilter::class,
         'throttle'      => ThrottleFilter::class,

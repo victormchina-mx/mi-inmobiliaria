@@ -22,6 +22,8 @@ class PropertyModel extends Model
         'lat', 'lng', 'exact_location',
         // Texto propio de "¿Por qué vivir aquí?" (app/Database/sql/2026-11-property-why-text.sql)
         'why_text',
+        // Ficha técnica y agenda (app/Database/sql/2026-11-property-extras.sql)
+        'land_size', 'parking', 'age_years', 'keys_status', 'keys_note',
     ];
 
     protected $validationRules = [

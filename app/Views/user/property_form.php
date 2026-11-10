@@ -119,6 +119,7 @@
                                value="<?= esc($property['size'] ?? old('asize') ?? 0) ?>">
                     </div>
                 </div>
+                <?= view('partials/property_extras_fields', ['property' => $property ?? []]) ?>
 
                 <!-- Precio, ciudad, estado -->
                 <div class="col-md-6">
