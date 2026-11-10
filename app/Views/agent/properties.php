@@ -3,7 +3,7 @@
 <?php
 /**
  * "Todas las propiedades" (Mi cuenta, solo agentes y constructores):
- * propiedades de todos los agentes con Agendar cita y Ficha técnica.
+ * propiedades de todos los agentes con Agendar cita (agente/agenda) y Ficha técnica.
  * Controlador: AgentArea::properties · Estilos: .ap-* en style.css
  */
 use App\Libraries\FichaTecnica;
@@ -36,10 +36,10 @@ $hasFilters   = array_filter(array_diff_key($filters, ['status' => 1])) || $filt
                 <h2 class="sec-title">Propiedades de todos los agentes</h2>
                 <p class="ap-sub">Genera la ficha técnica de cualquier propiedad para compartirla con tus clientes.</p>
             </div>
-            <div class="ap-tabs" role="tablist">
-                <span class="ap-tab is-active" role="tab" aria-selected="true"><i class="ms" aria-hidden="true">location_on</i>Propiedades</span>
-                <span class="ap-tab is-soon" role="tab" aria-disabled="true" title="Próximamente"><i class="ms" aria-hidden="true">calendar_month</i>Agenda de citas <small>Pronto</small></span>
-            </div>
+            <nav class="ap-tabs" aria-label="Área de agentes">
+                <span class="ap-tab is-active" aria-current="page"><i class="ms" aria-hidden="true">location_on</i>Propiedades</span>
+                <a class="ap-tab" href="<?= site_url('agente/agenda') ?>"><i class="ms" aria-hidden="true">calendar_month</i>Agenda de citas</a>
+            </nav>
         </div>
 
         <form class="ap-filters" method="get" action="<?= site_url('agente/propiedades') ?>">
@@ -136,9 +136,9 @@ $hasFilters   = array_filter(array_diff_key($filters, ['status' => 1])) || $filt
                         <?php endif ?>
                     </div>
                     <div class="ap-actions">
-                        <button type="button" class="ap-btn ap-btn--dark" disabled title="La agenda de citas llega en la siguiente fase">
+                        <a class="ap-btn ap-btn--dark" href="<?= site_url('agente/agenda?pid=' . $p['pid']) ?>#ag-panel">
                             <i class="ms" aria-hidden="true">event_available</i>Agendar cita
-                        </button>
+                        </a>
                         <a class="ap-btn ap-btn--gold" href="<?= site_url('agente/ficha/' . $p['pid']) ?>">
                             <i class="ms" aria-hidden="true">description</i>Ficha técnica
                         </a>

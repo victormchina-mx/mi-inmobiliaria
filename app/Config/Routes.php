@@ -53,6 +53,10 @@ $routes->group('', ['filter' => 'user-auth'], static function ($routes) {
 $routes->group('agente', ['filter' => 'agent-only'], static function ($routes) {
     $routes->get('propiedades', 'AgentArea::properties');
     $routes->get('ficha/(:num)', 'AgentArea::ficha/$1');
+    $routes->get('agenda', 'AgentAgenda::index');
+    $routes->get('agenda/conflictos', 'AgentAgenda::conflicts');
+    $routes->post('agenda/guardar', 'AgentAgenda::save');
+    $routes->post('agenda/(:num)/eliminar', 'AgentAgenda::delete/$1');
 });
 
 // Enlace corto de las fichas técnicas (código QR): /p/25 → detalle
