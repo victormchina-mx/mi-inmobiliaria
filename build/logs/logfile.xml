@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="/home/user/mi-inmobiliaria/phpunit.dist.xml" tests="58" assertions="195" errors="0" failures="0" skipped="0" time="0.152694">
+    <testsuite name="App" tests="58" assertions="195" errors="0" failures="0" skipped="0" time="0.152694">
+      <testsuite name="ExampleDatabaseTest" file="/home/user/mi-inmobiliaria/tests/database/ExampleDatabaseTest.php" tests="2" assertions="3" errors="0" failures="0" skipped="0" time="0.053882">
+        <testcase name="testModelFindAll" file="/home/user/mi-inmobiliaria/tests/database/ExampleDatabaseTest.php" line="17" class="ExampleDatabaseTest" classname="ExampleDatabaseTest" assertions="1" time="0.049768"/>
+        <testcase name="testSoftDeleteLeavesRow" file="/home/user/mi-inmobiliaria/tests/database/ExampleDatabaseTest.php" line="28" class="ExampleDatabaseTest" classname="ExampleDatabaseTest" assertions="2" time="0.004114"/>
+      </testsuite>
+      <testsuite name="AgentAreaAccessTest" file="/home/user/mi-inmobiliaria/tests/feature/AgentAreaAccessTest.php" tests="5" assertions="14" errors="0" failures="0" skipped="0" time="0.044551">
+        <testsuite name="AgentAreaAccessTest::testWithoutSessionGoesToLogin" tests="2" assertions="4" errors="0" failures="0" skipped="0" time="0.033035">
+          <testcase name="testWithoutSessionGoesToLogin with data set #0" file="/home/user/mi-inmobiliaria/tests/feature/AgentAreaAccessTest.php" line="23" class="AgentAreaAccessTest" classname="AgentAreaAccessTest" assertions="2" time="0.030695"/>
+          <testcase name="testWithoutSessionGoesToLogin with data set #1" file="/home/user/mi-inmobiliaria/tests/feature/AgentAreaAccessTest.php" line="23" class="AgentAreaAccessTest" classname="AgentAreaAccessTest" assertions="2" time="0.002340"/>
+        </testsuite>
+        <testsuite name="AgentAreaAccessTest::testBuyersCannotEnter" tests="2" assertions="8" errors="0" failures="0" skipped="0" time="0.007930">
+          <testcase name="testBuyersCannotEnter with data set #0" file="/home/user/mi-inmobiliaria/tests/feature/AgentAreaAccessTest.php" line="31" class="AgentAreaAccessTest" classname="AgentAreaAccessTest" assertions="4" time="0.005737"/>
+          <testcase name="testBuyersCannotEnter with data set #1" file="/home/user/mi-inmobiliaria/tests/feature/AgentAreaAccessTest.php" line="31" class="AgentAreaAccessTest" classname="AgentAreaAccessTest" assertions="4" time="0.002193"/>
+        </testsuite>
+        <testcase name="testShortLinkRedirectsToDetail" file="/home/user/mi-inmobiliaria/tests/feature/AgentAreaAccessTest.php" line="39" class="AgentAreaAccessTest" classname="AgentAreaAccessTest" assertions="2" time="0.003586"/>
+      </testsuite>
+      <testsuite name="BotTrapRoutesTest" file="/home/user/mi-inmobiliaria/tests/feature/BotTrapRoutesTest.php" tests="9" assertions="21" errors="0" failures="0" skipped="0" time="0.021310">
+        <testsuite name="BotTrapRoutesTest::testHoneypotIsDiscardedSilently" tests="3" assertions="9" errors="0" failures="0" skipped="0" time="0.009208">
+          <testcase name="testHoneypotIsDiscardedSilently with data set #0" file="/home/user/mi-inmobiliaria/tests/feature/BotTrapRoutesTest.php" line="35" class="BotTrapRoutesTest" classname="BotTrapRoutesTest" assertions="3" time="0.004672"/>
+          <testcase name="testHoneypotIsDiscardedSilently with data set #1" file="/home/user/mi-inmobiliaria/tests/feature/BotTrapRoutesTest.php" line="35" class="BotTrapRoutesTest" classname="BotTrapRoutesTest" assertions="3" time="0.002354"/>
+          <testcase name="testHoneypotIsDiscardedSilently with data set #2" file="/home/user/mi-inmobiliaria/tests/feature/BotTrapRoutesTest.php" line="35" class="BotTrapRoutesTest" classname="BotTrapRoutesTest" assertions="3" time="0.002182"/>
+        </testsuite>
+        <testsuite name="BotTrapRoutesTest::testTooFastGoesBackWithAMessage" tests="3" assertions="9" errors="0" failures="0" skipped="0" time="0.006811">
+          <testcase name="testTooFastGoesBackWithAMessage with data set #0" file="/home/user/mi-inmobiliaria/tests/feature/BotTrapRoutesTest.php" line="44" class="BotTrapRoutesTest" classname="BotTrapRoutesTest" assertions="3" time="0.002422"/>
+          <testcase name="testTooFastGoesBackWithAMessage with data set #1" file="/home/user/mi-inmobiliaria/tests/feature/BotTrapRoutesTest.php" line="44" class="BotTrapRoutesTest" classname="BotTrapRoutesTest" assertions="3" time="0.002090"/>
+          <testcase name="testTooFastGoesBackWithAMessage with data set #2" file="/home/user/mi-inmobiliaria/tests/feature/BotTrapRoutesTest.php" line="44" class="BotTrapRoutesTest" classname="BotTrapRoutesTest" assertions="3" time="0.002298"/>
+        </testsuite>
+        <testsuite name="BotTrapRoutesTest::testWithoutTokenIsRejected" tests="3" assertions="3" errors="0" failures="0" skipped="0" time="0.005290">
+          <testcase name="testWithoutTokenIsRejected with data set #0" file="/home/user/mi-inmobiliaria/tests/feature/BotTrapRoutesTest.php" line="53" class="BotTrapRoutesTest" classname="BotTrapRoutesTest" assertions="1" time="0.002192"/>
+          <testcase name="testWithoutTokenIsRejected with data set #1" file="/home/user/mi-inmobiliaria/tests/feature/BotTrapRoutesTest.php" line="53" class="BotTrapRoutesTest" classname="BotTrapRoutesTest" assertions="1" time="0.001562"/>
+          <testcase name="testWithoutTokenIsRejected with data set #2" file="/home/user/mi-inmobiliaria/tests/feature/BotTrapRoutesTest.php" line="53" class="BotTrapRoutesTest" classname="BotTrapRoutesTest" assertions="1" time="0.001536"/>
+        </testsuite>
+      </testsuite>
+      <testsuite name="ExampleSessionTest" file="/home/user/mi-inmobiliaria/tests/session/ExampleSessionTest.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.000458">
+        <testcase name="testSessionSimple" file="/home/user/mi-inmobiliaria/tests/session/ExampleSessionTest.php" line="10" class="ExampleSessionTest" classname="ExampleSessionTest" assertions="1" time="0.000458"/>
+      </testsuite>
+      <testsuite name="BotTrapTest" file="/home/user/mi-inmobiliaria/tests/unit/BotTrapTest.php" tests="4" assertions="6" errors="0" failures="0" skipped="0" time="0.001352">
+        <testcase name="testHumanAfterSomeSecondsPasses" file="/home/user/mi-inmobiliaria/tests/unit/BotTrapTest.php" line="18" class="BotTrapTest" classname="BotTrapTest" assertions="1" time="0.000419"/>
+        <testcase name="testHoneypotFilled" file="/home/user/mi-inmobiliaria/tests/unit/BotTrapTest.php" line="24" class="BotTrapTest" classname="BotTrapTest" assertions="1" time="0.000307"/>
+        <testcase name="testTooFast" file="/home/user/mi-inmobiliaria/tests/unit/BotTrapTest.php" line="30" class="BotTrapTest" classname="BotTrapTest" assertions="1" time="0.000290"/>
+        <testcase name="testForgedMissingOrOldToken" file="/home/user/mi-inmobiliaria/tests/unit/BotTrapTest.php" line="36" class="BotTrapTest" classname="BotTrapTest" assertions="3" time="0.000335"/>
+      </testsuite>
+      <testsuite name="ContactLinksTest" file="/home/user/mi-inmobiliaria/tests/unit/ContactLinksTest.php" tests="3" assertions="19" errors="0" failures="0" skipped="0" time="0.002690">
+        <testcase name="testWhatsappNumberUsesMexicanInternationalFormat" file="/home/user/mi-inmobiliaria/tests/unit/ContactLinksTest.php" line="11" class="ContactLinksTest" classname="ContactLinksTest" assertions="8" time="0.000968"/>
+        <testcase name="testTelAndPretty" file="/home/user/mi-inmobiliaria/tests/unit/ContactLinksTest.php" line="23" class="ContactLinksTest" classname="ContactLinksTest" assertions="4" time="0.000376"/>
+        <testcase name="testWhatsappAndMailCarryTheProperty" file="/home/user/mi-inmobiliaria/tests/unit/ContactLinksTest.php" line="31" class="ContactLinksTest" classname="ContactLinksTest" assertions="7" time="0.001346"/>
+      </testsuite>
+      <testsuite name="FichaTecnicaTest" file="/home/user/mi-inmobiliaria/tests/unit/FichaTecnicaTest.php" tests="5" assertions="22" errors="0" failures="0" skipped="0" time="0.004000">
+        <testcase name="testCode" file="/home/user/mi-inmobiliaria/tests/unit/FichaTecnicaTest.php" line="27" class="FichaTecnicaTest" classname="FichaTecnicaTest" assertions="2" time="0.000975"/>
+        <testcase name="testDataBuildsTitleZonePriceAndContact" file="/home/user/mi-inmobiliaria/tests/unit/FichaTecnicaTest.php" line="33" class="FichaTecnicaTest" classname="FichaTecnicaTest" assertions="9" time="0.001328"/>
+        <testcase name="testRentShowsPerMonth" file="/home/user/mi-inmobiliaria/tests/unit/FichaTecnicaTest.php" line="48" class="FichaTecnicaTest" classname="FichaTecnicaTest" assertions="2" time="0.000495"/>
+        <testcase name="testFactsOnlyWithValues" file="/home/user/mi-inmobiliaria/tests/unit/FichaTecnicaTest.php" line="56" class="FichaTecnicaTest" classname="FichaTecnicaTest" assertions="2" time="0.000405"/>
+        <testcase name="testExtrasNumber" file="/home/user/mi-inmobiliaria/tests/unit/FichaTecnicaTest.php" line="65" class="FichaTecnicaTest" classname="FichaTecnicaTest" assertions="7" time="0.000798"/>
+      </testsuite>
+      <testsuite name="GeocoderTest" file="/home/user/mi-inmobiliaria/tests/unit/GeocoderTest.php" tests="5" assertions="12" errors="0" failures="0" skipped="0" time="0.003150">
+        <testcase name="testQueriesGoFromMostPreciseToMostGeneral" file="/home/user/mi-inmobiliaria/tests/unit/GeocoderTest.php" line="11" class="GeocoderTest" classname="GeocoderTest" assertions="1" time="0.001200"/>
+        <testcase name="testQueriesSkipRepeatedAndEmptyParts" file="/home/user/mi-inmobiliaria/tests/unit/GeocoderTest.php" line="22" class="GeocoderTest" classname="GeocoderTest" assertions="3" time="0.000460"/>
+        <testcase name="testAddressJoinsDistinctParts" file="/home/user/mi-inmobiliaria/tests/unit/GeocoderTest.php" line="31" class="GeocoderTest" classname="GeocoderTest" assertions="3" time="0.000340"/>
+        <testcase name="testParseReadsCoordinatesAndBoundingBox" file="/home/user/mi-inmobiliaria/tests/unit/GeocoderTest.php" line="38" class="GeocoderTest" classname="GeocoderTest" assertions="1" time="0.000359"/>
+        <testcase name="testParseDistinguishesNotFoundFromBadResponse" file="/home/user/mi-inmobiliaria/tests/unit/GeocoderTest.php" line="48" class="GeocoderTest" classname="GeocoderTest" assertions="4" time="0.000791"/>
+      </testsuite>
+      <testsuite name="HealthTest" file="/home/user/mi-inmobiliaria/tests/unit/HealthTest.php" tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.001873">
+        <testcase name="testIsDefinedAppPath" file="/home/user/mi-inmobiliaria/tests/unit/HealthTest.php" line="12" class="HealthTest" classname="HealthTest" assertions="1" time="0.000387"/>
+        <testcase name="testBaseUrlHasBeenSet" file="/home/user/mi-inmobiliaria/tests/unit/HealthTest.php" line="17" class="HealthTest" classname="HealthTest" assertions="1" time="0.001486"/>
+      </testsuite>
+      <testsuite name="NearbyPlacesTest" file="/home/user/mi-inmobiliaria/tests/unit/NearbyPlacesTest.php" tests="8" assertions="25" errors="0" failures="0" skipped="0" time="0.007563">
+        <testcase name="testParseClassifiesSortsAndDeduplicates" file="/home/user/mi-inmobiliaria/tests/unit/NearbyPlacesTest.php" line="32" class="NearbyPlacesTest" classname="NearbyPlacesTest" assertions="10" time="0.003657"/>
+        <testcase name="testCountsIncludeEveryCategory" file="/home/user/mi-inmobiliaria/tests/unit/NearbyPlacesTest.php" line="54" class="NearbyPlacesTest" classname="NearbyPlacesTest" assertions="1" time="0.000456"/>
+        <testcase name="testSummaryOnlyStatesWhatTheDataSays" file="/home/user/mi-inmobiliaria/tests/unit/NearbyPlacesTest.php" line="61" class="NearbyPlacesTest" classname="NearbyPlacesTest" assertions="5" time="0.000467"/>
+        <testcase name="testSummaryWithFewPlaces" file="/home/user/mi-inmobiliaria/tests/unit/NearbyPlacesTest.php" line="74" class="NearbyPlacesTest" classname="NearbyPlacesTest" assertions="3" time="0.000858"/>
+        <testcase name="testDistance" file="/home/user/mi-inmobiliaria/tests/unit/NearbyPlacesTest.php" line="84" class="NearbyPlacesTest" classname="NearbyPlacesTest" assertions="1" time="0.000763"/>
+        <testcase name="testViewboxIsASquareAroundThePoint" file="/home/user/mi-inmobiliaria/tests/unit/NearbyPlacesTest.php" line="90" class="NearbyPlacesTest" classname="NearbyPlacesTest" assertions="1" time="0.000457"/>
+        <testcase name="testFromNominatimKeepsTypeAndExtraTags" file="/home/user/mi-inmobiliaria/tests/unit/NearbyPlacesTest.php" line="96" class="NearbyPlacesTest" classname="NearbyPlacesTest" assertions="3" time="0.000529"/>
+        <testcase name="testLinesAndRoutesAreNotStations" file="/home/user/mi-inmobiliaria/tests/unit/NearbyPlacesTest.php" line="110" class="NearbyPlacesTest" classname="NearbyPlacesTest" assertions="1" time="0.000376"/>
+      </testsuite>
+      <testsuite name="PlaceNameTest" file="/home/user/mi-inmobiliaria/tests/unit/PlaceNameTest.php" tests="5" assertions="36" errors="0" failures="0" skipped="0" time="0.003982">
+        <testcase name="testRemovesSchoolCodesQuotesAndShift" file="/home/user/mi-inmobiliaria/tests/unit/PlaceNameTest.php" line="14" class="PlaceNameTest" classname="PlaceNameTest" assertions="8" time="0.001353"/>
+        <testcase name="testFixesCapitalsAndAccents" file="/home/user/mi-inmobiliaria/tests/unit/PlaceNameTest.php" line="26" class="PlaceNameTest" classname="PlaceNameTest" assertions="8" time="0.000562"/>
+        <testcase name="testGenericNames" file="/home/user/mi-inmobiliaria/tests/unit/PlaceNameTest.php" line="38" class="PlaceNameTest" classname="PlaceNameTest" assertions="6" time="0.000608"/>
+        <testcase name="testReclassify" file="/home/user/mi-inmobiliaria/tests/unit/PlaceNameTest.php" line="48" class="PlaceNameTest" classname="PlaceNameTest" assertions="8" time="0.000762"/>
+        <testcase name="testTidyAndDistanceLabels" file="/home/user/mi-inmobiliaria/tests/unit/PlaceNameTest.php" line="60" class="PlaceNameTest" classname="PlaceNameTest" assertions="6" time="0.000697"/>
+      </testsuite>
+      <testsuite name="PropertyLocationTest" file="/home/user/mi-inmobiliaria/tests/unit/PropertyLocationTest.php" tests="4" assertions="16" errors="0" failures="0" skipped="0" time="0.003236">
+        <testcase name="testParseValidatesCoordinates" file="/home/user/mi-inmobiliaria/tests/unit/PropertyLocationTest.php" line="12" class="PropertyLocationTest" classname="PropertyLocationTest" assertions="5" time="0.001193"/>
+        <testcase name="testPointNeedsBothCoordinates" file="/home/user/mi-inmobiliaria/tests/unit/PropertyLocationTest.php" line="21" class="PropertyLocationTest" classname="PropertyLocationTest" assertions="3" time="0.000541"/>
+        <testcase name="testExactPointIsShownAsIs" file="/home/user/mi-inmobiliaria/tests/unit/PropertyLocationTest.php" line="31" class="PropertyLocationTest" classname="PropertyLocationTest" assertions="1" time="0.000432"/>
+        <testcase name="testApproximateZoneIsShiftedAndStable" file="/home/user/mi-inmobiliaria/tests/unit/PropertyLocationTest.php" line="38" class="PropertyLocationTest" classname="PropertyLocationTest" assertions="7" time="0.001070"/>
+      </testsuite>
+      <testsuite name="WhyTextTest" file="/home/user/mi-inmobiliaria/tests/unit/WhyTextTest.php" tests="5" assertions="18" errors="0" failures="0" skipped="0" time="0.004647">
+        <testcase name="testCleanKeepsPlainTextAndLineBreaks" file="/home/user/mi-inmobiliaria/tests/unit/WhyTextTest.php" line="12" class="WhyTextTest" classname="WhyTextTest" assertions="5" time="0.000992"/>
+        <testcase name="testOfReadsTheProperty" file="/home/user/mi-inmobiliaria/tests/unit/WhyTextTest.php" line="21" class="WhyTextTest" classname="WhyTextTest" assertions="2" time="0.000392"/>
+        <testcase name="testCustomTextReplacesTheAutomaticParagraph" file="/home/user/mi-inmobiliaria/tests/unit/WhyTextTest.php" line="40" class="WhyTextTest" classname="WhyTextTest" assertions="5" time="0.001729"/>
+        <testcase name="testWithoutPlacesOnlyTheCustomTextIsShown" file="/home/user/mi-inmobiliaria/tests/unit/WhyTextTest.php" line="57" class="WhyTextTest" classname="WhyTextTest" assertions="4" time="0.000765"/>
+        <testcase name="testWithoutCustomTextTheAutomaticOneIsUsed" file="/home/user/mi-inmobiliaria/tests/unit/WhyTextTest.php" line="67" class="WhyTextTest" classname="WhyTextTest" assertions="2" time="0.000769"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

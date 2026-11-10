@@ -1,0 +1,84 @@
+Agent Area Access
+ [x] Without session goes to login with data set #0
+ [x] Without session goes to login with data set #1
+ [x] Buyers cannot enter with data set #0
+ [x] Buyers cannot enter with data set #1
+ [x] Short link redirects to detail
+
+Bot Trap
+ [x] Human after some seconds passes
+ [x] Honeypot filled
+ [x] Too fast
+ [x] Forged missing or old token
+
+Bot Trap Routes
+ [x] Honeypot is discarded silently with data set #0
+ [x] Honeypot is discarded silently with data set #1
+ [x] Honeypot is discarded silently with data set #2
+ [x] Too fast goes back with a message with data set #0
+ [x] Too fast goes back with a message with data set #1
+ [x] Too fast goes back with a message with data set #2
+ [x] Without token is rejected with data set #0
+ [x] Without token is rejected with data set #1
+ [x] Without token is rejected with data set #2
+
+Contact Links
+ [x] Whatsapp number uses mexican international format
+ [x] Tel and pretty
+ [x] Whatsapp and mail carry the property
+
+Example Database
+ [x] Model find all
+ [x] Soft delete leaves row
+
+Example Session
+ [x] Session simple
+
+Ficha Tecnica
+ [x] Code
+ [x] Data builds title zone price and contact
+ [x] Rent shows per month
+ [x] Facts only with values
+ [x] Extras number
+
+Geocoder
+ [x] Queries go from most precise to most general
+ [x] Queries skip repeated and empty parts
+ [x] Address joins distinct parts
+ [x] Parse reads coordinates and bounding box
+ [x] Parse distinguishes not found from bad response
+
+Health
+ [x] Is defined app path
+ [x] Base url has been set
+
+Nearby Places
+ [x] Parse classifies sorts and deduplicates
+ [x] Counts include every category
+ [x] Summary only states what the data says
+ [x] Summary with few places
+ [x] Distance
+ [x] Viewbox is a square around the point
+ [x] From nominatim keeps type and extra tags
+ [x] Lines and routes are not stations
+
+Place Name
+ [x] Removes school codes quotes and shift
+ [x] Fixes capitals and accents
+ [x] Generic names
+ [x] Reclassify
+ [x] Tidy and distance labels
+
+Property Location
+ [x] Parse validates coordinates
+ [x] Point needs both coordinates
+ [x] Exact point is shown as is
+ [x] Approximate zone is shifted and stable
+
+Why Text
+ [x] Clean keeps plain text and line breaks
+ [x] Of reads the property
+ [x] Custom text replaces the automatic paragraph
+ [x] Without places only the custom text is shown
+ [x] Without custom text the automatic one is used
+
