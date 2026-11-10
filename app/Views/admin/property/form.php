@@ -162,6 +162,7 @@
                                        value="<?= esc($property['size'] ?? 0) ?>">
                             </div>
                         </div>
+                <?= view('partials/property_extras_fields', ['property' => $property ?? []]) ?>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Estado de publicación</label>

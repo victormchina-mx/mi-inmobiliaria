@@ -138,6 +138,12 @@ class Property extends BaseController
             ?? (Geocoder::address($property) !== '' ? (new Geocoder())->locate($property) : null);
     }
 
+    /** Enlace corto de la ficha técnica (código QR): /p/25 → /property/25 */
+    public function short(int $pid): RedirectResponse
+    {
+        return redirect()->to('property/' . $pid, 301);
+    }
+
     public function grid(): string
     {
         // Solo textos: un parámetro enviado como lista (city[]=x) se ignora

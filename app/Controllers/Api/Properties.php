@@ -4,6 +4,7 @@ namespace App\Controllers\Api;
 
 use App\Libraries\PropertyLocation;
 use App\Libraries\WhyText;
+use App\Libraries\PropertyExtras;
 use App\Libraries\HtmlSanitizer;
 use App\Models\PropertyModel;
 
@@ -115,7 +116,7 @@ class Properties extends BaseApiController
             'totalfloor'    => $this->request->getPost('totalfl') ?? '',
             'status'        => $status,
             'cancel_reason' => $status === 'cancelled' ? $cancelReason : null,
-        ], $this->uploadImages($existing ?? []), PropertyLocation::fromRequest($this->request, true), WhyText::fromRequest($this->request, true));
+        ], $this->uploadImages($existing ?? []), PropertyLocation::fromRequest($this->request, true), WhyText::fromRequest($this->request, true), PropertyExtras::fromRequest($this->request, true));
 
         if ($pid === null) {
             $data['uid']        = $uid;
@@ -191,6 +192,11 @@ class Properties extends BaseApiController
             'lng'           => isset($p['lng']) ? (float) $p['lng'] : null,
             'exact_location' => (int) ($p['exact_location'] ?? 0),
             'why_text'      => $p['why_text'] ?? '',
+            'land_size'     => isset($p['land_size']) ? (int) $p['land_size'] : null,
+            'parking'       => isset($p['parking']) ? (int) $p['parking'] : null,
+            'age_years'     => isset($p['age_years']) ? (int) $p['age_years'] : null,
+            'keys_status'   => $p['keys_status'] ?? null,
+            'keys_note'     => $p['keys_note'] ?? null,
             'images'        => $images,
         ];
     }

@@ -49,6 +49,15 @@ $routes->group('', ['filter' => 'user-auth'], static function ($routes) {
     $routes->post('my-properties/delete/(:num)', 'User\MyProperty::delete/$1');
 });
 
+// ─── Área de agentes: todas las propiedades y fichas técnicas ────────────────
+$routes->group('agente', ['filter' => 'agent-only'], static function ($routes) {
+    $routes->get('propiedades', 'AgentArea::properties');
+    $routes->get('ficha/(:num)', 'AgentArea::ficha/$1');
+});
+
+// Enlace corto de las fichas técnicas (código QR): /p/25 → detalle
+$routes->get('p/(:num)', 'Property::short/$1');
+
 // ─── API para la App Móvil ───────────────────────────────────────────────────
 $routes->post('api/v1/auth/login', 'Api\Auth::login');
 $routes->get('api/v1/lookups/cities', 'Api\Lookups::cities');

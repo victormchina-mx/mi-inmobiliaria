@@ -4,6 +4,7 @@ namespace App\Controllers\User;
 
 use App\Libraries\PropertyLocation;
 use App\Libraries\WhyText;
+use App\Libraries\PropertyExtras;
 use App\Controllers\BaseController;
 use App\Libraries\HtmlSanitizer;
 use App\Models\CityModel;
@@ -92,7 +93,7 @@ class MyProperty extends BaseController
             'mapimage'       => $images['mapimage'],
             'topmapimage'    => $images['topmapimage'],
             'groundmapimage' => $images['groundmapimage'],
-        ] + PropertyLocation::fromRequest($this->request) + WhyText::fromRequest($this->request));
+        ] + PropertyLocation::fromRequest($this->request) + WhyText::fromRequest($this->request) + PropertyExtras::fromRequest($this->request));
 
         return redirect()->to('my-properties')->with('success', 'Propiedad publicada correctamente.');
     }
@@ -170,7 +171,7 @@ class MyProperty extends BaseController
             'mapimage'       => $images['mapimage'],
             'topmapimage'    => $images['topmapimage'],
             'groundmapimage' => $images['groundmapimage'],
-        ] + PropertyLocation::fromRequest($this->request) + WhyText::fromRequest($this->request));
+        ] + PropertyLocation::fromRequest($this->request) + WhyText::fromRequest($this->request) + PropertyExtras::fromRequest($this->request));
 
         return redirect()->to('my-properties')->with('success', 'Propiedad actualizada correctamente.');
     }
