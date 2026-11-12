@@ -30,8 +30,6 @@ $row  = static fn (string $label, string $value): string => '<tr><td style="padd
             <?= $row('Fecha y hora', esc(ucfirst(Agenda::when($a['starts_at'], $a['ends_at'])))) ?>
             <?= $row('Muestra', esc($a['shower_name'] ?? '—')) ?>
             <?= $row('Cliente', esc($a['client_name'])) ?>
-            <?php if (! empty($a['client_phone'])): ?><?= $row('Teléfono', esc($a['client_phone'])) ?><?php endif ?>
-            <?php if (! empty($a['client_email'])): ?><?= $row('Correo', esc($a['client_email'])) ?><?php endif ?>
             <?php if (! empty($a['client_notes'])): ?><?= $row('Notas', esc($a['client_notes'])) ?><?php endif ?>
         </table>
         <?php if ($role === 'owner'): ?>
