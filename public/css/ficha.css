@@ -61,12 +61,15 @@
 .ficha p, .ficha li, .ficha span, .ficha small, .ficha b { color: inherit; }
 .ficha img { max-width: none !important; width: auto !important; }
 /* Logo Frices (app/Views/agent/ficha/_logo.php); el tamaño sale de font-size */
-.fx-logo { display: flex; align-items: center; gap: .7em; font-size: 16px; }
-.fx-logo__mark { display: block; width: 5.2em; height: 5.2em; flex: none; }
-.fx-logo__text { padding-left: .8em; border-left: 1px solid rgba(209, 168, 75, .55); }
-.ficha .fx-logo__text b { display: block; font-size: 1.12em; font-weight: 800; line-height: 1.04; letter-spacing: .05em; color: #E2BF63; }
-.ficha .fx-logo__text b span { font-size: 1.32em; letter-spacing: .04em; }
-.ficha .fx-logo__text small { display: block; margin-top: .45em; padding-top: .4em; border-top: 1px solid rgba(209, 168, 75, .45); font-size: .6em; font-weight: 600; letter-spacing: .02em; white-space: nowrap; color: #EBDDB4; }
+.fx-logo { display: flex; align-items: center; gap: .9em; font-size: 16px; }
+.fx-logo__emblem { display: flex; flex-direction: column; align-items: center; flex: none; }
+.fx-logo__mark { display: block; width: 5em; height: 5em; }
+.ficha .fx-logo__motto { display: block; margin-top: .15em; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 600; font-size: .72em; line-height: 1; white-space: nowrap; color: #EBDDB4; }
+.fx-logo__text { padding-left: .9em; border-left: 1px solid rgba(209, 168, 75, .55); }
+.ficha .fx-logo__text b { display: block; font-family: 'Cinzel', 'Trajan Pro', Georgia, serif; font-size: 1.3em; font-weight: 700; line-height: .98; letter-spacing: .02em; color: #E2BF63; }
+.fx-logo__rule { position: relative; display: block; height: 1px; margin: .5em 0 .4em; background: rgba(209, 168, 75, .55); }
+.fx-logo__rule::after { content: ''; position: absolute; left: 50%; top: 50%; width: .3em; height: .3em; border-radius: 50%; background: #E2BF63; transform: translate(-50%, -50%); }
+.ficha .fx-logo__text small { display: block; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 600; font-size: .74em; letter-spacing: .01em; white-space: nowrap; color: #EBDDB4; }
 .ficha .ms { font-family: 'Material Symbols Outlined'; font-weight: 400; font-style: normal; line-height: 1; width: auto; overflow: visible; vertical-align: 0; margin: 0; }
 .ft-qr { background: #fff; }
 .ft-qr svg, .ft-qr img { display: block; width: 100%; height: 100%; }
@@ -134,7 +137,7 @@
 /* ---------- Residencial (1500 × 1000) ---------- */
 .ft-re { width: 1500px; height: 1000px; display: grid; grid-template-columns: 400px minmax(0, 1fr); background: var(--fx-navy); color: #fff; }
 .ft-re__side { position: relative; padding: 44px 40px; }
-.ft-re__logo { margin-bottom: 26px; font-size: 15px; }
+.ft-re__logo { margin-bottom: 26px; font-size: 14px; }
 .ft-re__script { font-family: 'Allura', cursive; font-size: 54px; line-height: .9; color: var(--fx-gold-light); }
 .ft-re__op { font-size: 96px; font-weight: 800; line-height: .9; letter-spacing: -1px; color: #fff; }
 .ft-re__place { margin: 16px 0 24px; padding-top: 14px; border-top: 2px solid rgba(209, 168, 75, .6); font-size: 26px; font-weight: 800; text-transform: uppercase; }
