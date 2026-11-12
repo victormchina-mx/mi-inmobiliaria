@@ -74,6 +74,15 @@ $routes->group('api/v1', ['filter' => 'api-auth'], static function ($routes) {
     $routes->post('properties', 'Api\Properties::store');
     $routes->post('properties/(:num)', 'Api\Properties::update/$1');
     $routes->get('geocode', 'Api\Lookups::geocode');
+    // Área de agentes: todas las propiedades y agenda de citas (Api\Agent)
+    $routes->get('agent/properties', 'Api\Agent::properties');
+    $routes->get('agenda', 'Api\Agent::agenda');
+    $routes->get('agenda/options', 'Api\Agent::options');
+    $routes->get('agenda/conflicts', 'Api\Agent::conflicts');
+    $routes->get('agenda/(:num)', 'Api\Agent::show/$1');
+    $routes->post('agenda', 'Api\Agent::save');
+    $routes->post('agenda/(:num)', 'Api\Agent::save/$1');
+    $routes->post('agenda/(:num)/delete', 'Api\Agent::delete/$1');
 });
 
 // ─── Panel de administración ──────────────────────────────────────────────────

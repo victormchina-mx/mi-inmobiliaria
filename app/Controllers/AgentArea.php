@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\AgentListing;
 use App\Libraries\FichaTecnica;
 use App\Libraries\PropertyExtras;
 use App\Models\PropertyModel;
@@ -43,41 +44,7 @@ class AgentArea extends BaseController
             'status' => isset(self::STATUSES[$get('status')]) ? $get('status') : 'available',
         ];
 
-        $model = (new PropertyModel())->withOwner();
-
-        if ($filters['status'] !== 'all') {
-            $model->where('property.status', $filters['status']);
-        }
-        if ($filters['stype'] !== '') {
-            $model->where('property.stype', $filters['stype']);
-        }
-        if ($filters['type'] !== '') {
-            $model->where('property.type', $filters['type']);
-        }
-        if ($filters['city'] !== '') {
-            $model->where('property.city', $filters['city']);
-        }
-        if ($filters['agent'] !== '') {
-            $model->where('property.uid', (int) $filters['agent']);
-        }
-        if ($filters['keys'] !== '' && PropertyExtras::ready()) {
-            $model->where('property.keys_status', $filters['keys']);
-        }
-        if ($filters['q'] !== '') {
-            // "VMCH-0025", "0025" o "25" buscan por código; lo demás por texto
-            if (preg_match('/^(?:vmch-?)?0*(\d+)$/i', $filters['q'], $m)) {
-                $model->where('property.pid', (int) $m[1]);
-            } else {
-                $model->groupStart()
-                    ->like('property.title', $filters['q'])
-                    ->orLike('property.location', $filters['q'])
-                    ->orLike('property.city', $filters['q'])
-                    ->orLike('property.state', $filters['q'])
-                    ->groupEnd();
-            }
-        }
-
-        $properties = $model->orderBy('property.pid', 'DESC')->findAll();
+        $properties = AgentListing::search($filters);
 
         // Opciones de los filtros, a partir de lo que existe
         $all    = (new PropertyModel())->select('property.city, property.type, property.uid')->findAll();

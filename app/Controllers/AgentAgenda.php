@@ -2,13 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Filters\AgentOnlyFilter;
 use App\Libraries\Agenda;
-use App\Libraries\FichaTecnica;
-use App\Libraries\PropertyExtras;
+use App\Libraries\AgendaService;
 use App\Models\AppointmentModel;
 use App\Models\PropertyModel;
-use App\Models\UserModel;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 use DateTimeImmutable;
@@ -29,7 +26,7 @@ class AgentAgenda extends BaseController
 
         $uid    = $this->uid();
         $monday = Agenda::weekStart($this->request->getGet('semana'));
-        $agents = $this->agents();
+        $agents = AgendaService::agents();
         $filter = (string) $this->request->getGet('agente');
         if ($filter !== 'mias' && ! isset($agents[(int) $filter])) {
             $filter = '';
@@ -59,7 +56,7 @@ class AgentAgenda extends BaseController
             }
         }
 
-        $properties = $this->properties($current['pid'] ?? (int) $this->request->getGet('pid'));
+        $properties = AgendaService::properties($current['pid'] ?? (int) $this->request->getGet('pid'));
         $prefillPid = (int) $this->request->getGet('pid');
         $today      = new DateTimeImmutable('today');
         $fecha      = Agenda::date($this->request->getGet('fecha'));
@@ -104,7 +101,7 @@ class AgentAgenda extends BaseController
             }
         }
 
-        [$data, $errors] = Agenda::fromInput($this->request->getPost(), array_keys($this->agents()));
+        [$data, $errors] = Agenda::fromInput($this->request->getPost(), array_keys(AgendaService::agents()));
         $property = $data['pid'] ? (new PropertyModel())->withOwner()->find($data['pid']) : null;
         if (! $errors && ! $property) {
             $errors[] = 'El inmueble no existe.';
@@ -114,7 +111,7 @@ class AgentAgenda extends BaseController
         }
 
         if (! $this->request->getPost('force')) {
-            $conflicts = $this->conflictsFor($data, $apid ?: null);
+            $conflicts = AgendaService::conflictsFor($data, $apid ?: null);
             if ($conflicts) {
                 return redirect()->back()->withInput()->with('agenda_conflict', $conflicts);
             }
@@ -128,7 +125,7 @@ class AgentAgenda extends BaseController
             $data['created_by'] = $uid;
             $apid    = (int) $model->insert($data);
             $message = 'Cita agendada.';
-            $this->notify($apid, $uid);
+            AgendaService::notify($apid, $uid);
         }
 
         return redirect()->to('agente/agenda?semana=' . substr($data['starts_at'], 0, 10) . '&cita=' . $apid)->with('success', $message);
@@ -155,8 +152,8 @@ class AgentAgenda extends BaseController
 
         $in = $this->request->getGet();
         $in['client_name'] = 'x';   // solo se revisan inmueble, horario y agente
-        [$data, $errors] = Agenda::fromInput($in, array_keys($this->agents()));
-        $messages = $data['starts_at'] && ! $errors ? $this->conflictsFor($data, (int) ($in['apid'] ?? 0) ?: null) : [];
+        [$data, $errors] = Agenda::fromInput($in, array_keys(AgendaService::agents()));
+        $messages = $data['starts_at'] && ! $errors ? AgendaService::conflictsFor($data, (int) ($in['apid'] ?? 0) ?: null) : [];
 
         return $this->response->setJSON(['ok' => true, 'messages' => $messages]);
     }
@@ -166,97 +163,5 @@ class AgentAgenda extends BaseController
     private function uid(): int
     {
         return (int) session()->get('uid');
-    }
-
-    /** Agentes y constructores (uid => fila), los que pueden mostrar. */
-    private function agents(): array
-    {
-        $rows = (new UserModel())->select('uid, uname, uimage')->whereIn('utype', AgentOnlyFilter::TYPES)->orderBy('uname')->findAll();
-
-        return array_column($rows, null, 'uid');
-    }
-
-    /**
-     * Inmuebles para elegir (pid => datos de la sección 1): los disponibles
-     * y, si se está editando o se pidió otro, también ese.
-     */
-    private function properties(int $include = 0): array
-    {
-        $model = (new PropertyModel())->withOwner()->groupStart()->where('property.status', 'available');
-        if ($include) {
-            $model->orWhere('property.pid', $include);
-        }
-        $rows = $model->groupEnd()->orderBy('property.pid', 'DESC')->findAll();
-
-        $out = [];
-        foreach ($rows as $p) {
-            $keys = PropertyExtras::ready() ? ($p['keys_status'] ?? null) : null;
-            $out[(int) $p['pid']] = [
-                'pid'   => (int) $p['pid'],
-                'code'  => FichaTecnica::code((int) $p['pid']),
-                'title' => mb_strtoupper(mb_substr((string) $p['title'], 0, 1)) . mb_substr((string) $p['title'], 1),
-                'zone'  => implode(', ', array_filter(array_map(static fn ($v) => trim((string) $v), [$p['location'], $p['city'], $p['state']]))),
-                'owner' => (string) $p['uname'],
-                'keys'  => PropertyExtras::ready() ? PropertyExtras::keysLabel($keys) . (! empty($p['keys_note']) ? ' — ' . $p['keys_note'] : '') : '',
-                'warn'  => in_array($keys, ['owner', 'occupied', 'other'], true) || ! $keys,
-            ];
-        }
-
-        return $out;
-    }
-
-    /** Mensajes de las citas que chocan con la nueva (mismo inmueble o mismo agente). */
-    private function conflictsFor(array $data, ?int $except): array
-    {
-        $rows = (new AppointmentModel())->withDetails()
-            ->overlapping($data['starts_at'], $data['ends_at'], $except)
-            ->groupStart()->where('appointment.pid', $data['pid'])->orWhere('appointment.shower_uid', $data['shower_uid'])->groupEnd()
-            ->orderBy('appointment.starts_at')->findAll();
-
-        $out = [];
-        foreach ($rows as $r) {
-            $hours = substr($r['starts_at'], 11, 5) . ' a ' . substr($r['ends_at'], 11, 5);
-            if ((int) $r['pid'] === (int) $data['pid']) {
-                $out[] = ($r['shower_name'] ?: 'Otro agente') . ' ya tiene una cita en este inmueble de ' . $hours . '.';
-            } else {
-                $out[] = ($r['shower_name'] ?: 'El agente') . ' ya tiene otra cita a esa hora (' . FichaTecnica::code((int) $r['pid']) . ', ' . $hours . ').';
-            }
-        }
-
-        return array_values(array_unique($out));
-    }
-
-    /** Correo al responsable del inmueble y al agente que muestra (si no son quien agendó). */
-    private function notify(int $apid, int $uid): void
-    {
-        $appt = (new AppointmentModel())->withDetails()->find($apid);
-        if (! $appt) {
-            return;
-        }
-        $me = (new UserModel())->select('uname')->find($uid);
-
-        $to = [];
-        if ((int) $appt['owner_uid'] !== $uid && ! empty($appt['owner_email'])) {
-            $to[$appt['owner_email']] = 'owner';
-        }
-        if ((int) $appt['shower_uid'] !== $uid && ! empty($appt['shower_email']) && ! isset($to[$appt['shower_email']])) {
-            $to[$appt['shower_email']] = 'shower';
-        }
-
-        foreach ($to as $email => $role) {
-            $mail = \Config\Services::email();
-            $mail->setTo($email);
-            $mail->setSubject('Nueva cita · ' . FichaTecnica::code((int) $appt['pid']) . ' · ' . Agenda::when($appt['starts_at'], $appt['ends_at']));
-            $mail->setMessage(view('agent/emails/appointment', [
-                'a'       => $appt,
-                'role'    => $role,
-                'creator' => $me['uname'] ?? 'Un agente',
-                'link'    => site_url('agente/agenda?semana=' . substr($appt['starts_at'], 0, 10) . '&cita=' . $apid),
-            ]));
-            $mail->setMailType('html');
-            if (! $mail->send(false)) {
-                log_message('error', 'Error enviando aviso de cita: ' . $mail->printDebugger(['headers']));
-            }
-        }
     }
 }
