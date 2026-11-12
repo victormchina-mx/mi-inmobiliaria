@@ -17,7 +17,7 @@ $baseUrl = site_url('agente/ficha/' . $f['pid']);
 ?>
 
 <?= $this->section('styles') ?>
-<link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<?= asset_url('css/ficha.css') ?>">
 <?= $this->endSection() ?>
 
