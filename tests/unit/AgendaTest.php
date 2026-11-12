@@ -63,7 +63,7 @@ final class AgendaTest extends CIUnitTestCase
     {
         [$data, $errors] = Agenda::fromInput([
             'pid' => '25', 'date' => '2026-11-10', 'time' => '10:30', 'duration' => '90',
-            'shower_uid' => '2', 'client_name' => ' Ana Ruiz ', 'client_phone' => '55 1234 5678',
+            'shower_uid' => '2', 'client_name' => ' Ana Ruiz ', 'client_phone' => '55 1234 5678', 'client_email' => 'ana@example.com',
             'result' => 'offer', 'next_date' => '',
         ], [1, 2]);
 
@@ -72,7 +72,9 @@ final class AgendaTest extends CIUnitTestCase
         $this->assertSame('2026-11-10 12:00:00', $data['ends_at']);
         $this->assertSame('Ana Ruiz', $data['client_name']);
         $this->assertSame('offer', $data['result']);
-        $this->assertNull($data['client_email']);
+        // Ya no se guardan teléfono ni correo del cliente
+        $this->assertArrayNotHasKey('client_phone', $data);
+        $this->assertArrayNotHasKey('client_email', $data);
         $this->assertNull($data['next_date']);
     }
 
@@ -80,7 +82,7 @@ final class AgendaTest extends CIUnitTestCase
     {
         [, $errors] = Agenda::fromInput([
             'pid' => '', 'date' => '2026-02-30', 'time' => '25:00', 'shower_uid' => '9',
-            'client_name' => '', 'client_email' => 'no-es-correo', 'result' => 'hackeado',
+            'client_name' => '', 'result' => 'hackeado',
         ], [1, 2]);
 
         $this->assertContains('Elige el inmueble.', $errors);
@@ -88,6 +90,5 @@ final class AgendaTest extends CIUnitTestCase
         $this->assertContains('Elige la hora de la cita.', $errors);
         $this->assertContains('Elige el agente que muestra el inmueble.', $errors);
         $this->assertContains('Escribe el nombre del cliente.', $errors);
-        $this->assertContains('El correo del cliente no es válido.', $errors);
     }
 }

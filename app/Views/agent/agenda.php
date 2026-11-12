@@ -234,13 +234,9 @@ $ready = $ready ?? false;
                             </select>
                             </label>
                         </div>
-                        <div class="ag-row">
-                            <label class="ag-field"><span>Cliente prospecto</span><input type="text" name="client_name" value="<?= esc($val('client_name'), 'attr') ?>" maxlength="120" required placeholder="Nombre y apellido" autocomplete="off"></label>
-                            <label class="ag-field"><span>WhatsApp / teléfono</span><input type="tel" name="client_phone" value="<?= esc($val('client_phone'), 'attr') ?>" maxlength="30" placeholder="55 1234 5678" autocomplete="off"></label>
-                        </div>
-                        <label class="ag-field"><span>Correo <small>(opcional)</small></span><input type="email" name="client_email" value="<?= esc($val('client_email'), 'attr') ?>" maxlength="150" placeholder="cliente@correo.com" autocomplete="off"></label>
+                        <label class="ag-field"><span>Cliente prospecto</span><input type="text" name="client_name" value="<?= esc($val('client_name'), 'attr') ?>" maxlength="120" required placeholder="Nombre y apellido" autocomplete="off"></label>
                         <label class="ag-field"><span>Notas del cliente <small>(opcional)</small></span><input type="text" name="client_notes" value="<?= esc($val('client_notes'), 'attr') ?>" maxlength="500" placeholder="Presupuesto, crédito, qué busca…" autocomplete="off"></label>
-                        <p class="ag-private"><i class="ms" aria-hidden="true">lock</i>Teléfono, correo y notas solo los ven quien agenda, quien muestra y el responsable del inmueble.</p>
+                        <p class="ag-private"><i class="ms" aria-hidden="true">lock</i>Las notas solo las ven quien agenda, quien muestra y el responsable del inmueble.</p>
 
                         <div class="ag-warn" data-warn role="alert"<?= $conflicts ? '' : ' hidden' ?>>
                             <i class="ms" aria-hidden="true">warning</i>
@@ -298,7 +294,6 @@ $ready = $ready ?? false;
                         <dt>Agente que muestra</dt><dd><?= esc($current['shower_name'] ?? '') ?></dd>
                         <dt>Cliente</dt><dd><?= esc(Agenda::shortName($current['client_name'])) ?></dd>
                     </dl>
-                    <p class="ag-private"><i class="ms" aria-hidden="true">lock</i>Los datos de contacto del cliente solo los ven quien agendó, quien muestra y el responsable del inmueble.</p>
                 </div>
                 <div class="ag-sec">
                     <h4 class="ag-legend-h"><span class="ag-num ag-num--gold">3</span>Resultado</h4>

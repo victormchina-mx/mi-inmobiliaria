@@ -10,9 +10,9 @@ use Throwable;
  *
  * - Todos los agentes ven todas las citas: inmueble, horario, quién muestra
  *   y el resultado.
- * - Los datos de contacto del cliente (teléfono, correo, notas) y la
- *   edición solo son para quien agendó, quien muestra y el responsable del
- *   inmueble. Los demás ven el nombre abreviado ("Ana R.").
+ * - Las notas del cliente y la edición solo son para quien agendó, quien
+ *   muestra y el responsable del inmueble. Los demás ven el nombre
+ *   abreviado ("Ana R.").
  */
 class Agenda
 {
@@ -211,16 +211,8 @@ class Agenda
         }
 
         $name  = $text('client_name', 120);
-        $phone = $text('client_phone', 30);
-        $email = $text('client_email', 150);
         if ($name === '') {
             $errors[] = 'Escribe el nombre del cliente.';
-        }
-        if ($phone !== '' && ! preg_match('/^[\d\s()+\-.]{7,30}$/', $phone)) {
-            $errors[] = 'El teléfono del cliente no es válido.';
-        }
-        if ($email !== '' && ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors[] = 'El correo del cliente no es válido.';
         }
 
         $result = (string) ($in['result'] ?? 'pending');
@@ -240,8 +232,6 @@ class Agenda
             'ends_at'      => $start ? (new DateTimeImmutable($start))->modify('+' . $dur . ' minutes')->format('Y-m-d H:i:s') : null,
             'shower_uid'   => $shower,
             'client_name'  => $name,
-            'client_phone' => $phone !== '' ? $phone : null,
-            'client_email' => $email !== '' ? $email : null,
             'client_notes' => $text('client_notes', 500) ?: null,
             'result'       => $result,
             'comments'     => $text('comments', 2000) ?: null,
