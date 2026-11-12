@@ -1,11 +1,11 @@
 <?php
-/** Plantilla «Residencial»: horizontal 1500×1000, azul con collage e iconos. Datos: FichaTecnica::data() */
+/** Plantilla «Residencial»: horizontal 1500×1000, azul marino con dorado, collage e iconos. Datos: FichaTecnica::data() */
 $photo = static fn (int $i) => isset($f['photos'][$i]) ? 'background-image:url(' . esc($f['photos'][$i], 'attr') . ')' : '';
 $a     = $f['agent'];
 ?>
 <div class="ficha ft-re" data-ficha-node data-w="1500" data-h="1000">
     <div class="ft-re__side">
-        <img class="ft-re__logo" src="<?= base_url('images/logo/restatelg_white.png') ?>" alt="Real Estate">
+        <div class="ft-re__logo"><?= view('agent/ficha/_logo', ['id' => 'residencial']) ?></div>
         <div class="ft-re__script"><?= esc($f['type']) ?> en</div>
         <h2 class="ft-re__op"><?= esc(mb_strtoupper($f['operation'])) ?></h2>
         <?php if ($f['zone'] !== ''): ?><div class="ft-re__place"><?= esc($f['zone']) ?><?php if ($f['area'] !== ''): ?><small><?= esc($f['area']) ?></small><?php endif ?></div><?php endif ?>

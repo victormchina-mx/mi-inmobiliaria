@@ -1,12 +1,12 @@
 <?php
-/** Plantilla «Elegante»: vertical tamaño carta, oscuro con dorado. Datos: FichaTecnica::data() */
+/** Plantilla «Elegante»: vertical tamaño carta, azul marino con dorado (colores Frices). Datos: FichaTecnica::data() */
 $photo = static fn (int $i) => isset($f['photos'][$i]) ? 'background-image:url(' . esc($f['photos'][$i], 'attr') . ')' : '';
 $a     = $f['agent'];
 ?>
 <div class="ficha ft-el" data-ficha-node data-w="850" data-h="1100">
     <div class="ft-el__photo" style="<?= $photo(0) ?>"></div>
     <div class="ft-el__band"></div>
-    <img class="ft-el__logo" src="<?= base_url('images/logo/restatelg_white.png') ?>" alt="Real Estate">
+    <div class="ft-el__logo"><?= view('agent/ficha/_logo', ['id' => 'elegante']) ?></div>
     <span class="ft-el__code"><?= esc($f['code']) ?></span>
     <div class="ft-el__head">
         <h2 class="ft-el__title"><?= esc($f['type']) ?> en <em><?= esc($f['operation']) ?></em><?php if ($f['zone'] !== ''): ?><span><?= esc($f['zone']) ?></span><?php endif ?></h2>
