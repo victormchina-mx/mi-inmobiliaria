@@ -143,6 +143,7 @@ $jsonFlags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JS
                         <div class="featured-thumb hover-zoomer mb-4">
                             <div class="overlay-black overflow-hidden position-relative">
                                 <img src="<?= esc(thumb_url('property', $p['pimage'], 800)) ?>" srcset="<?= esc(thumb_srcset('property', $p['pimage'])) ?>" sizes="(min-width: 992px) 350px, (min-width: 768px) 50vw, 100vw" alt="<?= esc($p['title']) ?>" loading="lazy" decoding="async">
+                                <?= view('partials/agency_chip', ['p' => $p]) ?>
                                 <div class="featured bg-success text-white">Nuevo</div>
                                 <div class="sale bg-success text-white text-capitalize"><i class="ms" aria-hidden="true"><?= $p['stype'] === 'sale' ? 'sell' : 'key' ?></i>Para <?= $p['stype'] === 'sale' ? 'Venta' : 'Renta' ?></div>
                                 <div class="price text-primary"><b>$<?= number_format($p['price'], 0) ?></b> <span class="text-white"><?= esc($p['size']) ?> m²</span></div>

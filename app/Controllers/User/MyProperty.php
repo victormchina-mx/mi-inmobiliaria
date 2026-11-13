@@ -5,6 +5,7 @@ namespace App\Controllers\User;
 use App\Libraries\PropertyLocation;
 use App\Libraries\WhyText;
 use App\Libraries\AgendaService;
+use App\Libraries\Agency;
 use App\Libraries\PropertyExtras;
 use App\Libraries\PropertyImages;
 use App\Controllers\BaseController;
@@ -95,7 +96,8 @@ class MyProperty extends BaseController
             'mapimage'       => $images['mapimage'],
             'topmapimage'    => $images['topmapimage'],
             'groundmapimage' => $images['groundmapimage'],
-        ] + PropertyLocation::fromRequest($this->request) + WhyText::fromRequest($this->request) + PropertyExtras::fromRequest($this->request));
+        ] + PropertyLocation::fromRequest($this->request) + WhyText::fromRequest($this->request) + PropertyExtras::fromRequest($this->request)
+            + Agency::propertyFields((int) session()->get('uid')));
 
         if ($saved === false) {
             $errors = $this->propertyModel->errors();

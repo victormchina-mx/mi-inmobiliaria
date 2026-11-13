@@ -183,3 +183,14 @@
   /* Bootstrap fuerza al imprimir un ancho mínimo de 992 px que encoge la ficha */
   body.ft-printing, body.ft-printing .container, body.ft-printing .container-fluid { min-width: 0 !important; }
 }
+
+/* ---------- Logo de cada inmobiliaria (agent/ficha/_brand.php) ---------- */
+.fx-brand--img { display: inline-flex; align-items: center; padding: .55em .8em; border-radius: .7em; background: rgba(255, 255, 255, .96); box-shadow: 0 10px 24px -14px rgba(0, 0, 0, .55); }
+.fx-brand--img img { display: block; height: 4.6em !important; max-width: 16em !important; width: auto !important; object-fit: contain; }
+.fx-brand--vick { display: inline-flex; align-items: flex-end; gap: .4em; }
+.fx-brand--vick img { display: block; height: 3.6em !important; width: auto !important; }
+.ficha .fx-brand--vick span { font-family: 'Fraunces', serif; font-style: italic; font-size: 1.05em; color: var(--fx-gold-light); padding-bottom: .2em; }
+.fx-brand__ini { display: flex; align-items: center; justify-content: center; width: 4.8em; height: 4.8em; flex: none; border-radius: 50%; border: .25em solid var(--fx-gold); font-family: 'Fraunces', serif; font-size: 1em; font-weight: 700; color: var(--fx-gold); }
+.ficha .fx-brand__ini { font-size: 1.9em; width: 2.5em; height: 2.5em; border-width: .12em; }
+.ficha .fx-brand--text .fx-logo__text b { font-family: 'Fraunces', serif; font-size: 1.45em; letter-spacing: .03em; color: var(--fx-gold-light); }
+.ficha .fx-brand--text .fx-logo__text small { font-style: normal; font-family: inherit; color: var(--fx-gold-light); opacity: .85; }

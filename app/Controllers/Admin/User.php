@@ -135,6 +135,24 @@ class User extends BaseController
             $data['uimage'] = $imageName;
         }
 
+        // Inmobiliaria (vacío = independiente); sus propiedades se mueven con él si se pide
+        if (\App\Libraries\Agency::ready() && $this->request->getPost('agency_id') !== null) {
+            $agencyId = (int) $this->request->getPost('agency_id');
+            $agencyId = $agencyId && \App\Libraries\Agency::find($agencyId) ? $agencyId : null;
+            $data['agency_id'] = $agencyId;
+
+            $oldAgency = ! empty($user['agency_id']) ? (int) $user['agency_id'] : null;
+            if ($agencyId !== $oldAgency) {
+                if ($this->request->getPost('move_properties')) {
+                    (new \App\Models\PropertyModel())->builder()->where('uid', $uid)->update(['agency_id' => $agencyId]);
+                }
+                // Deja de ser encargado de su inmobiliaria anterior
+                if ($oldAgency) {
+                    (new \App\Models\AgencyModel())->builder()->where('agency_id', $oldAgency)->where('manager_uid', $uid)->update(['manager_uid' => null]);
+                }
+            }
+        }
+
         $this->userModel->skipValidation(true)->update($uid, $data);
 
         $redirect = match($newType) {

@@ -2,7 +2,6 @@
 
 namespace App\Libraries;
 
-use App\Filters\AgentOnlyFilter;
 use App\Models\AppointmentModel;
 use App\Models\PropertyModel;
 use App\Models\UserModel;
@@ -14,25 +13,28 @@ use App\Models\UserModel;
  */
 class AgendaService
 {
-    /** Agentes y constructores (uid => fila), los que pueden mostrar. */
-    public static function agents(): array
+    /**
+     * Agentes que pueden mostrar (uid => fila): los de la inmobiliaria del
+     * usuario, o solo él si es independiente (App\Libraries\Agency).
+     */
+    public static function agents(int $uid): array
     {
-        $rows = (new UserModel())->select('uid, uname, uimage')->whereIn('utype', AgentOnlyFilter::TYPES)->orderBy('uname')->findAll();
-
-        return array_column($rows, null, 'uid');
+        return Agency::agentsFor($uid);
     }
 
     /**
      * Inmuebles para elegir (pid => datos de la sección 1): los disponibles
      * y, si se está editando o se pidió otro, también ese.
      */
-    public static function properties(int $include = 0): array
+    public static function properties(int $include, int $uid): array
     {
         $model = (new PropertyModel())->withOwner()->groupStart()->where('property.status', 'available');
         if ($include) {
             $model->orWhere('property.pid', $include);
         }
-        $rows = $model->groupEnd()->orderBy('property.pid', 'DESC')->findAll();
+        $model->groupEnd();
+        Agency::scopeProperties($model, $uid);   // solo los de su inmobiliaria
+        $rows = $model->orderBy('property.pid', 'DESC')->findAll();
 
         $out = [];
         foreach ($rows as $p) {

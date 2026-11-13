@@ -5390,3 +5390,20 @@ a.ap-tab:hover { text-decoration: none; border-color: #C9A96E; color: var(--them
 .prop-features li::before { content: ''; position: absolute; left: 0; top: 2px; width: 20px; height: 20px; border-radius: 50%; background: #FBF7EF; border: 1px solid rgba(201, 169, 110, .55); }
 .prop-features li::after { content: ''; position: absolute; left: 7px; top: 6px; width: 6px; height: 10px; border: solid #B07D4F; border-width: 0 2px 2px 0; transform: rotate(45deg); }
 @media (max-width: 575px) { .prop-features ul { grid-template-columns: minmax(0, 1fr); } }
+
+/* ================================================================
+   Inmobiliaria de la propiedad (partials/agency_chip.php)
+   ================================================================ */
+.featured-thumb .ag-chip { position: absolute; top: 14px; left: 14px; z-index: 99; display: inline-flex; align-items: center; gap: 7px; max-width: calc(100% - 150px); padding: 4px 11px 4px 4px; border-radius: 20px; background: rgba(255, 255, 255, .95); box-shadow: 0 8px 18px -10px rgba(15, 23, 42, .55); font-size: 12px; font-weight: 800; color: #0F172A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
+.ag-chip__mark { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; flex: none; border-radius: 50%; font-size: 10px; font-weight: 800; overflow: hidden; }
+.ag-chip__mark svg { width: 18px; height: 18px; }
+.ag-chip__mark img { width: 100%; height: 100%; object-fit: contain; background: #fff; padding: 2px; }
+.ag-chip .ag-chip__ic { margin: 0 0 0 4px; font-size: 16px; color: #6B7280; }
+.ag-band { display: flex; align-items: center; gap: 12px; margin: 16px 0 4px; padding: 10px 14px; border-radius: 12px; }
+.ag-band__mark { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; flex: none; border-radius: 50%; border: 2px solid currentColor; font-weight: 800; font-size: 14px; }
+.ag-band__mark svg { width: 32px; height: 32px; }
+.ag-band .ag-band__mark:has(svg) { border: 0; }
+.ag-band__plate { display: inline-flex; padding: 4px 8px; border-radius: 8px; background: #fff; }
+.ag-band__plate img { height: 34px; width: auto; max-width: 140px; object-fit: contain; }
+.ag-band__name { font-weight: 800; font-size: 15px; letter-spacing: .02em; }
+.ag-band__name.is-frices { font-family: 'Cinzel', 'Fraunces', serif; text-transform: uppercase; font-size: 14px; }

@@ -6,6 +6,7 @@ use App\Libraries\PropertyLocation;
 use App\Libraries\WhyText;
 use App\Libraries\PropertyExtras;
 use App\Libraries\PropertyImages;
+use App\Libraries\Agency;
 use App\Libraries\HtmlSanitizer;
 use App\Models\PropertyModel;
 
@@ -122,6 +123,7 @@ class Properties extends BaseApiController
         if ($pid === null) {
             $data['uid']        = $uid;
             $data['isFeatured'] = 0; // solo el admin destaca propiedades
+            $data += Agency::propertyFields($uid);   // en la inmobiliaria de su agente
             $this->propertyModel->insert($data);
 
             return $this->jsonResponse([

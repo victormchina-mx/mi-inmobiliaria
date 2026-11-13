@@ -301,6 +301,7 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
                                 </ul>
                             </div>
                         </div>
+                        <?= view('partials/agency_chip', ['p' => $property, 'band' => true]) ?>
 
                         <?php if ($telHref || $waHref || $mailHref): ?>
                         <div class="agent-card__actions">

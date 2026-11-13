@@ -24,6 +24,8 @@ class PropertyModel extends Model
         'why_text',
         // Ficha técnica y agenda (app/Database/sql/2026-11-property-extras.sql)
         'land_size', 'parking', 'age_years', 'keys_status', 'keys_note',
+        // Inmobiliaria (app/Database/sql/2026-11-agencies.sql); vacío = independiente
+        'agency_id',
     ];
 
     protected $validationRules = [
@@ -37,8 +39,17 @@ class PropertyModel extends Model
     /** Propiedades con datos del agente/dueño */
     public function withOwner(): static
     {
-        return $this->select('property.*, user.uname, user.uemail, user.uphone, user.uimage, user.utype')
-                    ->join('user', 'user.uid = property.uid');
+        $this->select('property.*, user.uname, user.uemail, user.uphone, user.uimage, user.utype')
+             ->join('user', 'user.uid = property.uid');
+
+        // Inmobiliaria de la propiedad (logo y nombre en el portal)
+        if (\App\Libraries\Agency::ready()) {
+            $this->select('agency.name AS agency_name, agency.slug AS agency_slug, agency.logo AS agency_logo, '
+                    . 'agency.color_primary AS agency_primary, agency.color_accent AS agency_accent')
+                 ->join('agency', 'agency.agency_id = property.agency_id', 'left');
+        }
+
+        return $this;
     }
 
     /** Scope: solo propiedades destacadas (y visibles al público) */
@@ -75,6 +86,12 @@ class PropertyModel extends Model
         }
         if (! empty($filters['stype'])) {
             $this->where('property.stype', $filters['stype']);
+        }
+        if (! empty($filters['agency']) && \App\Libraries\Agency::ready()) {
+            // "independiente" = sin inmobiliaria; si no, el id de la inmobiliaria
+            $filters['agency'] === 'independiente'
+                ? $this->where('property.agency_id', null)
+                : $this->where('property.agency_id', (int) $filters['agency']);
         }
         if (! empty($filters['city'])) {
             // El campo dice "Ciudad, colonia...": coincidencia parcial en

@@ -5,7 +5,7 @@ $a = $f['agent'];
 <div class="ficha ft-mo" data-ficha-node data-w="1080" data-h="1080">
     <div class="ft-mo__photo" style="<?= isset($f['photos'][0]) ? 'background-image:url(' . esc($f['photos'][0], 'attr') . ')' : '' ?>"></div>
     <div class="ft-mo__shade"></div>
-    <div class="ft-mo__logo"><?= view('agent/ficha/_logo', ['id' => 'moderna']) ?></div>
+    <div class="ft-mo__logo"><?= view('agent/ficha/_brand', ['id' => 'moderna', 'brand' => $brand ?? null]) ?></div>
     <div class="ft-mo__box">
         <small><?= esc(mb_strtoupper($f['type'] . ' en')) ?></small>
         <h2><?= esc(mb_strtoupper($f['operation'])) ?><?php if ($f['zone'] !== ''): ?><span><?= esc($f['zone']) ?></span><?php endif ?></h2>

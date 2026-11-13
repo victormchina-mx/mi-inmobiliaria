@@ -110,6 +110,14 @@ $routes->group('admin', ['filter' => 'admin-auth'], static function ($routes) {
     $routes->post('property/edit/(:num)', 'Admin\Property::update/$1');
     $routes->post('property/delete/(:num)', 'Admin\Property::delete/$1');
 
+    // Inmobiliarias (Admin\Agency)
+    $routes->get('agencies', 'Admin\Agency::index');
+    $routes->get('agencies/create', 'Admin\Agency::create');
+    $routes->post('agencies/create', 'Admin\Agency::store');
+    $routes->get('agencies/edit/(:num)', 'Admin\Agency::edit/$1');
+    $routes->post('agencies/edit/(:num)', 'Admin\Agency::update/$1');
+    $routes->post('agencies/delete/(:num)', 'Admin\Agency::delete/$1');
+
     // Usuarios / agentes / builders
     $routes->get('users', 'Admin\User::index');
     $routes->get('users/edit/(:num)', 'Admin\User::edit/$1');

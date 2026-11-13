@@ -33,9 +33,25 @@
                         <option value="sale" <?= ($filters['stype'] ?? '') === 'sale' ? 'selected' : '' ?>>Venta</option>
                     </select>
                 </div>
+                <?php $agencyList = \App\Libraries\Agency::all(true); ?>
+                <?php if ($agencyList): ?>
+                <div class="col-md-2">
+                    <input type="text" class="form-control mb-2" name="city" placeholder="Ciudad..." value="<?= esc($filters['city'] ?? '') ?>">
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control mb-2" name="agency" aria-label="Inmobiliaria">
+                        <option value="">Inmobiliaria</option>
+                        <?php foreach ($agencyList as $ag): ?>
+                        <option value="<?= (int) $ag['agency_id'] ?>" <?= ($filters['agency'] ?? '') === (string) $ag['agency_id'] ? 'selected' : '' ?>><?= esc(\App\Libraries\Agency::shortName($ag['name'])) ?></option>
+                        <?php endforeach ?>
+                        <option value="independiente" <?= ($filters['agency'] ?? '') === 'independiente' ? 'selected' : '' ?>>Independientes</option>
+                    </select>
+                </div>
+                <?php else: ?>
                 <div class="col-md-4">
                     <input type="text" class="form-control mb-2" name="city" placeholder="Ciudad..." value="<?= esc($filters['city'] ?? '') ?>">
                 </div>
+                <?php endif ?>
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-success w-100">Buscar</button>
                 </div>
@@ -52,6 +68,7 @@
                 <div class="featured-thumb hover-zoomer">
                     <div class="overlay-black overflow-hidden position-relative">
                         <img src="<?= esc(thumb_url('property', $p['pimage'], 800)) ?>" srcset="<?= esc(thumb_srcset('property', $p['pimage'])) ?>" sizes="(min-width: 992px) 350px, (min-width: 768px) 50vw, 100vw" alt="<?= esc($p['title']) ?>" loading="lazy" decoding="async">
+                        <?= view('partials/agency_chip', ['p' => $p]) ?>
                         <div class="sale bg-success text-white text-capitalize"><i class="ms" aria-hidden="true"><?= $p['stype'] === 'sale' ? 'sell' : 'key' ?></i>Para <?= $p['stype'] === 'sale' ? 'Venta' : 'Renta' ?></div>
                         <div class="price text-primary"><b>$<?= number_format($p['price'], 0) ?></b></div>
                         <a href="<?= site_url('property/' . $p['pid']) ?>" class="thumb-link" tabindex="-1" aria-hidden="true"></a>

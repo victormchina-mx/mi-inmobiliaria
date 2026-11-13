@@ -3,7 +3,7 @@
 <?php
 /**
  * "Todas las propiedades" (Mi cuenta, solo agentes y constructores):
- * propiedades de todos los agentes con Agendar cita (agente/agenda) y Ficha técnica.
+ * las propiedades de su inmobiliaria (App\Libraries\Agency) con Agendar cita (agente/agenda) y Ficha técnica.
  * Controlador: AgentArea::properties · Estilos: .ap-* en style.css
  */
 use App\Libraries\FichaTecnica;
@@ -33,8 +33,16 @@ $hasFilters   = array_filter(array_diff_key($filters, ['status' => 1])) || $filt
         <div class="ap-head">
             <div>
                 <span class="sec-eyebrow">Área de agentes</span>
+                <?php if (! empty($agency)): ?>
+                <h2 class="sec-title">Propiedades de <?= esc($agency['name']) ?></h2>
+                <p class="ap-sub">Las propiedades de los agentes de tu inmobiliaria, con su ficha técnica para compartir con tus clientes.</p>
+                <?php elseif (\App\Libraries\Agency::ready()): ?>
+                <h2 class="sec-title">Tus propiedades</h2>
+                <p class="ap-sub">Eres agente independiente: aquí ves tus propiedades y generas su ficha técnica.</p>
+                <?php else: ?>
                 <h2 class="sec-title">Propiedades de todos los agentes</h2>
                 <p class="ap-sub">Genera la ficha técnica de cualquier propiedad para compartirla con tus clientes.</p>
+                <?php endif ?>
             </div>
             <nav class="ap-tabs" aria-label="Área de agentes">
                 <span class="ap-tab is-active" aria-current="page"><i class="ms" aria-hidden="true">location_on</i>Propiedades</span>

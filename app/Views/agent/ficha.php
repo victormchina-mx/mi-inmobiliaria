@@ -8,12 +8,14 @@
  * Controlador: AgentArea::ficha · Datos: App\Libraries\FichaTecnica
  * Plantillas: app/Views/agent/ficha/{elegante,moderna,residencial}.php
  * Estilos: public/css/ficha.css · JS: public/js/ficha.js
+ * Logo y colores: los de la inmobiliaria del inmueble (App\Libraries\Agency).
  */
 use App\Libraries\FichaTecnica;
 
 $f       = $ficha;
 $missing = array_diff(['Terreno', 'Estacionamientos', 'Antigüedad'], array_map(static fn ($x) => in_array($x['label'], ['Estacionamiento'], true) ? 'Estacionamientos' : ($x['label'] === 'A estrenar' ? 'Antigüedad' : $x['label']), $f['facts']));
 $baseUrl = site_url('agente/ficha/' . $f['pid']);
+$brand   = $brand ?? \App\Libraries\Agency::brand(null);   // logo y colores de la inmobiliaria
 ?>
 
 <?= $this->section('styles') ?>
@@ -29,7 +31,7 @@ $baseUrl = site_url('agente/ficha/' . $f['pid']);
 
 <?= $this->section('content') ?>
 
-<div class="full-row ft-page" data-ficha data-code="<?= esc($f['code'], 'attr') ?>" data-url="<?= esc($f['url'], 'attr') ?>"
+<div class="full-row ft-page" style="<?= esc(\App\Libraries\Agency::cssVars($brand['colors']), 'attr') ?>" data-ficha data-code="<?= esc($f['code'], 'attr') ?>" data-url="<?= esc($f['url'], 'attr') ?>"
      data-nearby="<?= site_url('property/' . $f['pid'] . '/cerca') ?>">
     <div class="container-fluid ft-wrap">
         <!-- Opciones -->
@@ -88,7 +90,7 @@ $baseUrl = site_url('agente/ficha/' . $f['pid']);
         <div class="ft-preview" data-preview>
             <?php foreach (array_keys(FichaTecnica::TEMPLATES) as $key): ?>
             <div class="ft-stage<?= $key === $template ? ' is-active' : '' ?>" data-stage="<?= $key ?>">
-                <?= view('agent/ficha/' . $key, ['f' => $f]) ?>
+                <?= view('agent/ficha/' . $key, ['f' => $f, 'brand' => $brand]) ?>
             </div>
             <?php endforeach ?>
         </div>

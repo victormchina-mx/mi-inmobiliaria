@@ -157,6 +157,8 @@ class Property extends BaseController
             'type'  => $param('type'),
             'stype' => $param('stype'),
             'city'  => mb_substr($param('city'), 0, 100),
+            // Inmobiliaria: su id o "independiente"
+            'agency' => preg_match('/^(\d{1,9}|independiente)$/', $param('agency')) ? $param('agency') : '',
         ];
 
         $properties = $this->propertyModel->withOwner()->applyFilters($filters)->findAll();
