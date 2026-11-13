@@ -137,11 +137,22 @@ $facts  = array_filter([
                     <?php if ($address !== ''): ?>
                     <p class="loc-card__addr text-capitalize"><i class="ms" aria-hidden="true">location_on</i><?= esc($address) ?></p>
                     <?php endif ?>
+                    <?php
+                    // Solo los datos que tiene (un terreno no dice "0 Rec.")
+                    $locStats = array_filter([
+                        ['square_foot', (int) $property['size'], 'm²'],
+                        ['landscape', (int) ($property['land_size'] ?? 0), 'm² terreno'],
+                        ['bed', (int) $property['bedroom'], 'Rec.'],
+                        ['bathtub', (int) $property['bathroom'], 'Baños'],
+                    ], static fn ($s) => $s[1] > 0);
+                    ?>
+                    <?php if ($locStats): ?>
                     <ul class="loc-card__stats">
-                        <li><i class="ms" aria-hidden="true">square_foot</i><?= esc($property['size']) ?> m²</li>
-                        <li><i class="ms" aria-hidden="true">bed</i><?= esc($property['bedroom']) ?> Rec.</li>
-                        <li><i class="ms" aria-hidden="true">bathtub</i><?= esc($property['bathroom']) ?> Baños</li>
+                        <?php foreach ($locStats as [$icon, $value, $label]): ?>
+                        <li><i class="ms" aria-hidden="true"><?= $icon ?></i><?= $value ?> <?= $label ?></li>
+                        <?php endforeach ?>
                     </ul>
+                    <?php endif ?>
                     <div class="loc-card__btns">
                         <a href="<?= esc($routeUrl, 'attr') ?>" class="loc-btn loc-btn--gold" target="_blank" rel="noopener"><i class="ms" aria-hidden="true">directions</i>Cómo llegar</a>
                         <a href="<?= $detailUrl ?>" class="loc-btn loc-btn--ghost">Ver propiedad</a>

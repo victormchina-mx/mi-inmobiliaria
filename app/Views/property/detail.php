@@ -174,9 +174,12 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
 
                 <!-- Características -->
                 <div class="property-details">
+                    <?php $stats = view('partials/property_stats', ['p' => $property, 'full' => true]); ?>
+                    <?php if (trim($stats) !== ''): ?>
                     <div class="bg-gray property-quantity px-4 pt-4 w-100">
-                        <?= view('partials/property_stats', ['p' => $property, 'full' => true]) ?>
+                        <?= $stats ?>
                     </div>
+                    <?php endif ?>
 <?php
                     // "2nd Floor" / "2 Floor" → 2: así se puede decir "Piso 2 de 2"
                     $floorNum = static fn ($v): ?int => preg_match('/\d+/', (string) $v, $m) ? (int) $m[0] : null;
@@ -213,7 +216,11 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
                         <span class="sec-eyebrow">Detalles</span>
                         <h2 class="sec-title">Características</h2>
                     </div>
+                        <?php if (preg_match('/class="[^"]*\bcol-/', $safeFeature)): ?>
                         <div class="row"><?= $safeFeature ?></div>
+                        <?php else: /* Texto o lista simple (p. ej. <ul><li>…): lista con palomitas */ ?>
+                        <div class="prop-features"><?= $safeFeature ?></div>
+                        <?php endif ?>
                     </section>
                     <?php endif ?>
 
