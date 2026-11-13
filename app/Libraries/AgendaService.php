@@ -106,6 +106,14 @@ class AgendaService
         }
     }
 
+    /** Al borrar una propiedad se borran sus citas (si la agenda está lista). */
+    public static function deleteForProperty(int $pid): void
+    {
+        if ($pid > 0 && Agenda::ready()) {
+            (new AppointmentModel())->where('pid', $pid)->delete();
+        }
+    }
+
     /**
      * Cita para la app: los datos privados (notas, comentarios, próxima
      * acción) solo van si quien pregunta puede editarla.

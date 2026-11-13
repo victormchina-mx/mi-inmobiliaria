@@ -5,6 +5,7 @@ namespace App\Controllers\Api;
 use App\Libraries\PropertyLocation;
 use App\Libraries\WhyText;
 use App\Libraries\PropertyExtras;
+use App\Libraries\PropertyImages;
 use App\Libraries\HtmlSanitizer;
 use App\Models\PropertyModel;
 
@@ -130,6 +131,8 @@ class Properties extends BaseApiController
         }
 
         $this->propertyModel->update($pid, $data);
+        // Fotos reemplazadas desde la app: se borra el archivo anterior
+        PropertyImages::removeUnused(PropertyImages::replaced($existing, $data));
 
         return $this->jsonResponse(['pid' => $pid, 'message' => 'Propiedad actualizada correctamente.']);
     }
