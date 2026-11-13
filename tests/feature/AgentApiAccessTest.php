@@ -23,6 +23,7 @@ final class AgentApiAccessTest extends CIUnitTestCase
             ['post', 'api/v1/agenda'],
             ['post', 'api/v1/agenda/3'],
             ['post', 'api/v1/agenda/3/delete'],
+            ['post', 'api/v1/me/photo'],
         ];
     }
 
