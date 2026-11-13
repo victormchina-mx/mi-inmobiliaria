@@ -13,7 +13,11 @@ use App\Models\PropertyModel;
  */
 class AgentListing
 {
-    public static function search(array $filters): array
+    /**
+     * @param int|null $uid usuario que busca: solo ve las propiedades de su
+     *                      inmobiliaria (o las suyas si es independiente)
+     */
+    public static function search(array $filters, ?int $uid = null): array
     {
         $filters += ['q' => '', 'stype' => '', 'type' => '', 'city' => '', 'agent' => '', 'keys' => '', 'status' => 'available'];
 
@@ -49,6 +53,10 @@ class AgentListing
                     ->orLike('property.state', $filters['q'])
                     ->groupEnd();
             }
+        }
+
+        if ($uid !== null) {
+            Agency::scopeProperties($model, $uid);
         }
 
         return $model->orderBy('property.pid', 'DESC')->findAll();

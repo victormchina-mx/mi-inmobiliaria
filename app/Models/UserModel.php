@@ -13,6 +13,8 @@ class UserModel extends Model
 
     protected $allowedFields = [
         'uname', 'uemail', 'uphone', 'upass', 'utype', 'uimage',
+        // Inmobiliaria (app/Database/sql/2026-11-agencies.sql); vacío = independiente
+        'agency_id',
     ];
 
     protected $validationRules = [

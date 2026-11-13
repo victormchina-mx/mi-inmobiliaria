@@ -59,6 +59,21 @@
                                     <option value="builder" <?= old('utype', $user['utype']) === 'builder' ? 'selected' : '' ?>>Constructor</option>
                                 </select>
                             </div>
+                            <?php if (\App\Libraries\Agency::ready()): ?>
+                            <div class="form-group">
+                                <label>Inmobiliaria</label>
+                                <select name="agency_id" class="form-control">
+                                    <option value="">Independiente (sin inmobiliaria)</option>
+                                    <?php foreach (\App\Libraries\Agency::all() as $ag): ?>
+                                    <option value="<?= (int) $ag['agency_id'] ?>" <?= (int) old('agency_id', (string) ($user['agency_id'] ?? '')) === (int) $ag['agency_id'] ? 'selected' : '' ?>><?= esc($ag['name']) ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                                <div class="custom-control custom-checkbox mt-2">
+                                    <input type="checkbox" class="custom-control-input" id="move-props" name="move_properties" value="1" checked>
+                                    <label class="custom-control-label" for="move-props">Si cambia de inmobiliaria, mover también sus propiedades</label>
+                                </div>
+                            </div>
+                            <?php endif ?>
                         </div>
                     </div>
 

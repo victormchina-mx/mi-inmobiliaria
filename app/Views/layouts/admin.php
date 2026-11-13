@@ -45,6 +45,8 @@
                     <li class="menu-title"><span>Principal</span></li>
                     <li><a href="<?= site_url('admin/dashboard') ?>"><i class="fe fe-home"></i> Dashboard</a></li>
 
+                    <li><a href="<?= site_url('admin/agencies') ?>"><i class="fe fe-layout"></i> Inmobiliarias</a></li>
+
                     <li class="submenu">
                         <a href="#"><i class="fe fe-users"></i> Usuarios <span class="menu-arrow"></span></a>
                         <ul>

@@ -26,11 +26,18 @@ class AppointmentModel extends Model
      */
     public function withDetails(): static
     {
-        return $this->select('appointment.*, property.title, property.location, property.city, property.state, property.uid AS owner_uid, '
+        $this->select('appointment.*, property.title, property.location, property.city, property.state, property.uid AS owner_uid, '
                 . 'owner.uname AS owner_name, owner.uemail AS owner_email, shower.uname AS shower_name, shower.uemail AS shower_email')
             ->join('property', 'property.pid = appointment.pid', 'left')
             ->join('user owner', 'owner.uid = property.uid', 'left')
             ->join('user shower', 'shower.uid = appointment.shower_uid', 'left');
+
+        // Inmobiliaria del inmueble (solo cuando ya existen las columnas)
+        if (\App\Libraries\Agency::ready()) {
+            $this->select('property.agency_id AS property_agency');
+        }
+
+        return $this;
     }
 
     /** Citas que se empalman con [inicio, fin), opcionalmente sin contar una. */

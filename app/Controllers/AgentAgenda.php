@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\Agency;
 use App\Libraries\Agenda;
 use App\Libraries\AgendaService;
 use App\Models\AppointmentModel;
@@ -26,7 +27,7 @@ class AgentAgenda extends BaseController
 
         $uid    = $this->uid();
         $monday = Agenda::weekStart($this->request->getGet('semana'));
-        $agents = AgendaService::agents();
+        $agents = AgendaService::agents($uid);
         $filter = (string) $this->request->getGet('agente');
         if ($filter !== 'mias' && ! isset($agents[(int) $filter])) {
             $filter = '';
@@ -36,6 +37,7 @@ class AgentAgenda extends BaseController
         $model = (new AppointmentModel())->withDetails()
             ->where('appointment.starts_at >=', $monday->format('Y-m-d 00:00:00'))
             ->where('appointment.starts_at <', $monday->modify('+7 days')->format('Y-m-d 00:00:00'));
+        Agency::scopeAppointments($model, $uid);   // solo las de su inmobiliaria
         if ($filter !== '') {
             $who = $filter === 'mias' ? $uid : (int) $filter;
             $model->groupStart()
@@ -51,12 +53,12 @@ class AgentAgenda extends BaseController
         $citaId  = (int) $this->request->getGet('cita');
         if ($citaId) {
             $current = (new AppointmentModel())->withDetails()->find($citaId);
-            if (! $current) {
+            if (! $current || ! Agency::canSeeAppointment($current, $uid)) {
                 return redirect()->to('agente/agenda')->with('error', 'La cita ya no existe.');
             }
         }
 
-        $properties = AgendaService::properties($current['pid'] ?? (int) $this->request->getGet('pid'));
+        $properties = AgendaService::properties($current['pid'] ?? (int) $this->request->getGet('pid'), $uid);
         $prefillPid = (int) $this->request->getGet('pid');
         $today      = new DateTimeImmutable('today');
         $fecha      = Agenda::date($this->request->getGet('fecha'));
@@ -101,9 +103,9 @@ class AgentAgenda extends BaseController
             }
         }
 
-        [$data, $errors] = Agenda::fromInput($this->request->getPost(), array_keys(AgendaService::agents()));
+        [$data, $errors] = Agenda::fromInput($this->request->getPost(), array_keys(AgendaService::agents($uid)));
         $property = $data['pid'] ? (new PropertyModel())->withOwner()->find($data['pid']) : null;
-        if (! $errors && ! $property) {
+        if (! $errors && (! $property || ! Agency::canSee($property, $uid))) {
             $errors[] = 'El inmueble no existe.';
         }
         if ($errors) {
@@ -152,7 +154,7 @@ class AgentAgenda extends BaseController
 
         $in = $this->request->getGet();
         $in['client_name'] = 'x';   // solo se revisan inmueble, horario y agente
-        [$data, $errors] = Agenda::fromInput($in, array_keys(AgendaService::agents()));
+        [$data, $errors] = Agenda::fromInput($in, array_keys(AgendaService::agents($this->uid())));
         $messages = $data['starts_at'] && ! $errors ? AgendaService::conflictsFor($data, (int) ($in['apid'] ?? 0) ?: null) : [];
 
         return $this->response->setJSON(['ok' => true, 'messages' => $messages]);

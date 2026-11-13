@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Libraries\PropertyLocation;
 use App\Libraries\WhyText;
 use App\Libraries\AgendaService;
+use App\Libraries\Agency;
 use App\Libraries\PropertyExtras;
 use App\Libraries\PropertyImages;
 use App\Controllers\BaseController;
@@ -131,7 +132,9 @@ class Property extends BaseController
             'status'     => $this->request->getPost('status'),
             'isFeatured' => (int) $this->request->getPost('isFeatured'),
             'uid'        => (int) $this->request->getPost('uid'),
-        ] + PropertyLocation::fromRequest($this->request) + WhyText::fromRequest($this->request) + PropertyExtras::fromRequest($this->request);
+        ] + PropertyLocation::fromRequest($this->request) + WhyText::fromRequest($this->request) + PropertyExtras::fromRequest($this->request)
+          // La propiedad queda en la inmobiliaria de su agente
+          + Agency::propertyFields((int) $this->request->getPost('uid'));
     }
 
     private function uploadImages(array $existing = []): array

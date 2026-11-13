@@ -3,6 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Filters\AgentOnlyFilter;
+use App\Libraries\Agency;
 use App\Libraries\Agenda;
 use App\Libraries\AgendaService;
 use App\Libraries\AgentListing;
@@ -33,7 +34,7 @@ class Agent extends BaseApiController
             'q'      => $get('q'),
             'stype'  => in_array($get('stype'), ['sale', 'rent'], true) ? $get('stype') : '',
             'status' => in_array($status, ['available', 'sold', 'rented', 'cancelled', 'all'], true) ? $status : 'available',
-        ]);
+        ], (int) $this->currentUid());
 
         $keysReady = PropertyExtras::ready();
         $items     = array_map(static fn (array $p) => [
@@ -71,6 +72,7 @@ class Agent extends BaseApiController
         $model = (new AppointmentModel())->withDetails()
             ->where('appointment.starts_at >=', $monday->format('Y-m-d 00:00:00'))
             ->where('appointment.starts_at <', $monday->modify('+7 days')->format('Y-m-d 00:00:00'));
+        Agency::scopeAppointments($model, $uid);   // solo las de su inmobiliaria
         if ($filter === 'mias' || ctype_digit($filter)) {
             $who = $filter === 'mias' ? $uid : (int) $filter;
             $model->groupStart()
@@ -94,8 +96,9 @@ class Agent extends BaseApiController
             return $denied;
         }
 
-        $properties = array_values(AgendaService::properties((int) $this->request->getGet('pid')));
-        $agents     = array_values(array_map(static fn ($a) => ['uid' => (int) $a['uid'], 'uname' => $a['uname']], AgendaService::agents()));
+        $uid        = (int) $this->currentUid();
+        $properties = array_values(AgendaService::properties((int) $this->request->getGet('pid'), $uid));
+        $agents     = array_values(array_map(static fn ($a) => ['uid' => (int) $a['uid'], 'uname' => $a['uname']], AgendaService::agents($uid)));
 
         return $this->jsonResponse([
             'properties' => $properties,
@@ -113,7 +116,7 @@ class Agent extends BaseApiController
         }
 
         $appt = (new AppointmentModel())->withDetails()->find($apid);
-        if (! $appt) {
+        if (! $appt || ! Agency::canSeeAppointment($appt, (int) $this->currentUid())) {
             return $this->jsonResponse(['error' => 'La cita ya no existe.'], 404);
         }
 
@@ -129,7 +132,7 @@ class Agent extends BaseApiController
 
         $in                = $this->request->getGet();
         $in['client_name'] = 'x';   // solo se revisan inmueble, horario y agente
-        [$data, $errors]   = Agenda::fromInput($in, array_keys(AgendaService::agents()));
+        [$data, $errors]   = Agenda::fromInput($in, array_keys(AgendaService::agents((int) $this->currentUid())));
         $messages          = $data['starts_at'] && ! $errors ? AgendaService::conflictsFor($data, (int) ($in['apid'] ?? 0) ?: null) : [];
 
         return $this->jsonResponse(['messages' => $messages]);
@@ -155,8 +158,9 @@ class Agent extends BaseApiController
         }
 
         $in              = $this->body();
-        [$data, $errors] = Agenda::fromInput($in, array_keys(AgendaService::agents()));
-        if (! $errors && ! (new PropertyModel())->find($data['pid'])) {
+        [$data, $errors] = Agenda::fromInput($in, array_keys(AgendaService::agents($uid)));
+        $property        = $data['pid'] ? (new PropertyModel())->find($data['pid']) : null;
+        if (! $errors && (! $property || ! Agency::canSee($property, $uid))) {
             $errors[] = 'El inmueble no existe.';
         }
         if ($errors) {

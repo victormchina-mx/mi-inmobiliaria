@@ -5,7 +5,7 @@ $a     = $f['agent'];
 ?>
 <div class="ficha ft-re" data-ficha-node data-w="1500" data-h="1000">
     <div class="ft-re__side">
-        <div class="ft-re__logo"><?= view('agent/ficha/_logo', ['id' => 'residencial']) ?></div>
+        <div class="ft-re__logo"><?= view('agent/ficha/_brand', ['id' => 'residencial', 'brand' => $brand ?? null]) ?></div>
         <div class="ft-re__script"><?= esc($f['type']) ?> en</div>
         <h2 class="ft-re__op"><?= esc(mb_strtoupper($f['operation'])) ?></h2>
         <?php if ($f['zone'] !== ''): ?><div class="ft-re__place"><?= esc($f['zone']) ?><?php if ($f['area'] !== ''): ?><small><?= esc($f['area']) ?></small><?php endif ?></div><?php endif ?>

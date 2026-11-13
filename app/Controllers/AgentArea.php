@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\Agency;
 use App\Libraries\AgentListing;
 use App\Libraries\FichaTecnica;
 use App\Libraries\PropertyExtras;
@@ -44,10 +45,11 @@ class AgentArea extends BaseController
             'status' => isset(self::STATUSES[$get('status')]) ? $get('status') : 'available',
         ];
 
-        $properties = AgentListing::search($filters);
+        $uid        = (int) session()->get('uid');
+        $properties = AgentListing::search($filters, $uid);   // solo las de su inmobiliaria
 
-        // Opciones de los filtros, a partir de lo que existe
-        $all    = (new PropertyModel())->select('property.city, property.type, property.uid')->findAll();
+        // Opciones de los filtros, a partir de lo que ve el agente
+        $all    = Agency::scopeProperties((new PropertyModel())->select('property.city, property.type, property.uid'), $uid)->findAll();
         $cities = array_values(array_unique(array_filter(array_map(static fn ($p) => trim((string) $p['city']), $all))));
         $types  = array_values(array_unique(array_filter(array_column($all, 'type'))));
         sort($cities);
@@ -63,6 +65,7 @@ class AgentArea extends BaseController
             'types'      => $types,
             'agents'     => $agents,
             'keysReady'  => PropertyExtras::ready(),
+            'agency'     => Agency::ofUser($uid),
         ]);
     }
 
@@ -70,7 +73,8 @@ class AgentArea extends BaseController
     {
         $property = (new PropertyModel())->withOwner()->find($pid);
 
-        if (! $property) {
+        // Solo propiedades de su inmobiliaria (o las suyas si es independiente)
+        if (! $property || ! Agency::canSee($property, (int) session()->get('uid'))) {
             return redirect()->to('agente/propiedades')->with('error', 'Propiedad no encontrada.');
         }
 
@@ -91,6 +95,8 @@ class AgentArea extends BaseController
             'noindex'    => true,
             'property'   => $property,
             'ficha'      => FichaTecnica::data($property, $agent),
+            // Logo y colores de la inmobiliaria del inmueble (o Real Estate by Vick)
+            'brand'      => Agency::brand(Agency::find(isset($property['agency_id']) ? (int) $property['agency_id'] : null)),
             'template'   => $template,
             'useOwner'   => $useOwner,
             'isOwner'    => (int) $property['uid'] === (int) session()->get('uid'),

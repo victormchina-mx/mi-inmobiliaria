@@ -6,7 +6,7 @@ $a     = $f['agent'];
 <div class="ficha ft-el" data-ficha-node data-w="850" data-h="1100">
     <div class="ft-el__photo" style="<?= $photo(0) ?>"></div>
     <div class="ft-el__band"></div>
-    <div class="ft-el__logo"><?= view('agent/ficha/_logo', ['id' => 'elegante']) ?></div>
+    <div class="ft-el__logo"><?= view('agent/ficha/_brand', ['id' => 'elegante', 'brand' => $brand ?? null]) ?></div>
     <span class="ft-el__code"><?= esc($f['code']) ?></span>
     <div class="ft-el__head">
         <h2 class="ft-el__title"><?= esc($f['type']) ?> en <em><?= esc($f['operation']) ?></em><?php if ($f['zone'] !== ''): ?><span><?= esc($f['zone']) ?></span><?php endif ?></h2>
