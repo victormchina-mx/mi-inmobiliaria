@@ -30,7 +30,8 @@ $emblem  = '<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M66.5 25 L24 
     <?php if ($name === ''): ?>
     <i class="ms ag-chip__ic" aria-hidden="true">person</i>Independiente
     <?php else: ?>
-    <span class="ag-chip__mark" style="background: <?= esc($primary, 'attr') ?>; color: <?= esc($accent, 'attr') ?>;">
+    <?php /* Con logo en imagen: círculo blanco (el color de fondo se asomaba como un aro oscuro) */ ?>
+    <span class="ag-chip__mark<?= $icon ? ' has-img' : '' ?>"<?= $icon ? '' : ' style="background: ' . esc($primary, 'attr') . '; color: ' . esc($accent, 'attr') . ';"' ?>>
         <?php if ($icon): ?><img src="<?= esc($icon, 'attr') ?>" alt="" loading="lazy"<?= $icon !== $logo ? ' class="is-icon"' : '' ?>><?php elseif ($frices): ?><?= $emblem ?><?php else: ?><?= esc(Agency::initials($name)) ?><?php endif ?>
     </span><?= esc(Agency::shortName($name)) ?>
     <?php endif ?>

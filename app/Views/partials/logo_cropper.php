@@ -6,7 +6,7 @@
  * Variables:
  *   $input  id del <input type="file"> del logo (p. ej. 'fu-logo')
  *   $src    URL del logo actual ('' si no hay)
- *   $bg     color de fondo del círculo (color principal de la inmobiliaria)
+ *   $bg     (ya no se usa: el círculo es blanco, como en el portal)
  *   $name   nombre corto para la vista previa de la insignia
  */
 $bg = $bg ?? '#0A2342';
@@ -35,10 +35,10 @@ $bg = $bg ?? '#0A2342';
 .lc { margin-top: 12px; padding: 14px; border: 1px solid #E5E7EB; border-radius: 12px; background: #FAFAF8; }
 .lc__label { font-weight: 600; font-size: 14px; margin-bottom: 10px; }
 .lc__body { display: flex; gap: 18px; align-items: flex-start; flex-wrap: wrap; }
-.lc__view { position: relative; width: 200px; height: 200px; flex: none; border-radius: 50%; overflow: hidden; background: var(--lc-bg); cursor: grab; touch-action: none; box-shadow: 0 0 0 4px #fff, 0 0 0 5px #D1D5DB; }
+.lc__view { position: relative; width: 200px; height: 200px; flex: none; border-radius: 50%; overflow: hidden; background: #fff; cursor: grab; touch-action: none; box-shadow: 0 0 0 4px #fff, 0 0 0 5px #D1D5DB; }
 .lc__view.is-dragging { cursor: grabbing; }
 .lc__img { position: absolute; left: 0; top: 0; max-width: none !important; user-select: none; pointer-events: none; transform-origin: 0 0; }
-.lc__empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 30px; text-align: center; color: rgba(255,255,255,.75); font-size: 13px; }
+.lc__empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 30px; text-align: center; color: #9CA3AF; font-size: 13px; }
 .lc:not(.is-ready) .lc__side { opacity: .5; pointer-events: none; }
 .lc__side { flex: 1; min-width: 200px; }
 .lc__zoom { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; font-size: 12px; color: #6B7280; }
@@ -46,6 +46,6 @@ $bg = $bg ?? '#0A2342';
 .lc__help { margin: 8px 0; font-size: 12px; color: #6B7280; }
 .lc__preview { display: flex; align-items: center; gap: 16px; margin-top: 12px; }
 .lc__chip { display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px 4px 4px; border-radius: 20px; background: #fff; box-shadow: 0 4px 12px -6px rgba(15,23,42,.4); font-size: 12px; font-weight: 800; }
-.lc__chip canvas { width: 24px; height: 24px; border-radius: 50%; background: var(--lc-bg); }
-.lc__big { width: 46px; height: 46px; border-radius: 50%; background: var(--lc-bg); }
+.lc__chip canvas { width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px rgba(15,23,42,.12); }
+.lc__big { width: 46px; height: 46px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px rgba(15,23,42,.12); }
 </style>
