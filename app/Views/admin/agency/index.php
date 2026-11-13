@@ -43,7 +43,7 @@ use App\Libraries\Agency;
                         <td>
                             <div class="d-flex align-items-center">
                                 <span class="ag-logo" style="background: <?= esc($a['color_primary'], 'attr') ?>; color: <?= esc($a['color_accent'], 'attr') ?>;">
-                                    <?php if (! empty($a['logo'])): ?><img src="<?= esc(Agency::logoUrl($a['logo']), 'attr') ?>" alt=""><?php elseif ($a['slug'] === 'frices'): ?><svg width="34" height="34" viewBox="0 0 100 100" aria-hidden="true"><path d="M66.5 25 L24 50 H33.5 V72 H55 V58 H66 V67 Q66 71.5 70.5 70.5 C80 68 90 59 91.8 46.3 A42 42 0 0 0 50 8 A42 42 0 0 0 8 50 A42 42 0 0 0 50 92 A42 42 0 0 0 89.3 64.7" fill="none" stroke="<?= esc($a['color_accent'], 'attr') ?>" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg><?php else: ?><?= esc(Agency::initials($a['name'])) ?><?php endif ?>
+                                    <?php if (! empty($a['logo'])): $ic = Agency::iconUrl($a['logo']); ?><img src="<?= esc($ic, 'attr') ?>" alt=""<?= $ic !== Agency::logoUrl($a['logo']) ? ' class="is-icon"' : '' ?>><?php elseif ($a['slug'] === 'frices'): ?><svg width="34" height="34" viewBox="0 0 100 100" aria-hidden="true"><path d="M66.5 25 L24 50 H33.5 V72 H55 V58 H66 V67 Q66 71.5 70.5 70.5 C80 68 90 59 91.8 46.3 A42 42 0 0 0 50 8 A42 42 0 0 0 8 50 A42 42 0 0 0 50 92 A42 42 0 0 0 89.3 64.7" fill="none" stroke="<?= esc($a['color_accent'], 'attr') ?>" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg><?php else: ?><?= esc(Agency::initials($a['name'])) ?><?php endif ?>
                                 </span>
                                 <div class="ml-3">
                                     <a href="<?= site_url('admin/agencies/edit/' . $id) ?>" class="font-weight-bold text-dark"><?= esc($a['name']) ?></a>
@@ -74,6 +74,7 @@ use App\Libraries\Agency;
 .ag-table td { vertical-align: middle; }
 .ag-logo { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; flex: none; border-radius: 12px; font-weight: 800; overflow: hidden; }
 .ag-logo img { width: 100%; height: 100%; object-fit: contain; background: #fff; padding: 4px; }
+.ag-logo img.is-icon { object-fit: cover; background: transparent; padding: 0; border-radius: 50%; }
 .ag-sw { display: inline-block; width: 18px; height: 18px; margin-right: 4px; border-radius: 5px; border: 1px solid rgba(0,0,0,.1); vertical-align: middle; }
 .ag-indep td { background: #FAFAF8; color: #6B7280; font-size: 13px; }
 </style>

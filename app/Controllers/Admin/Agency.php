@@ -176,6 +176,12 @@ class Agency extends BaseController
             $logo = null;
         }
 
+        // Parte del logo que se ve en el círculo (la eligió el usuario)
+        $icon = (string) $this->request->getPost('logo_icon');
+        if ($logo && $icon !== '') {
+            Agencies::saveIcon($logo, $icon);
+        }
+
         $data = [
             'name'          => $name,
             'logo'          => $logo,
@@ -216,9 +222,11 @@ class Agency extends BaseController
     private function deleteLogo(?string $file): void
     {
         if ($file && preg_match('/^[A-Za-z0-9][A-Za-z0-9._-]*$/', $file)) {
-            $path = FCPATH . 'uploads/agency/' . $file;
-            if (is_file($path)) {
-                @unlink($path);
+            foreach ([$file, Agencies::iconFile($file)] as $f) {
+                $path = FCPATH . 'uploads/agency/' . $f;
+                if (is_file($path)) {
+                    @unlink($path);
+                }
             }
         }
     }

@@ -22,6 +22,7 @@ $primary = Agency::color($p['agency_primary'] ?? '') ?? Agency::NEUTRAL['primary
 $accent  = Agency::color($p['agency_accent'] ?? '') ?? Agency::NEUTRAL['accent'];
 $frices  = ($p['agency_slug'] ?? '') === 'frices' && empty($p['agency_logo']);
 $logo    = ! empty($p['agency_logo']) ? Agency::logoUrl($p['agency_logo']) : null;
+$icon    = ! empty($p['agency_logo']) ? Agency::iconUrl($p['agency_logo']) : null;   // recorte del círculo
 $emblem  = '<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M66.5 25 L24 50 H33.5 V72 H55 V58 H66 V67 Q66 71.5 70.5 70.5 C80 68 90 59 91.8 46.3 A42 42 0 0 0 50 8 A42 42 0 0 0 8 50 A42 42 0 0 0 50 92 A42 42 0 0 0 89.3 64.7" fill="none" stroke="' . $accent . '" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 ?>
 <?php if (! $band): ?>
@@ -30,7 +31,7 @@ $emblem  = '<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M66.5 25 L24 
     <i class="ms ag-chip__ic" aria-hidden="true">person</i>Independiente
     <?php else: ?>
     <span class="ag-chip__mark" style="background: <?= esc($primary, 'attr') ?>; color: <?= esc($accent, 'attr') ?>;">
-        <?php if ($logo): ?><img src="<?= esc($logo, 'attr') ?>" alt="" loading="lazy"><?php elseif ($frices): ?><?= $emblem ?><?php else: ?><?= esc(Agency::initials($name)) ?><?php endif ?>
+        <?php if ($icon): ?><img src="<?= esc($icon, 'attr') ?>" alt="" loading="lazy"<?= $icon !== $logo ? ' class="is-icon"' : '' ?>><?php elseif ($frices): ?><?= $emblem ?><?php else: ?><?= esc(Agency::initials($name)) ?><?php endif ?>
     </span><?= esc(Agency::shortName($name)) ?>
     <?php endif ?>
 </span>

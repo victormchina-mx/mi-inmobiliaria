@@ -77,4 +77,12 @@ final class AgencyTest extends CIUnitTestCase
         $this->assertStringEndsWith('uploads/agency/logo.png', (string) $other['logo']);
         $this->assertSame(['primary' => '#0F3D2E', 'accent' => Agency::FRICES['accent']], $other['colors']);
     }
+
+    public function testCircleCropOnlyAcceptsRealPngImages(): void
+    {
+        $this->assertSame('1794_ab12-icon.png', Agency::iconFile('1794_ab12.jpg'));
+        $this->assertFalse(Agency::saveIcon('x.png', 'data:image/svg+xml;base64,PHN2Zz48L3N2Zz4='));
+        $this->assertFalse(Agency::saveIcon('x.png', 'data:image/png;base64,' . base64_encode('<?php echo 1;')));
+        $this->assertFalse(Agency::saveIcon('x.png', 'no es una imagen'));
+    }
 }

@@ -303,6 +303,56 @@ class Agency
         return $file ? base_url('uploads/agency/' . rawurlencode($file)) : null;
     }
 
+    /**
+     * Versión del logo para los lugares redondos (insignia del portal, lista
+     * del admin): el recorte que el usuario eligió en el círculo al subirlo
+     * ("{logo}-icon.png"). Si no hay recorte, el logo completo.
+     */
+    public static function iconUrl(?string $logo): ?string
+    {
+        if (! $logo) {
+            return null;
+        }
+        $icon = self::iconFile($logo);
+
+        return is_file(FCPATH . 'uploads/agency/' . $icon) ? base_url('uploads/agency/' . rawurlencode($icon)) . '?v=' . filemtime(FCPATH . 'uploads/agency/' . $icon) : self::logoUrl($logo);
+    }
+
+    /** "1794_ab12.png" → "1794_ab12-icon.png" */
+    public static function iconFile(string $logo): string
+    {
+        return pathinfo($logo, PATHINFO_FILENAME) . '-icon.png';
+    }
+
+    /**
+     * Guarda el recorte del círculo (data:image/png;base64 del navegador):
+     * se vuelve a dibujar con GD para no guardar nada que no sea imagen.
+     */
+    public static function saveIcon(string $logo, string $dataUrl): bool
+    {
+        if (! preg_match('#^data:image/png;base64,([A-Za-z0-9+/=]+)$#', $dataUrl, $m) || strlen($m[1]) > 700_000) {
+            return false;
+        }
+        $bytes = base64_decode($m[1], true);
+        $info  = $bytes !== false ? @getimagesizefromstring($bytes) : false;
+        if (! $info || $info[2] !== IMAGETYPE_PNG || $info[0] > 1024 || $info[1] > 1024 || ! function_exists('imagecreatefromstring')) {
+            return false;
+        }
+        $img = @imagecreatefromstring($bytes);
+        if (! $img) {
+            return false;
+        }
+        imagesavealpha($img, true);
+        $dir = FCPATH . 'uploads/agency';
+        if (! is_dir($dir)) {
+            @mkdir($dir, 0755, true);
+        }
+        $ok = imagepng($img, $dir . '/' . self::iconFile($logo), 9);
+        imagedestroy($img);
+
+        return $ok;
+    }
+
     /** Texto corto para el portal: "Grupo Inmobiliario Frices" → "Frices". */
     public static function shortName(string $name): string
     {
