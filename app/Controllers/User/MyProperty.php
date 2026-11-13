@@ -61,7 +61,7 @@ class MyProperty extends BaseController
 
         $images = $this->uploadPropertyImages();
 
-        $this->propertyModel->insert([
+        $saved = $this->propertyModel->insert([
             'title'          => $this->request->getPost('title'),
             'pcontent'       => HtmlSanitizer::clean($this->request->getPost('content')),
             'type'           => $this->request->getPost('ptype'),
@@ -94,6 +94,12 @@ class MyProperty extends BaseController
             'topmapimage'    => $images['topmapimage'],
             'groundmapimage' => $images['groundmapimage'],
         ] + PropertyLocation::fromRequest($this->request) + WhyText::fromRequest($this->request) + PropertyExtras::fromRequest($this->request));
+
+        if ($saved === false) {
+            $errors = $this->propertyModel->errors();
+
+            return redirect()->back()->withInput()->with('error', $errors ? implode(' ', $errors) : 'No se pudo guardar la propiedad. Intenta de nuevo.');
+        }
 
         return redirect()->to('my-properties')->with('success', 'Propiedad publicada correctamente.');
     }
@@ -142,7 +148,7 @@ class MyProperty extends BaseController
 
         $images = $this->uploadPropertyImages($property);
 
-        $this->propertyModel->update($pid, [
+        $saved = $this->propertyModel->update($pid, [
             'title'          => $this->request->getPost('title'),
             'pcontent'       => HtmlSanitizer::clean($this->request->getPost('content')),
             'type'           => $this->request->getPost('ptype'),
@@ -172,6 +178,12 @@ class MyProperty extends BaseController
             'topmapimage'    => $images['topmapimage'],
             'groundmapimage' => $images['groundmapimage'],
         ] + PropertyLocation::fromRequest($this->request) + WhyText::fromRequest($this->request) + PropertyExtras::fromRequest($this->request));
+
+        if ($saved === false) {
+            $errors = $this->propertyModel->errors();
+
+            return redirect()->back()->withInput()->with('error', $errors ? implode(' ', $errors) : 'No se pudo guardar la propiedad. Intenta de nuevo.');
+        }
 
         return redirect()->to('my-properties')->with('success', 'Propiedad actualizada correctamente.');
     }

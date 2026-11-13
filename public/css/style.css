@@ -5380,3 +5380,13 @@ a.ap-tab:hover { text-decoration: none; border-color: #C9A96E; color: var(--them
   .ag-info { grid-template-columns: 1fr; gap: 0; }
   .ag-info dd { margin-bottom: 6px; }
 }
+
+/* Características escritas como texto o lista simple (property/detail.php):
+   lista con palomitas en dos columnas. Las de la plantilla (col-md-4) siguen igual. */
+.prop-features { color: #4B5563; font-size: 15px; line-height: 1.6; }
+.prop-features p { margin: 0 0 8px; }
+.prop-features ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 24px; margin: 4px 0 0; padding: 0; list-style: none; }
+.prop-features li { position: relative; padding-left: 30px; color: #374151; }
+.prop-features li::before { content: ''; position: absolute; left: 0; top: 2px; width: 20px; height: 20px; border-radius: 50%; background: #FBF7EF; border: 1px solid rgba(201, 169, 110, .55); }
+.prop-features li::after { content: ''; position: absolute; left: 7px; top: 6px; width: 6px; height: 10px; border: solid #B07D4F; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+@media (max-width: 575px) { .prop-features ul { grid-template-columns: minmax(0, 1fr); } }

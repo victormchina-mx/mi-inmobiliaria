@@ -46,7 +46,13 @@ class Property extends BaseController
 
         $images = $this->uploadImages();
 
-        $this->propertyModel->insert(array_merge($this->getFormData(), $images));
+        $saved = $this->propertyModel->insert(array_merge($this->getFormData(), $images));
+
+        if ($saved === false) {
+            $errors = $this->propertyModel->errors();
+
+            return redirect()->back()->withInput()->with('error', $errors ? implode(' ', $errors) : 'No se pudo guardar la propiedad. Intenta de nuevo.');
+        }
 
         return redirect()->to('admin/property')->with('success', 'Propiedad creada correctamente.');
     }
@@ -70,7 +76,13 @@ class Property extends BaseController
         $existing = $this->propertyModel->find($pid);
         $images   = $this->uploadImages($existing);
 
-        $this->propertyModel->update($pid, array_merge($this->getFormData(), $images));
+        $saved = $this->propertyModel->update($pid, array_merge($this->getFormData(), $images));
+
+        if ($saved === false) {
+            $errors = $this->propertyModel->errors();
+
+            return redirect()->back()->withInput()->with('error', $errors ? implode(' ', $errors) : 'No se pudo guardar la propiedad. Intenta de nuevo.');
+        }
 
         return redirect()->to('admin/property')->with('success', 'Propiedad actualizada correctamente.');
     }
