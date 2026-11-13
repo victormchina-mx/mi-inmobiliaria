@@ -44,6 +44,12 @@ $action = $isEdit ? site_url('admin/agencies/edit/' . $a['agency_id']) : site_ur
                         'current'  => ! empty($a['logo']) ? Agency::logoUrl($a['logo']) : '',
                         'optional' => true,
                     ]) ?>
+                    <?= view('partials/logo_cropper', [
+                        'input' => 'fu-logo',
+                        'src'   => ! empty($a['logo']) ? Agency::logoUrl($a['logo']) : '',
+                        'bg'    => $val('color_primary', '#0A2342'),
+                        'name'  => Agency::shortName($val('name') ?: 'Inmobiliaria'),
+                    ]) ?>
                     <?php if (! empty($a['logo'])): ?>
                     <div class="custom-control custom-checkbox mt-1"><input type="checkbox" class="custom-control-input" id="rm-logo" name="remove_logo" value="1"><label class="custom-control-label" for="rm-logo">Quitar el logo</label></div>
                     <?php elseif (($a['slug'] ?? '') === 'frices'): ?>
@@ -140,7 +146,11 @@ $action = $isEdit ? site_url('admin/agencies/edit/' . $a['agency_id']) : site_ur
     ['primary', 'accent'].forEach(function (k) {
         var pick = document.querySelector('[data-ag-pick="' + k + '"]');
         var hex  = document.querySelector('[data-ag-hex="' + k + '"]');
-        var apply = function (v) { if (/^#[0-9a-f]{6}$/i.test(v)) { prev.style.setProperty(k === 'primary' ? '--p' : '--a', v); } };
+        var apply = function (v) {
+            if (!/^#[0-9a-f]{6}$/i.test(v)) { return; }
+            prev.style.setProperty(k === 'primary' ? '--p' : '--a', v);
+            if (k === 'primary') { document.querySelectorAll('[data-logo-cropper]').forEach(function (c) { c.style.setProperty('--lc-bg', v); }); }
+        };
         pick.addEventListener('input', function () { hex.value = pick.value.toUpperCase(); apply(pick.value); });
         hex.addEventListener('input', function () { if (/^#[0-9a-f]{6}$/i.test(hex.value)) { pick.value = hex.value; } apply(hex.value); });
     });
@@ -153,4 +163,8 @@ $action = $isEdit ? site_url('admin/agencies/edit/' . $a['agency_id']) : site_ur
     }
 })();
 </script>
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script src="<?= asset_url('js/logo-cropper.js') ?>"></script>
 <?= $this->endSection() ?>
