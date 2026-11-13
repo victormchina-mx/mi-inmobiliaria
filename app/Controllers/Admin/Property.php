@@ -4,7 +4,9 @@ namespace App\Controllers\Admin;
 
 use App\Libraries\PropertyLocation;
 use App\Libraries\WhyText;
+use App\Libraries\AgendaService;
 use App\Libraries\PropertyExtras;
+use App\Libraries\PropertyImages;
 use App\Controllers\BaseController;
 use App\Models\CityModel;
 use App\Models\PropertyModel;
@@ -84,12 +86,23 @@ class Property extends BaseController
             return redirect()->back()->withInput()->with('error', $errors ? implode(' ', $errors) : 'No se pudo guardar la propiedad. Intenta de nuevo.');
         }
 
+        // Fotos reemplazadas: se borra el archivo anterior
+        PropertyImages::removeUnused(PropertyImages::replaced($existing, $images));
+
         return redirect()->to('admin/property')->with('success', 'Propiedad actualizada correctamente.');
     }
 
     public function delete(int $pid): RedirectResponse
     {
+        $property = $this->propertyModel->find($pid);
+        if (! $property) {
+            return redirect()->to('admin/property')->with('error', 'La propiedad ya no existe.');
+        }
+
         $this->propertyModel->delete($pid);
+        // También sus fotos y planos (si ninguna otra propiedad los usa) y sus citas
+        PropertyImages::removeUnused(PropertyImages::filesOf($property));
+        AgendaService::deleteForProperty($pid);
 
         return redirect()->to('admin/property')->with('success', 'Propiedad eliminada.');
     }
