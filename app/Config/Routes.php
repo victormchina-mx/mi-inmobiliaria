@@ -53,6 +53,12 @@ $routes->group('', ['filter' => 'user-auth'], static function ($routes) {
 $routes->group('agente', ['filter' => 'agent-only'], static function ($routes) {
     $routes->get('propiedades', 'AgentArea::properties');
     $routes->get('ficha/(:num)', 'AgentArea::ficha/$1');
+    // Mi inmobiliaria (solo la encargada): identidad y agentes
+    $routes->get('inmobiliaria', 'AgencyPanel::index');
+    $routes->post('inmobiliaria', 'AgencyPanel::save');
+    $routes->get('inmobiliaria/agentes', 'AgencyPanel::agents');
+    $routes->post('inmobiliaria/agentes/agregar', 'AgencyPanel::addAgent');
+    $routes->post('inmobiliaria/agentes/(:num)/quitar', 'AgencyPanel::removeAgent/$1');
     $routes->get('agenda', 'AgentAgenda::index');
     $routes->get('agenda/conflictos', 'AgentAgenda::conflicts');
     $routes->post('agenda/guardar', 'AgentAgenda::save');
