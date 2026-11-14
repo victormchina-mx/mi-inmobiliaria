@@ -112,13 +112,7 @@
                     </div>
                 </div>
                 <?php endforeach ?>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Tamaño (m²)</label>
-                        <input type="number" name="asize" class="form-control" min="0"
-                               value="<?= esc($property['size'] ?? old('asize') ?? 0) ?>">
-                    </div>
-                </div>
+                <?= view('partials/property_size_fields', ['property' => $property ?? []]) ?>
                 <?= view('partials/property_extras_fields', ['property' => $property ?? []]) ?>
 
                 <!-- Precio, ciudad, estado -->

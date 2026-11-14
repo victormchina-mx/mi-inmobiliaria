@@ -59,7 +59,8 @@ class PropertyExtras
             if ($onlyIfSent && $value === null) {
                 continue;
             }
-            $data[$field] = self::number($value, $max);
+            // Terreno con hasta 2 decimales; lo demás, entero
+            $data[$field] = $field === 'land_size' ? self::decimal($value, $max) : self::number($value, $max);
         }
 
         $keys = $request->getPost('keys_status');
@@ -84,6 +85,25 @@ class PropertyExtras
         }
 
         return max(0, min($max, (int) round((float) $value)));
+    }
+
+    /** Número con hasta 2 decimales entre 0 y $max ("1,250.5" → 1250.5), o null. */
+    public static function decimal(mixed $value, int $max): ?float
+    {
+        $value = is_string($value) ? str_replace([',', ' '], ['', ''], trim($value)) : $value;
+        if ($value === null || $value === '' || ! is_numeric($value)) {
+            return null;
+        }
+
+        return max(0.0, min((float) $max, round((float) $value, 2)));
+    }
+
+    /** m² para mostrar: 496 → "496", 496.5 → "496.5", 1250.25 → "1,250.25". */
+    public static function area(mixed $value): string
+    {
+        $text = number_format((float) $value, 2);
+
+        return str_contains($text, '.') ? rtrim(rtrim($text, '0'), '.') : $text;
     }
 
     public static function keysLabel(?string $status): string

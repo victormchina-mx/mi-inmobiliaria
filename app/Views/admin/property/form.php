@@ -155,13 +155,7 @@
                                        value="<?= esc($property['price'] ?? old('price')) ?>" required>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Tamaño (m²)</label>
-                                <input type="number" name="asize" class="form-control"
-                                       value="<?= esc($property['size'] ?? 0) ?>">
-                            </div>
-                        </div>
+                <?= view('partials/property_size_fields', ['property' => $property ?? []]) ?>
                 <?= view('partials/property_extras_fields', ['property' => $property ?? []]) ?>
                         <div class="col-md-3">
                             <div class="form-group">

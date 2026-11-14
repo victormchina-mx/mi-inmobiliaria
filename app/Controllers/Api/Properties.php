@@ -197,7 +197,7 @@ class Properties extends BaseApiController
             'lng'           => isset($p['lng']) ? (float) $p['lng'] : null,
             'exact_location' => (int) ($p['exact_location'] ?? 0),
             'why_text'      => $p['why_text'] ?? '',
-            'land_size'     => isset($p['land_size']) ? (int) $p['land_size'] : null,
+            'land_size'     => isset($p['land_size']) ? round((float) $p['land_size'], 2) : null,
             'parking'       => isset($p['parking']) ? (int) $p['parking'] : null,
             'age_years'     => isset($p['age_years']) ? (int) $p['age_years'] : null,
             'keys_status'   => $p['keys_status'] ?? null,

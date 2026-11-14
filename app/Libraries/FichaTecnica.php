@@ -23,10 +23,16 @@ class FichaTecnica
         'residencial' => ['name' => 'Residencial', 'format' => 'Horizontal · 1500 × 1000 (WhatsApp)',    'w' => 1500, 'h' => 1000],
     ];
 
-    /** Código único del inmueble: VMCH-0025. */
+    /** Código único del inmueble: A-0025. */
     public static function code(int $pid): string
     {
-        return 'VMCH-' . str_pad((string) $pid, 4, '0', STR_PAD_LEFT);
+        return 'A-' . self::number($pid);
+    }
+
+    /** Número del código sin el prefijo: 25 → "0025". */
+    public static function number(int $pid): string
+    {
+        return str_pad((string) $pid, 4, '0', STR_PAD_LEFT);
     }
 
     /**
@@ -96,8 +102,9 @@ class FichaTecnica
         if ($v = $n($p['size'] ?? null)) {
             $facts[] = ['icon' => 'square_foot', 'value' => number_format($v) . ' m²', 'label' => 'Construcción', 'long' => number_format($v) . ' m² de construcción'];
         }
-        if ($v = $n($p['land_size'] ?? null)) {
-            $facts[] = ['icon' => 'landscape', 'value' => number_format($v) . ' m²', 'label' => 'Terreno', 'long' => number_format($v) . ' m² de terreno'];
+        if (is_numeric($p['land_size'] ?? null) && (float) $p['land_size'] > 0) {
+            $v       = PropertyExtras::area($p['land_size']);   // hasta 2 decimales
+            $facts[] = ['icon' => 'landscape', 'value' => $v . ' m²', 'label' => 'Terreno', 'long' => $v . ' m² de terreno'];
         }
         if ($v = $n($p['bedroom'] ?? null)) {
             $facts[] = ['icon' => 'bed', 'value' => (string) $v, 'label' => $v === 1 ? 'Recámara' : 'Recámaras', 'long' => $v . ($v === 1 ? ' recámara' : ' recámaras')];
