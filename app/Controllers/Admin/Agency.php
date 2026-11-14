@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Filters\AgentOnlyFilter;
 use App\Libraries\Agency as Agencies;
+use App\Libraries\AgencyForm;
 use App\Models\AgencyModel;
 use App\Models\PropertyModel;
 use App\Models\UserModel;
@@ -17,8 +18,6 @@ use CodeIgniter\HTTP\RedirectResponse;
  */
 class Agency extends BaseController
 {
-    private const LOGO_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
-
     public function index(): string
     {
         $ready    = Agencies::ready();
@@ -95,7 +94,7 @@ class Agency extends BaseController
         }
 
         (new AgencyModel())->delete($id);
-        $this->deleteLogo($agency['logo'] ?? null);
+        AgencyForm::deleteLogo($agency['logo'] ?? null);
 
         return redirect()->to('admin/agencies')->with('success', 'Inmobiliaria eliminada.');
     }
@@ -122,30 +121,8 @@ class Agency extends BaseController
             return redirect()->to('admin/agencies');
         }
 
-        $post = fn (string $k, int $max = 200): string => mb_substr(trim((string) $this->request->getPost($k)), 0, $max);
-
-        $name    = $post('name', 120);
-        $primary = Agencies::color($post('color_primary', 7));
-        $accent  = Agencies::color($post('color_accent', 7));
-        $email   = $post('email', 150);
-        $website = $post('website', 200);
-        if ($website !== '' && ! preg_match('#^https?://#i', $website)) {
-            $website = 'https://' . $website;
-        }
-
-        $errors = [];
-        if ($name === '') {
-            $errors[] = 'Escribe el nombre de la inmobiliaria.';
-        }
-        if (! $primary || ! $accent) {
-            $errors[] = 'Elige el color principal y el de acento.';
-        }
-        if ($email !== '' && ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors[] = 'El correo no es válido.';
-        }
-        if ($website !== '' && ! filter_var($website, FILTER_VALIDATE_URL)) {
-            $errors[] = 'El sitio web no es válido.';
-        }
+        [$data, $errors] = AgencyForm::read($this->request);
+        $status = (string) $this->request->getPost('status');
 
         // Encargado: solo alguien de la misma inmobiliaria
         $manager = (int) $this->request->getPost('manager_uid');
@@ -153,48 +130,14 @@ class Agency extends BaseController
             $errors[] = 'El encargado debe ser un agente de esta inmobiliaria.';
         }
 
-        // Logo: PNG, JPG o WebP (SVG no: podría llevar código)
-        $logo = $agency['logo'] ?? null;
-        $file = $this->request->getFile('logo');
-        if ($file && $file->isValid() && ! $file->hasMoved()) {
-            if (! in_array($file->getMimeType(), self::LOGO_TYPES, true)) {
-                $errors[] = 'El logo debe ser PNG, JPG o WebP.';
-            }
-        }
-
         if ($errors) {
             return redirect()->back()->withInput()->with('error', implode(' ', $errors));
         }
 
-        if ($file && $file->isValid() && ! $file->hasMoved()) {
-            $newName = $file->getRandomName();
-            $file->move(FCPATH . 'uploads/agency', $newName);
-            $this->deleteLogo($logo);
-            $logo = $newName;
-        } elseif ($this->request->getPost('remove_logo')) {
-            $this->deleteLogo($logo);
-            $logo = null;
-        }
-
-        // Parte del logo que se ve en el círculo (la eligió el usuario)
-        $icon = (string) $this->request->getPost('logo_icon');
-        if ($logo && $icon !== '') {
-            Agencies::saveIcon($logo, $icon);
-        }
-
-        $data = [
-            'name'          => $name,
-            'logo'          => $logo,
-            'color_primary' => $primary,
-            'color_accent'  => $accent,
-            'tagline'       => $post('tagline', 160) ?: null,
-            'phone'         => $post('phone', 30) ?: null,
-            'whatsapp'      => $post('whatsapp', 30) ?: null,
-            'email'         => $email ?: null,
-            'website'       => $website ?: null,
-            'manager_uid'   => $manager ?: null,
-            'status'        => isset(Agencies::STATUSES[$post('status', 20)]) ? $post('status', 20) : 'active',
-        ];
+        $data['logo']        = AgencyForm::applyLogo($this->request, $agency['logo'] ?? null);
+        $data['manager_uid'] = $manager ?: null;
+        $data['status']      = isset(Agencies::STATUSES[$status]) ? $status : 'active';
+        $name                = $data['name'];
 
         $model = new AgencyModel();
         if ($agency) {
@@ -217,17 +160,5 @@ class Agency extends BaseController
         }
 
         return $try;
-    }
-
-    private function deleteLogo(?string $file): void
-    {
-        if ($file && preg_match('/^[A-Za-z0-9][A-Za-z0-9._-]*$/', $file)) {
-            foreach ([$file, Agencies::iconFile($file)] as $f) {
-                $path = FCPATH . 'uploads/agency/' . $f;
-                if (is_file($path)) {
-                    @unlink($path);
-                }
-            }
-        }
     }
 }
