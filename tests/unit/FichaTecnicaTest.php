@@ -26,8 +26,9 @@ final class FichaTecnicaTest extends CIUnitTestCase
 
     public function testCode(): void
     {
-        $this->assertSame('VMCH-0025', FichaTecnica::code(25));
-        $this->assertSame('VMCH-12345', FichaTecnica::code(12345));
+        $this->assertSame('A-0025', FichaTecnica::code(25));
+        $this->assertSame('A-12345', FichaTecnica::code(12345));
+        $this->assertSame('0025', FichaTecnica::number(25));
     }
 
     public function testDataBuildsTitleZonePriceAndContact(): void
@@ -42,7 +43,7 @@ final class FichaTecnicaTest extends CIUnitTestCase
         $this->assertStringEndsWith('/p/25', $f['url']);
         $this->assertSame('789 666 5555', $f['agent']['phone']);
         $this->assertStringStartsWith('https://wa.me/527896665555?text=', $f['agent']['wa']);
-        $this->assertStringContainsString(rawurlencode('VMCH-0025'), $f['agent']['wa']);
+        $this->assertStringContainsString(rawurlencode('A-0025'), $f['agent']['wa']);
     }
 
     public function testRentShowsPerMonth(): void

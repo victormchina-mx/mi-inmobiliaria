@@ -24,7 +24,7 @@ final class AgendaServiceTest extends CIUnitTestCase
         $json = AgendaService::toJson($this->appt, 3);
 
         $this->assertTrue($json['editable']);
-        $this->assertSame('VMCH-0025', $json['code']);
+        $this->assertSame('A-0025', $json['code']);
         $this->assertSame('Ana Ruiz López', $json['client_name']);
         $this->assertSame('Crédito Infonavit', $json['client_notes']);
         $this->assertSame('Le gustó', $json['comments']);

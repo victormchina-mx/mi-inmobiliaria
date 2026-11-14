@@ -53,7 +53,7 @@ $hasFilters   = array_filter(array_diff_key($filters, ['status' => 1])) || $filt
         <form class="ap-filters" method="get" action="<?= site_url('agente/propiedades') ?>">
             <label class="ap-search">
                 <i class="ms" aria-hidden="true">search</i>
-                <input type="search" name="q" value="<?= esc($filters['q']) ?>" placeholder="Código (VMCH-0025), colonia o título…" aria-label="Buscar">
+                <input type="search" name="q" value="<?= esc($filters['q']) ?>" placeholder="Código (A-0025), colonia o título…" aria-label="Buscar">
             </label>
             <select name="stype" aria-label="Operación">
                 <option value="">Venta y renta</option>

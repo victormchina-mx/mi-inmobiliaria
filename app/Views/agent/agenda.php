@@ -138,7 +138,7 @@ $ready = $ready ?? false;
                            style="top: <?= $pos['top'] ?>%; height: <?= $pos['height'] ?>%; left: calc(<?= $a['lane'] ?> * 100% / <?= $a['lanes'] ?>); width: calc(100% / <?= $a['lanes'] ?>);"
                            title="<?= esc(substr($a['starts_at'], 11, 5) . '–' . substr($a['ends_at'], 11, 5) . ' · ' . FichaTecnica::code((int) $a['pid']) . ' · ' . $res[0] . ' · Muestra: ' . ($a['shower_name'] ?? ''), 'attr') ?>">
                             <small class="ag-ev__time"><?= substr($a['starts_at'], 11, 5) ?></small>
-                            <b><?= substr(FichaTecnica::code((int) $a['pid']), 5) ?> · <?= esc($a['title'] ?? '') ?></b>
+                            <b><?= FichaTecnica::number((int) $a['pid']) ?> · <?= esc($a['title'] ?? '') ?></b>
                             <span><?= esc($mine ? $a['client_name'] : Agenda::shortName($a['client_name'])) ?> · <?= esc(strtok((string) $a['shower_name'], ' ')) ?></span>
                         </a>
                         <?php endforeach ?>

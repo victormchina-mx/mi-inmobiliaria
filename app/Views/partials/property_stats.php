@@ -20,10 +20,11 @@ $num   = static fn (string $k): int => (int) ($p[$k] ?? 0);
 $items = [];
 
 if ($num('size') > 0) {
-    $items[] = ['square_foot', $num('size'), $full && $num('land_size') > 0 ? 'm² constr.' : 'm²'];
+    $items[] = ['square_foot', $num('size'), $full && (float) ($p['land_size'] ?? 0) > 0 ? 'm² constr.' : 'm²'];
 }
-if ($num('land_size') > 0 && ($full || $num('size') === 0)) {
-    $items[] = ['landscape', $num('land_size'), 'm² terreno'];
+$land = (float) ($p['land_size'] ?? 0);   // hasta 2 decimales
+if ($land > 0 && ($full || $num('size') === 0)) {
+    $items[] = ['landscape', \App\Libraries\PropertyExtras::area($land), 'm² terreno'];
 }
 if ($num('bedroom') > 0) {
     $items[] = ['bed', $num('bedroom'), 'Recámaras'];

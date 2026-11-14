@@ -8,7 +8,7 @@ use App\Models\PropertyModel;
  * Búsqueda de "Todas las propiedades" del área de agentes: la usan la web
  * (AgentArea::properties) y la app móvil (Api\Agent::properties).
  *
- * Filtros: q (código VMCH-0025 / 25, o texto), stype, type, city, agent,
+ * Filtros: q (código A-0025 / 25, o texto), stype, type, city, agent,
  * keys y status ('all' = todos los estados).
  */
 class AgentListing
@@ -42,8 +42,8 @@ class AgentListing
             $model->where('property.keys_status', $filters['keys']);
         }
         if ($filters['q'] !== '') {
-            // "VMCH-0025", "0025" o "25" buscan por código; lo demás por texto
-            if (preg_match('/^(?:vmch-?)?0*(\d+)$/i', $filters['q'], $m)) {
+            // "A-0025", "0025" o "25" buscan por código (también el anterior "VMCH-0025"); lo demás por texto
+            if (preg_match('/^(?:a-?|vmch-?)?0*(\d+)$/i', $filters['q'], $m)) {
                 $model->where('property.pid', (int) $m[1]);
             } else {
                 $model->groupStart()

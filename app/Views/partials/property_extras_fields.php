@@ -1,9 +1,10 @@
 <?php
 /**
- * Campos de terreno, estacionamientos, antigüedad y llaves del formulario de
+ * Campos de estacionamientos, antigüedad y llaves del formulario de
  * propiedad (agente y admin). Van en la fila .row del formulario.
  * No se muestran si la base de datos aún no tiene las columnas
- * (app/Database/sql/2026-11-property-extras.sql).
+ * (app/Database/sql/2026-11-property-extras.sql). El terreno va junto a los
+ * m² construidos (partials/property_size_fields.php).
  */
 use App\Libraries\PropertyExtras;
 
@@ -14,12 +15,6 @@ if (! PropertyExtras::ready()) {
 $property = $property ?? [];
 $val      = static fn (string $f) => old($f) ?? ($property[$f] ?? '');
 ?>
-<div class="col-md-3">
-    <div class="form-group">
-        <label for="pe-land">Terreno (m²)</label>
-        <input type="number" id="pe-land" name="land_size" class="form-control" min="0" max="999999" value="<?= esc($val('land_size')) ?>">
-    </div>
-</div>
 <div class="col-md-3">
     <div class="form-group">
         <label for="pe-parking">Estacionamientos</label>

@@ -141,7 +141,7 @@ $facts  = array_filter([
                     // Solo los datos que tiene (un terreno no dice "0 Rec.")
                     $locStats = array_filter([
                         ['square_foot', (int) $property['size'], 'm²'],
-                        ['landscape', (int) ($property['land_size'] ?? 0), 'm² terreno'],
+                        ['landscape', round((float) ($property['land_size'] ?? 0), 2), 'm² terreno'],
                         ['bed', (int) $property['bedroom'], 'Rec.'],
                         ['bathtub', (int) $property['bathroom'], 'Baños'],
                     ], static fn ($s) => $s[1] > 0);
@@ -149,7 +149,7 @@ $facts  = array_filter([
                     <?php if ($locStats): ?>
                     <ul class="loc-card__stats">
                         <?php foreach ($locStats as [$icon, $value, $label]): ?>
-                        <li><i class="ms" aria-hidden="true"><?= $icon ?></i><?= $value ?> <?= $label ?></li>
+                        <li><i class="ms" aria-hidden="true"><?= $icon ?></i><?= \App\Libraries\PropertyExtras::area($value) ?> <?= $label ?></li>
                         <?php endforeach ?>
                     </ul>
                     <?php endif ?>
