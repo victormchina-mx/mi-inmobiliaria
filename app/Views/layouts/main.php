@@ -17,7 +17,9 @@
 <meta property="og:url" content="<?= current_url() ?>">
 <meta property="og:image" content="<?= $ogImage ?? base_url('images/banner/rshmpg.jpg') ?>">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="<?= base_url('favicon.ico') ?>">
+<link rel="icon" href="<?= base_url('favicon.ico') ?>" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="<?= base_url('images/logo/icon-192.png') ?>">
+<link rel="apple-touch-icon" href="<?= base_url('apple-touch-icon.png') ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">

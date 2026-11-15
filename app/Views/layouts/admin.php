@@ -3,12 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="shortcut icon" href="<?= base_url('images/favicon.ico') ?>">
+<link rel="icon" href="<?= base_url('favicon.ico') ?>" sizes="any">
+<link rel="apple-touch-icon" href="<?= base_url('apple-touch-icon.png') ?>">
 <link rel="stylesheet" href="<?= base_url('admin/assets/css/bootstrap.min.css') ?>">
 <link rel="stylesheet" href="<?= base_url('admin/assets/css/font-awesome.min.css') ?>">
 <link rel="stylesheet" href="<?= base_url('admin/assets/css/feathericon.min.css') ?>">
 <link rel="stylesheet" href="<?= asset_url('admin/assets/css/style.css') ?>">
 <link rel="stylesheet" href="<?= asset_url('css/file-upload.css') ?>">
+<style>
+/* Logo del admin: casa dorada + texto legible sobre el amarillo de la plantilla */
+.header .header-left .logo span { margin-left: 8px; color: #0F172A; font-weight: 700; }
+</style>
 <?= $this->renderSection('styles') ?>
 <title><?= esc($pageTitle ?? 'Admin') ?> | Panel de Administración</title>
 </head>
@@ -20,7 +25,7 @@
         <div class="header-left">
             <a href="<?= site_url('admin/dashboard') ?>" class="logo">
                 <img src="<?= base_url('admin/assets/img/logo-small.png') ?>" alt="Logo" width="35" height="35">
-                <span>Real Estate Admin</span>
+                <span>Inmobiliaria · Admin</span>
             </a>
         </div>
         <ul class="nav user-menu">
