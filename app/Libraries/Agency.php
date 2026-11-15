@@ -17,7 +17,7 @@ use Throwable;
  *   web y app) un agente solo ve lo de su inmobiliaria; un independiente,
  *   solo lo suyo. El administrador (panel /admin) ve todo.
  * - Marca de cada inmobiliaria: logo y colores para las fichas técnicas y
- *   el portal. Los independientes usan "Real Estate by Vick" con los
+ *   el portal. Los independientes usan "Inmobiliaria by VMCH" con los
  *   colores neutros del sitio.
  *
  * Si la base de datos aún no tiene las tablas (ready() = false) todo
@@ -229,7 +229,7 @@ class Agency
             return self::brandArray(false, true, 'Grupo Inmobiliario Frices', 'Fortaleza • Resiliencia • Integridad • Confianza', null, 'https://www.frices.com.mx', self::FRICES);
         }
         if (! $agency) {
-            return self::brandArray(true, false, 'Real Estate by Vick', '', null, '', self::NEUTRAL);
+            return self::brandArray(true, false, 'Inmobiliaria by VMCH', '', null, '', self::NEUTRAL);
         }
 
         return self::brandArray(

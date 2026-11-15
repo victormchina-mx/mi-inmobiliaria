@@ -95,7 +95,7 @@ class AgentArea extends BaseController
             'noindex'    => true,
             'property'   => $property,
             'ficha'      => FichaTecnica::data($property, $agent),
-            // Logo y colores de la inmobiliaria del inmueble (o Real Estate by Vick)
+            // Logo y colores de la inmobiliaria del inmueble (o Inmobiliaria by VMCH)
             'brand'      => Agency::brand(Agency::find(isset($property['agency_id']) ? (int) $property['agency_id'] : null)),
             'template'   => $template,
             'useOwner'   => $useOwner,

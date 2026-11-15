@@ -55,13 +55,13 @@ final class AgencyTest extends CIUnitTestCase
         $this->assertSame(Agency::FRICES, $b['colors']);
     }
 
-    public function testIndependentAgentsUseRealEstateByVick(): void
+    public function testIndependentAgentsUseInmobiliariaByVmch(): void
     {
         Agency::reset(true);
         $b = Agency::brand(null);
 
         $this->assertTrue($b['independent']);
-        $this->assertSame('Real Estate by Vick', $b['name']);
+        $this->assertSame('Inmobiliaria by VMCH', $b['name']);
         $this->assertSame(Agency::NEUTRAL, $b['colors']);
     }
 

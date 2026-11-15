@@ -194,3 +194,8 @@
 .ficha .fx-brand__ini { font-size: 1.9em; width: 2.5em; height: 2.5em; border-width: .12em; }
 .ficha .fx-brand--text .fx-logo__text b { font-family: 'Fraunces', serif; font-size: 1.45em; letter-spacing: .03em; color: var(--fx-gold-light); }
 .ficha .fx-brand--text .fx-logo__text small { font-style: normal; font-family: inherit; color: var(--fx-gold-light); opacity: .85; }
+
+/* Independientes: logo de Inmobiliaria by VMCH (casa dorada + texto) */
+.fx-inmo__icon { display: block; width: 4.6em !important; height: 4.6em !important; flex: none; }
+.ficha .fx-brand--inmo .fx-logo__text b { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.75em; font-weight: 700; letter-spacing: -.01em; line-height: 1; color: #fff; }
+.ficha .fx-brand--inmo .fx-logo__text small { margin-top: .35em; padding-top: 0; border-top: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-style: normal; font-size: .85em; font-weight: 600; letter-spacing: .12em; color: var(--fx-gold); }

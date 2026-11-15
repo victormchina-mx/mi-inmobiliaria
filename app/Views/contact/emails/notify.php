@@ -22,7 +22,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>Real Estate &mdash; Nuevo mensaje de contacto</h1>
+        <h1>Inmobiliaria by VMCH &mdash; Nuevo mensaje de contacto</h1>
     </div>
     <div class="body">
         <p>Se recibió un nuevo mensaje desde el formulario de contacto del sitio:</p>
@@ -41,7 +41,7 @@
         <p style="margin-top:24px; font-size:13px; color:#777;">Puedes responder directamente a este correo — el botón "Responder" de tu cliente de correo se dirigirá a <?= esc($email) ?>.</p>
     </div>
     <div class="footer">
-        &copy; <?= date('Y') ?> Real Estate &mdash; Correo generado automáticamente desde inmobiliaria.vmch.net
+        &copy; <?= date('Y') ?> Inmobiliaria by VMCH &mdash; Correo generado automáticamente desde inmobiliaria.vmch.net
     </div>
 </div>
 </body>

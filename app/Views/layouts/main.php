@@ -4,15 +4,15 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="<?= esc($metaDescription ?? 'Encuentra tu próxima propiedad en venta o renta: casas, departamentos y oficinas. Real Estate, tu aliado de confianza en bienes raíces.') ?>">
+<meta name="description" content="<?= esc($metaDescription ?? 'Encuentra tu próxima propiedad en venta o renta: casas, departamentos y oficinas. Inmobiliaria by VMCH, tu aliado de confianza en bienes raíces.') ?>">
 <link rel="canonical" href="<?= current_url() ?>">
 <?php if (! empty($noindex)): ?>
 <meta name="robots" content="noindex, follow">
 <?php endif ?>
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Real Estate by Vick">
+<meta property="og:site_name" content="Inmobiliaria by VMCH">
 <meta property="og:locale" content="es_MX">
-<meta property="og:title" content="<?= esc($pageTitle ?? 'Real Estate') ?>">
+<meta property="og:title" content="<?= esc($pageTitle ?? 'Inmobiliaria by VMCH') ?>">
 <meta property="og:description" content="<?= esc($metaDescription ?? 'Encuentra tu próxima propiedad en venta o renta: casas, departamentos y oficinas.') ?>">
 <meta property="og:url" content="<?= current_url() ?>">
 <meta property="og:image" content="<?= $ogImage ?? base_url('images/banner/rshmpg.jpg') ?>">
@@ -37,7 +37,7 @@
 <link rel="stylesheet" href="<?= asset_url('css/file-upload.css') ?>">
 <?= $this->renderSection('styles') ?>
 <?= $this->renderSection('schema') ?>
-<title><?= esc($pageTitle ?? 'Real Estate') ?> | Real Estate by Vick</title>
+<title><?= esc($pageTitle ?? 'Inicio') ?> | Inmobiliaria by VMCH</title>
 </head>
 <body>
 
@@ -190,7 +190,7 @@
                 </div>
                 <div class="row copyright">
                     <div class="col-sm-6">
-                        <span class="text-white">© <?= date('Y') ?> Real Estate - Todos los derechos reservados</span>
+                        <span class="text-white">© <?= date('Y') ?> Inmobiliaria · Todos los derechos reservados</span>
                     </div>
                     <div class="col-sm-6">
                         <ul class="line-menu text-white hover-text-primary float-right">
