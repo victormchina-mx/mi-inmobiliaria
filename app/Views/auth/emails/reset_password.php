@@ -23,7 +23,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>Real Estate</h1>
+        <h1>Inmobiliaria by VMCH</h1>
     </div>
     <div class="body">
         <p>Hola, <strong><?= esc($userName) ?></strong>.</p>
@@ -41,7 +41,7 @@
         <a href="<?= esc($resetUrl) ?>" style="color:#3c50e0; word-break:break-all;"><?= esc($resetUrl) ?></a></p>
     </div>
     <div class="footer">
-        &copy; <?= date('Y') ?> Real Estate &mdash; Correo generado automáticamente, no responder.
+        &copy; <?= date('Y') ?> Inmobiliaria by VMCH &mdash; Correo generado automáticamente, no responder.
     </div>
 </div>
 </body>

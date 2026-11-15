@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="<?= base_url('admin/assets/css/bootstrap.min.css') ?>">
 <link rel="stylesheet" href="<?= base_url('admin/assets/css/style.css') ?>">
-<title>Recuperar Contraseña | Real Estate Admin</title>
+<title>Recuperar Contraseña | Inmobiliaria by VMCH · Admin</title>
 </head>
 <body class="account-page">
 <div class="main-wrapper">

@@ -15,7 +15,7 @@
 .header .header-left .logo span { margin-left: 8px; color: #0F172A; font-weight: 700; }
 </style>
 <?= $this->renderSection('styles') ?>
-<title><?= esc($pageTitle ?? 'Admin') ?> | Panel de Administración</title>
+<title><?= esc($pageTitle ?? 'Admin') ?> | Inmobiliaria by VMCH · Admin</title>
 </head>
 <body>
 

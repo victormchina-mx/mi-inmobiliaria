@@ -141,7 +141,7 @@ class Auth extends BaseController
 
         $emailService = \Config\Services::email();
         $emailService->setTo($email);
-        $emailService->setSubject('Restablecer contraseña — Real Estate');
+        $emailService->setSubject('Restablecer contraseña — Inmobiliaria by VMCH');
         $emailService->setMessage($emailBody);
         $emailService->setMailType('html');
 

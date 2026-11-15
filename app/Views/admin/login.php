@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="<?= base_url('admin/assets/css/bootstrap.min.css') ?>">
 <link rel="stylesheet" href="<?= base_url('admin/assets/css/style.css') ?>">
-<title>Admin Login | Real Estate</title>
+<title>Acceso al admin | Inmobiliaria by VMCH</title>
 </head>
 <body class="account-page">
 <div class="main-wrapper">

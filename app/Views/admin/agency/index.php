@@ -60,7 +60,7 @@ use App\Libraries\Agency;
                     </tr>
                     <?php endforeach ?>
                     <tr class="ag-indep">
-                        <td colspan="7"><i class="fe fe-user"></i> <b>Agentes independientes</b> (sin inmobiliaria): <?= $stats[0]['agents'] ?? 0 ?> agentes · <?= $stats[0]['properties'] ?? 0 ?> propiedades. Sus fichas usan el logo de Real Estate by Vick.</td>
+                        <td colspan="7"><i class="fe fe-user"></i> <b>Agentes independientes</b> (sin inmobiliaria): <?= $stats[0]['agents'] ?? 0 ?> agentes · <?= $stats[0]['properties'] ?? 0 ?> propiedades. Sus fichas usan el logo de Inmobiliaria by VMCH.</td>
                     </tr>
                 </tbody>
             </table>
