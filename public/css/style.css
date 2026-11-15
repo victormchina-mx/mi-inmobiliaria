@@ -5484,3 +5484,20 @@ a.ap-tab:hover { text-decoration: none; border-color: #C9A96E; color: var(--them
 
 .ma-card label.ma-label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 700; line-height: 1.4; color: #4B5563; }
 .ma-add input::placeholder, .ma-field input::placeholder { color: #9CA3AF; opacity: 1; }
+
+/* ================================================================
+   Logo del sitio (partials/site_logo.php): casa dorada + Inmobiliaria
+   ================================================================ */
+.site-logo { display: inline-flex; align-items: center; gap: 10px; line-height: 1; text-decoration: none; }
+.site-logo__icon { display: block; width: 46px !important; height: 46px !important; flex: none; }
+.site-logo__text { display: flex; flex-direction: column; gap: 4px; }
+.site-logo__text b { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 23px; font-weight: 700; letter-spacing: -.01em; color: var(--theme-secondary-color, #0F172A); }
+.site-logo__text small { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11.5px; font-weight: 500; color: #7C8BA1; white-space: nowrap; }
+.site-logo--light .site-logo__text b { color: #fff; }
+.site-logo--light .site-logo__text small { color: #94A3B8; }
+.navbar-brand:hover .site-logo__text b { color: var(--theme-secondary-color, #0F172A); }
+@media (max-width: 575px) {
+  .site-logo__icon { width: 38px !important; height: 38px !important; }
+  .site-logo__text b { font-size: 20px; }
+  .site-logo__text small { font-size: 10px; }
+}
