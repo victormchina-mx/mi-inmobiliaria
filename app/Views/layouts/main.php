@@ -74,8 +74,8 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <nav class="navbar navbar-expand-lg navbar-light p-0">
-                                <a class="navbar-brand position-relative" href="<?= site_url('/') ?>">
-                                    <img class="nav-logo" src="<?= base_url('images/logo/restatelg.png') ?>" alt="Real Estate by Vick">
+                                <a class="navbar-brand position-relative" href="<?= site_url('/') ?>" aria-label="Inmobiliaria · Inicio">
+                                    <?= view('partials/site_logo') ?>
                                 </a>
                                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
                                     <span class="navbar-toggler-icon"></span>
@@ -137,7 +137,7 @@
                                 <div class="col-md-12 col-lg-4">
                                     <div class="footer-widget mb-4">
                                         <div class="footer-logo mb-4">
-                                            <a href="<?= site_url('/') ?>"><img class="logo-bottom" src="<?= base_url('images/logo/restatelg_white.png') ?>" alt="Logo"></a>
+                                            <a href="<?= site_url('/') ?>" aria-label="Inmobiliaria · Inicio"><?= view('partials/site_logo', ['light' => true]) ?></a>
                                         </div>
                                         <p class="pb-20 text-white">Tu aliado de confianza en bienes raíces. Encuentra la propiedad ideal para ti.</p>
                                     </div>
