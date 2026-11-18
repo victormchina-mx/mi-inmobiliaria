@@ -17,6 +17,7 @@ class Sitemap extends BaseController
         $staticPages = [
             ['url' => '',         'priority' => '1.0', 'changefreq' => 'daily'],
             ['url' => 'property', 'priority' => '0.9', 'changefreq' => 'daily'],
+            ['url' => 'plataforma', 'priority' => '0.7', 'changefreq' => 'monthly'],
             ['url' => 'about',    'priority' => '0.5', 'changefreq' => 'monthly'],
             ['url' => 'contact',  'priority' => '0.5', 'changefreq' => 'monthly'],
             ['url' => 'agents',   'priority' => '0.6', 'changefreq' => 'weekly'],
