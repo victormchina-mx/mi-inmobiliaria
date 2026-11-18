@@ -3,8 +3,10 @@
 <?php
 /**
  * Agenda de citas compartida (Mi cuenta, solo agentes y constructores).
- * Semana en calendario (en celular, lista por día) y el panel de la cita con
- * sus 3 partes: inmueble, cita y resultado.
+ * Semana o mes en calendario (en celular, lista por día) y el panel de la
+ * cita con sus 3 partes: inmueble, cita y resultado. Con JS, moverse entre
+ * semanas/meses, filtrar, abrir y guardar citas no recarga la página
+ * (agenda.js cambia solo el bloque .ag-layout y conserva la posición).
  *
  * Controlador: AgentAgenda · Reglas: App\Libraries\Agenda
  * Estilos: .ag-* en style.css · JS: public/js/agenda.js
@@ -57,13 +59,32 @@ $ready = $ready ?? false;
 <?php else: ?>
 <?php
     $today    = date('Y-m-d');
-    $prevWeek = $monday->modify('-7 days')->format('Y-m-d');
-    $nextWeek = $monday->modify('+7 days')->format('Y-m-d');
-    $base     = static function (array $extra = []) use ($monday, $filter): string {
-        $q = array_filter(['semana' => $monday->format('Y-m-d'), 'agente' => $filter], static fn ($v) => $v !== '');
+    // Estado actual de la vista: semana (?semana=) o mes (?vista=mes&mes=)
+    $state = $isMonth
+        ? ['vista' => 'mes', 'mes' => $month->format('Y-m'), 'agente' => $filter]
+        : ['semana' => $monday->format('Y-m-d'), 'agente' => $filter];
+    $base = static function (array $extra = []) use ($state): string {
+        $q = array_filter(array_merge($state, $extra), static fn ($v) => $v !== '' && $v !== null);
 
-        return site_url('agente/agenda') . '?' . http_build_query(array_merge($q, $extra));
+        return site_url('agente/agenda') . (http_build_query($q) !== '' ? '?' . http_build_query($q) : '');
     };
+    // Ir a la semana de un día (sale de la vista de mes)
+    $weekOf = static fn (string $ymd): string => $base(['vista' => null, 'mes' => null, 'semana' => $ymd]);
+
+    if ($isMonth) {
+        $prevUrl = $base(['mes' => $month->modify('-1 month')->format('Y-m')]);
+        $nextUrl = $base(['mes' => $month->modify('+1 month')->format('Y-m')]);
+        $todayUrl = $base(['mes' => date('Y-m')]);
+        $weekUrl  = $weekOf($month->format('Y-m') === date('Y-m') ? $today : $month->format('Y-m-d'));
+        $monthUrl = $base();
+    } else {
+        $prevUrl  = $base(['semana' => $monday->modify('-7 days')->format('Y-m-d')]);
+        $nextUrl  = $base(['semana' => $monday->modify('+7 days')->format('Y-m-d')]);
+        $todayUrl = $base(['semana' => $today]);
+        $weekUrl  = $base();
+        $monthUrl = $base(['semana' => null, 'vista' => 'mes', 'mes' => $monday->modify('+3 days')->format('Y-m')]);
+    }
+    $unit = $isMonth ? 'Mes' : 'Semana';
 
     // Citas por día (Y-m-d => lista con carril)
     $byDay = [];
@@ -89,12 +110,21 @@ $ready = $ready ?? false;
 ?>
         <div class="ag-layout">
             <!-- Calendario -->
-            <section class="ag-cal" aria-label="Calendario de la semana">
+            <section class="ag-cal<?= $isMonth ? ' is-month' : '' ?>" aria-label="<?= $isMonth ? 'Calendario del mes' : 'Calendario de la semana' ?>">
                 <div class="ag-cal__head">
-                    <h3 class="ag-cal__title"><?= esc(Agenda::weekTitle($monday)) ?></h3>
+                    <h3 class="ag-cal__title"><?= esc($isMonth ? ucfirst(Agenda::monthTitle($month)) : Agenda::weekTitle($monday)) ?></h3>
                     <div class="ag-cal__tools">
-                        <form method="get" action="<?= site_url('agente/agenda') ?>" class="ag-who">
+                        <div class="ag-view" role="group" aria-label="Vista">
+                            <a href="<?= esc($weekUrl) ?>" class="<?= $isMonth ? '' : 'is-active' ?>"<?= $isMonth ? '' : ' aria-current="true"' ?>>Semana</a>
+                            <a href="<?= esc($monthUrl) ?>" class="<?= $isMonth ? 'is-active' : '' ?>"<?= $isMonth ? ' aria-current="true"' : '' ?>>Mes</a>
+                        </div>
+                        <form method="get" action="<?= site_url('agente/agenda') ?>" class="ag-who" data-agenda-filter>
+                            <?php if ($isMonth): ?>
+                            <input type="hidden" name="vista" value="mes">
+                            <input type="hidden" name="mes" value="<?= $month->format('Y-m') ?>">
+                            <?php else: ?>
                             <input type="hidden" name="semana" value="<?= $monday->format('Y-m-d') ?>">
+                            <?php endif ?>
                             <label class="sr-only" for="ag-agente">Ver citas de</label>
                             <i class="ms" aria-hidden="true">person</i>
                             <select id="ag-agente" name="agente" data-autosubmit>
@@ -106,12 +136,46 @@ $ready = $ready ?? false;
                             </select>
                             <noscript><button type="submit" class="ap-btn ap-btn--gold">Ver</button></noscript>
                         </form>
-                        <a class="ag-nav" href="<?= esc($base(['semana' => $prevWeek])) ?>" aria-label="Semana anterior"><i class="ms" aria-hidden="true">chevron_left</i></a>
-                        <a class="ag-today" href="<?= esc($base(['semana' => $today])) ?>">Hoy</a>
-                        <a class="ag-nav" href="<?= esc($base(['semana' => $nextWeek])) ?>" aria-label="Semana siguiente"><i class="ms" aria-hidden="true">chevron_right</i></a>
+                        <a class="ag-nav" href="<?= esc($prevUrl) ?>" aria-label="<?= $unit ?> anterior" title="<?= $unit ?> anterior"><i class="ms" aria-hidden="true">chevron_left</i></a>
+                        <a class="ag-today" href="<?= esc($todayUrl) ?>">Hoy</a>
+                        <a class="ag-nav" href="<?= esc($nextUrl) ?>" aria-label="<?= $unit ?> siguiente" title="<?= $unit ?> siguiente"><i class="ms" aria-hidden="true">chevron_right</i></a>
                     </div>
                 </div>
 
+<?php if ($isMonth): ?>
+                <!-- Mes: cuadrícula de lunes a domingo -->
+                <div class="ag-month">
+                    <?php foreach (Agenda::DAYS as $dname): ?>
+                    <div class="ag-month__dow"><?= $dname ?></div>
+                    <?php endforeach ?>
+                    <?php for ($day = $gridStart; $day < $gridEnd; $day = $day->modify('+1 day')): ?>
+                    <?php
+                    $ymd   = $day->format('Y-m-d');
+                    $evs   = $byDay[$ymd] ?? [];
+                    $out   = $day->format('Y-m') !== $month->format('Y-m');
+                    $shown = array_slice($evs, 0, 3);
+                    $more  = count($evs) - count($shown);
+                    ?>
+                    <div class="ag-month__cell<?= $out ? ' is-out' : '' ?><?= $ymd === $today ? ' is-today' : '' ?><?= $ymd < $today ? ' is-past' : '' ?><?= $evs ? ' has-ev' : '' ?>" data-date="<?= $ymd ?>">
+                        <a class="ag-month__num" href="<?= esc($weekOf($ymd)) ?>" title="Ver la semana"><?= $day->format('j') ?></a>
+                        <?php foreach ($shown as $a): $res = Agenda::RESULTS[$a['result']] ?? Agenda::RESULTS['pending']; ?>
+                        <a class="ag-mev <?= $res[1] ?><?= (int) ($current['apid'] ?? 0) === (int) $a['apid'] ? ' is-open' : '' ?>" href="<?= esc($base(['cita' => $a['apid']])) ?>"
+                           title="<?= esc(substr($a['starts_at'], 11, 5) . '–' . substr($a['ends_at'], 11, 5) . ' · ' . FichaTecnica::code((int) $a['pid']) . ' · ' . ($a['title'] ?? '') . ' · ' . $res[0] . ' · Muestra: ' . ($a['shower_name'] ?? ''), 'attr') ?>">
+                            <small><?= substr($a['starts_at'], 11, 5) ?></small>
+                            <b><?= FichaTecnica::number((int) $a['pid']) ?></b>
+                            <span><?= esc(Agenda::canEdit($a, $uid) ? $a['client_name'] : Agenda::shortName($a['client_name'])) ?></span>
+                        </a>
+                        <?php endforeach ?>
+                        <?php if ($more > 0): ?>
+                        <a class="ag-month__more" href="<?= esc($weekOf($ymd)) ?>">+<?= $more ?> más</a>
+                        <?php endif ?>
+                        <?php if ($evs): ?>
+                        <span class="ag-month__dots" aria-hidden="true"><?php foreach (array_slice($evs, 0, 4) as $a): ?><i class="<?= (Agenda::RESULTS[$a['result']] ?? Agenda::RESULTS['pending'])[1] ?>"></i><?php endforeach ?></span>
+                        <?php endif ?>
+                    </div>
+                    <?php endfor ?>
+                </div>
+<?php else: ?>
                 <!-- Escritorio: semana en columnas -->
                 <div class="ag-week" style="--ag-rows: <?= count($hours) ?>">
                     <div class="ag-week__corner" aria-hidden="true"></div>
@@ -145,15 +209,24 @@ $ready = $ready ?? false;
                     </div>
                     <?php endfor ?>
                 </div>
+<?php endif ?>
 
                 <!-- Celular: lista por día -->
+                <?php
+                $listFrom = $isMonth ? $month : $monday;
+                $listTo   = $isMonth ? $month->modify('+1 month') : $monday->modify('+7 days');
+                $listHas  = false;
+                for ($day = $listFrom; $day < $listTo; $day = $day->modify('+1 day')) {
+                    $listHas = $listHas || ! empty($byDay[$day->format('Y-m-d')]);
+                }
+                ?>
                 <div class="ag-list">
-                    <?php if (! $week): ?>
-                    <p class="ag-list__empty">Sin citas esta semana.</p>
+                    <?php if (! $listHas): ?>
+                    <p class="ag-list__empty"><?= $isMonth ? 'Sin citas este mes.' : 'Sin citas esta semana.' ?></p>
                     <?php endif ?>
-                    <?php for ($i = 0; $i < 7; $i++): $day = $monday->modify("+{$i} days"); $ymd = $day->format('Y-m-d'); ?>
+                    <?php for ($day = $listFrom; $day < $listTo; $day = $day->modify('+1 day')): $ymd = $day->format('Y-m-d'); ?>
                     <?php if (empty($byDay[$ymd])) { continue; } ?>
-                    <h4 class="ag-list__day<?= $ymd === $today ? ' is-today' : '' ?>"><?= Agenda::DAYS[$i] ?> <?= $day->format('j') ?></h4>
+                    <h4 class="ag-list__day<?= $ymd === $today ? ' is-today' : '' ?>" id="ag-d-<?= $ymd ?>"><?= Agenda::DAYS[(int) $day->format('N') - 1] ?> <?= $day->format('j') ?><?= $isMonth ? ' DE ' . mb_strtoupper(Agenda::MONTHS[(int) $day->format('n') - 1]) : '' ?></h4>
                     <?php foreach ($byDay[$ymd] as $a): $res = Agenda::RESULTS[$a['result']] ?? Agenda::RESULTS['pending']; ?>
                     <a class="ag-item <?= $res[1] ?>" href="<?= esc($base(['cita' => $a['apid']])) ?>#ag-panel">
                         <span class="ag-item__time"><?= substr($a['starts_at'], 11, 5) ?><small><?= substr($a['ends_at'], 11, 5) ?></small></span>
@@ -171,7 +244,7 @@ $ready = $ready ?? false;
                     <?php foreach (Agenda::RESULTS as $k => [$label, $cls]): ?>
                     <li class="<?= $cls ?>"><?= $label ?></li>
                     <?php endforeach ?>
-                    <li class="ag-legend__hint">Haz clic en un horario libre para agendar.</li>
+                    <li class="ag-legend__hint"><?= $isMonth ? 'Haz clic en un día para agendar; en el número, para ver la semana.' : 'Haz clic en un horario libre para agendar.' ?></li>
                 </ul>
             </section>
 
@@ -188,6 +261,8 @@ $ready = $ready ?? false;
                 <form method="post" action="<?= site_url('agente/agenda/guardar') ?>" class="ag-form" data-agenda-form
                       data-check="<?= site_url('agente/agenda/conflictos') ?>">
                     <?= csrf_field() ?>
+                    <input type="hidden" name="vista" value="<?= $isMonth ? 'mes' : 'semana' ?>">
+                    <input type="hidden" name="agente" value="<?= esc($filter, 'attr') ?>">
                     <?php if (! $isNew): ?><input type="hidden" name="apid" value="<?= (int) $current['apid'] ?>"><?php endif ?>
                     <script type="application/json" data-properties><?= json_encode($properties, JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) ?></script>
 
@@ -270,6 +345,8 @@ $ready = $ready ?? false;
                 <?php if (! $isNew): ?>
                 <form method="post" action="<?= site_url('agente/agenda/' . (int) $current['apid'] . '/eliminar') ?>" class="ag-delete" data-confirm="¿Eliminar esta cita? No se puede deshacer.">
                     <?= csrf_field() ?>
+                    <input type="hidden" name="vista" value="<?= $isMonth ? 'mes' : 'semana' ?>">
+                    <input type="hidden" name="agente" value="<?= esc($filter, 'attr') ?>">
                     <button type="submit"><i class="ms" aria-hidden="true">delete</i>Eliminar cita</button>
                 </form>
                 <?php endif ?>
