@@ -26,17 +26,20 @@ class AgentAgenda extends BaseController
         }
 
         $uid    = $this->uid();
+        $isMonth = $this->request->getGet('vista') === 'mes';
         $monday = Agenda::weekStart($this->request->getGet('semana'));
+        $month  = Agenda::monthStart($this->request->getGet('mes'));
+        [$from, $to] = $isMonth ? Agenda::monthGrid($month) : [$monday, $monday->modify('+7 days')];
         $agents = AgendaService::agents($uid);
         $filter = (string) $this->request->getGet('agente');
         if ($filter !== 'mias' && ! isset($agents[(int) $filter])) {
             $filter = '';
         }
 
-        // Citas de la semana
+        // Citas de la semana (o de las semanas que cubren el mes)
         $model = (new AppointmentModel())->withDetails()
-            ->where('appointment.starts_at >=', $monday->format('Y-m-d 00:00:00'))
-            ->where('appointment.starts_at <', $monday->modify('+7 days')->format('Y-m-d 00:00:00'));
+            ->where('appointment.starts_at >=', $from->format('Y-m-d 00:00:00'))
+            ->where('appointment.starts_at <', $to->format('Y-m-d 00:00:00'));
         Agency::scopeAppointments($model, $uid);   // solo las de su inmobiliaria
         if ($filter !== '') {
             $who = $filter === 'mias' ? $uid : (int) $filter;
@@ -62,14 +65,20 @@ class AgentAgenda extends BaseController
         $prefillPid = (int) $this->request->getGet('pid');
         $today      = new DateTimeImmutable('today');
         $fecha      = Agenda::date($this->request->getGet('fecha'));
-        $defaultDay = $fecha ?? ($monday <= $today && $today < $monday->modify('+7 days') ? $today : $monday);
+        $anchor     = $isMonth ? $month : $monday;
+        $anchorEnd  = $isMonth ? $month->modify('+1 month') : $monday->modify('+7 days');
+        $defaultDay = $fecha ?? ($anchor <= $today && $today < $anchorEnd ? $today : $anchor);
 
         return view('agent/agenda', [
             'pageTitle'  => 'Agenda de citas',
             'noindex'    => true,
             'ready'      => true,
             'uid'        => $uid,
+            'isMonth'    => $isMonth,
             'monday'     => $monday,
+            'month'      => $month,
+            'gridStart'  => $from,
+            'gridEnd'    => $to,
             'week'       => $week,
             'agents'     => $agents,
             'filter'     => $filter,
@@ -130,7 +139,7 @@ class AgentAgenda extends BaseController
             AgendaService::notify($apid, $uid);
         }
 
-        return redirect()->to('agente/agenda?semana=' . substr($data['starts_at'], 0, 10) . '&cita=' . $apid)->with('success', $message);
+        return redirect()->to($this->backTo($data['starts_at'], ['cita' => $apid]))->with('success', $message);
     }
 
     public function delete(int $apid): RedirectResponse
@@ -142,7 +151,7 @@ class AgentAgenda extends BaseController
 
         (new AppointmentModel())->delete($apid);
 
-        return redirect()->to('agente/agenda?semana=' . substr($appt['starts_at'], 0, 10))->with('success', 'Cita eliminada.');
+        return redirect()->to($this->backTo($appt['starts_at']))->with('success', 'Cita eliminada.');
     }
 
     /** Aviso en vivo del formulario: ¿se empalma con otra cita? (JSON) */
@@ -161,6 +170,23 @@ class AgentAgenda extends BaseController
     }
 
     // ---------------------------------------------------------------
+
+    /**
+     * Regresa a la agenda en la misma vista (semana o mes) y con el mismo
+     * filtro de agente con que se guardó, en la fecha de la cita.
+     */
+    private function backTo(string $startsAt, array $extra = []): string
+    {
+        $q = $this->request->getPost('vista') === 'mes'
+            ? ['vista' => 'mes', 'mes' => substr($startsAt, 0, 7)]
+            : ['semana' => substr($startsAt, 0, 10)];
+        $agente = (string) $this->request->getPost('agente');
+        if ($agente === 'mias' || ctype_digit($agente)) {
+            $q['agente'] = $agente;
+        }
+
+        return 'agente/agenda?' . http_build_query($q + $extra);
+    }
 
     private function uid(): int
     {

@@ -24,6 +24,27 @@ final class AgendaTest extends CIUnitTestCase
         $this->assertSame('28 de diciembre 2026 – 3 de enero 2027', Agenda::weekTitle(Agenda::weekStart('2026-12-30')));
     }
 
+    public function testMonthStartAndTitle(): void
+    {
+        $this->assertSame('2026-11-01', Agenda::monthStart('2026-11')->format('Y-m-d'));
+        $this->assertSame('2026-11-01', Agenda::monthStart('2026-11-18')->format('Y-m-d'));
+        $this->assertSame('01', Agenda::monthStart('2026-13')->format('d'));   // inválido: mes actual
+        $this->assertSame('noviembre 2026', Agenda::monthTitle(Agenda::monthStart('2026-11')));
+    }
+
+    public function testMonthGridCoversWholeWeeks(): void
+    {
+        // Noviembre 2026: empieza en domingo y termina en lunes → 6 semanas
+        [$from, $to] = Agenda::monthGrid(Agenda::monthStart('2026-11'));
+        $this->assertSame('2026-10-26', $from->format('Y-m-d'));
+        $this->assertSame('2026-12-07', $to->format('Y-m-d'));
+
+        // Febrero 2027: lunes 1 a domingo 28 → 4 semanas justas
+        [$from, $to] = Agenda::monthGrid(Agenda::monthStart('2027-02'));
+        $this->assertSame('2027-02-01', $from->format('Y-m-d'));
+        $this->assertSame('2027-03-01', $to->format('Y-m-d'));
+    }
+
     public function testOnlyInvolvedAgentsCanEdit(): void
     {
         $appt = ['created_by' => 1, 'shower_uid' => 2, 'owner_uid' => 3];

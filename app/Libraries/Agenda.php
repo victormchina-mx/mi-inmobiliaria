@@ -74,6 +74,36 @@ class Agenda
         return $monday->format('j') . ' – ' . $sunday->format('j') . ' de ' . $m1 . ' ' . $sunday->format('Y');
     }
 
+    /** Día 1 del mes dado ("2026-11" o "2026-11-18"); el mes actual si no es válido. */
+    public static function monthStart(?string $value): DateTimeImmutable
+    {
+        if (is_string($value) && preg_match('/^\d{4}-\d{2}$/', $value)) {
+            $value .= '-01';
+        }
+        $day = self::date($value) ?? new DateTimeImmutable('today');
+
+        return $day->modify('first day of this month')->setTime(0, 0);
+    }
+
+    /** "noviembre 2026" */
+    public static function monthTitle(DateTimeImmutable $first): string
+    {
+        return self::MONTHS[(int) $first->format('n') - 1] . ' ' . $first->format('Y');
+    }
+
+    /**
+     * Semanas completas (lunes a domingo) que cubren el mes.
+     *
+     * @return array{0: DateTimeImmutable, 1: DateTimeImmutable} [primer lunes, lunes siguiente al último domingo]
+     */
+    public static function monthGrid(DateTimeImmutable $first): array
+    {
+        $start = self::weekStart($first->format('Y-m-d'));
+        $end   = self::weekStart($first->modify('last day of this month')->format('Y-m-d'))->modify('+7 days');
+
+        return [$start, $end];
+    }
+
     /** "lunes 10 de noviembre, 10:00 a 11:00" */
     public static function when(string $start, string $end): string
     {
