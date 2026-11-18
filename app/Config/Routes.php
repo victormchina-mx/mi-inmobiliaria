@@ -20,6 +20,7 @@ $routes->get('property/(:num)/cerca', 'Property::nearby/$1');
 $routes->get('geocode', 'Geocode::search', ['filter' => 'throttle:15,60']);
 $routes->get('agents', 'Agent::index');
 $routes->get('about', 'About::index');
+$routes->get('plataforma', 'Plataforma::index');
 $routes->get('contact', 'Contact::index');
 $routes->post('contact', 'Contact::submit', ['filter' => ['throttle:5,600', 'bottrap:3']]);
 $routes->get('calculator', 'Calculator::index');
