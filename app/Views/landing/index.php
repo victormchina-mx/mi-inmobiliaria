@@ -29,15 +29,19 @@ $money      = static fn ($v): string => '$' . number_format((float) $v, 0, '.', 
     <div class="container">
         <div class="lp-hero__grid">
             <div class="lp-hero__copy">
+                <?php if ($offer): ?>
+                <a class="lp-launch" href="#fundador"><span>Lanzamiento</span>Gratis hasta el <?= esc($offer['freeUntil']) ?><i class="ms" aria-hidden="true">arrow_forward</i></a>
+                <?php endif ?>
                 <span class="lp-eyebrow">Plataforma inmobiliaria</span>
                 <h1 class="lp-hero__title">Publica y administra <em>tus propiedades</em></h1>
-                <p class="lp-hero__lead">El portal donde compradores, agentes e inmobiliarias se encuentran. Propiedades con fotos, ubicación y contacto directo, y herramientas para que tu equipo venda más y se organice mejor.</p>
+                <p class="lp-hero__lead">El portal donde compradores, agentes, inmobiliarias y constructoras se encuentran. Propiedades con fotos, ubicación y contacto directo, y herramientas para que tu equipo venda más y se organice mejor.</p>
                 <div class="lp-hero__cta">
                     <a class="lp-btn lp-btn--gold" href="<?= site_url('property') ?>">Ver propiedades<i class="ms" aria-hidden="true">arrow_forward</i></a>
                     <a class="lp-btn lp-btn--ghost" href="<?= $publishUrl ?>">Publicar mi propiedad</a>
                 </div>
                 <ul class="lp-hero__checks">
-                    <li><i class="ms" aria-hidden="true">check_circle</i>Inmobiliarias y agentes independientes</li>
+                    <li><i class="ms" aria-hidden="true">check_circle</i>Particulares publican gratis</li>
+                    <li><i class="ms" aria-hidden="true">check_circle</i>Inmobiliarias, constructoras y agentes</li>
                     <li><i class="ms" aria-hidden="true">check_circle</i>Cada inmobiliaria con su logo</li>
                 </ul>
             </div>
@@ -101,6 +105,50 @@ $money      = static fn ($v): string => '$' . number_format((float) $v, 0, '.', 
 </section>
 <?php endif ?>
 
+<?php if ($offer): ?>
+<!-- ============ Oferta de lanzamiento: Socio fundador ============ -->
+<section class="lp-sec lp-offer" id="fundador">
+    <div class="container">
+        <div class="lp-offer__box">
+            <div class="lp-offer__head">
+                <span class="lp-seal" aria-hidden="true"><i class="ms">workspace_premium</i></span>
+                <span class="lp-eyebrow lp-eyebrow--dark">Oferta de lanzamiento</span>
+                <h2 class="lp-h2">Sé Socio fundador</h2>
+                <p class="lp-lead">Agentes, inmobiliarias y constructoras que se registren <b>antes del <?= esc($offer['ends']) ?></b> usan la plataforma completa <b>gratis hasta el <?= esc($offer['freeUntil']) ?></b>.</p>
+                <div class="lp-count"><b><?= (int) $offer['daysLeft'] ?></b><span><?= $offer['daysLeft'] === 1 ? 'día' : 'días' ?> para<br>registrarte</span></div>
+            </div>
+            <ul class="lp-perks">
+                <li>
+                    <i class="ms" aria-hidden="true">event_available</i>
+                    <b>6 meses gratis</b>
+                    <span>Agenda de citas, fichas técnicas, app para agentes y panel de tu inmobiliaria, sin costo hasta el <?= esc($offer['freeUntil']) ?>.</span>
+                </li>
+                <li>
+                    <i class="ms" aria-hidden="true">workspace_premium</i>
+                    <b>Insignia de Socio fundador</b>
+                    <span>Un distintivo que reconoce a quienes confiaron desde el inicio.</span>
+                </li>
+                <li>
+                    <i class="ms" aria-hidden="true">upload</i>
+                    <b>Te subimos tus propiedades</b>
+                    <span>Si eres inmobiliaria o constructora, mándanos tus fichas y cargamos tus primeras propiedades por ti.</span>
+                </li>
+                <li>
+                    <i class="ms" aria-hidden="true">home</i>
+                    <b>Particulares, gratis siempre</b>
+                    <span>Si vendes o rentas tu propia casa, publicar no te cuesta nada, sin fecha límite.</span>
+                </li>
+            </ul>
+            <div class="lp-offer__cta">
+                <a class="lp-btn lp-btn--gold" href="<?= $signupUrl ?>"><?= $loggedIn ? 'Publicar mi propiedad' : 'Registrarme como Socio fundador' ?><i class="ms" aria-hidden="true">arrow_forward</i></a>
+                <a class="lp-link" href="<?= site_url('contact') ?>">Quiero que suban mis propiedades<i class="ms" aria-hidden="true">arrow_forward</i></a>
+            </div>
+            <p class="lp-fine">Sin tarjeta y sin compromiso. Aplica a cuentas de agente, inmobiliaria o constructora registradas hasta el <?= esc($offer['ends']) ?>. Antes de que termine el periodo gratuito te avisaremos con anticipación los planes disponibles.</p>
+        </div>
+    </div>
+</section>
+<?php endif ?>
+
 <!-- ============ Para quienes buscan ============ -->
 <section class="lp-sec">
     <div class="container">
@@ -108,7 +156,7 @@ $money      = static fn ($v): string => '$' . number_format((float) $v, 0, '.', 
             <div>
                 <span class="lp-eyebrow lp-eyebrow--dark">Para quienes buscan</span>
                 <h2 class="lp-h2">Encuentra la propiedad ideal</h2>
-                <p class="lp-lead">Casas, departamentos, terrenos, locales y oficinas de inmobiliarias reconocidas y agentes independientes. Cada propiedad trae fotos, características, ubicación y los datos del agente para que lo contactes directamente.</p>
+                <p class="lp-lead">Casas, departamentos, terrenos, locales, oficinas y desarrollos en preventa de inmobiliarias reconocidas, constructoras y agentes independientes. Cada propiedad trae fotos, características, ubicación y los datos del agente para que lo contactes directamente.</p>
                 <ul class="lp-list">
                     <li><i class="ms" aria-hidden="true">search</i><span><b>Búsqueda por tipo, estado y ciudad</b>Filtra y encuentra rápido lo que buscas.</span></li>
                     <li><i class="ms" aria-hidden="true">map</i><span><b>Ubicación en el mapa</b>Conoce la zona y lo que hay cerca.</span></li>
@@ -171,16 +219,16 @@ $money      = static fn ($v): string => '$' . number_format((float) $v, 0, '.', 
     <div class="container">
         <div class="lp-split lp-split--rev">
             <div>
-                <span class="lp-eyebrow">Para inmobiliarias</span>
+                <span class="lp-eyebrow">Para inmobiliarias y constructoras</span>
                 <h2 class="lp-h2 lp-h2--light">Tu marca, tu equipo, tu información</h2>
-                <p class="lp-lead lp-lead--light">Tu inmobiliaria tiene su propio espacio dentro del portal: tus propiedades se ven junto a las demás, pero tu equipo y tus datos son solo tuyos.</p>
-                <a class="lp-btn lp-btn--gold" href="<?= site_url('contact') ?>">Quiero sumar mi inmobiliaria<i class="ms" aria-hidden="true">arrow_forward</i></a>
+                <p class="lp-lead lp-lead--light">Tu empresa tiene su propio espacio dentro del portal: tus propiedades y desarrollos se ven junto a los demás, pero tu equipo y tus datos son solo tuyos.</p>
+                <a class="lp-btn lp-btn--gold" href="<?= site_url('contact') ?>">Quiero sumar mi empresa<i class="ms" aria-hidden="true">arrow_forward</i></a>
             </div>
             <ul class="lp-feats">
                 <li><i class="ms" aria-hidden="true">palette</i><b>Tu logo y tus colores</b><span>En cada propiedad del portal y en cada ficha técnica.</span></li>
                 <li><i class="ms" aria-hidden="true">badge</i><b>Un encargado</b><span>Administra a los agentes y la identidad de la inmobiliaria.</span></li>
                 <li><i class="ms" aria-hidden="true">groups</i><b>Información solo para tu equipo</b><span>Cada agente ve únicamente las propiedades y citas de su inmobiliaria.</span></li>
-                <li><i class="ms" aria-hidden="true">apartment</i><b>Visibilidad en el portal</b><span>Tus propiedades aparecen con tu logo ante todos los compradores.</span></li>
+                <li><i class="ms" aria-hidden="true">apartment</i><b>Desarrollos y preventas</b><span>Las constructoras publican sus casas y departamentos con su logo, ante todos los compradores del portal.</span></li>
             </ul>
         </div>
     </div>
@@ -194,7 +242,7 @@ $money      = static fn ($v): string => '$' . number_format((float) $v, 0, '.', 
             <h2 class="lp-h2">Empieza en tres pasos</h2>
         </div>
         <ol class="lp-steps">
-            <li><span>1</span><b>Crea tu cuenta</b><p>Regístrate como usuario o agente en un par de minutos.</p></li>
+            <li><span>1</span><b>Crea tu cuenta</b><p>Regístrate como usuario, agente o constructor en un par de minutos.</p></li>
             <li><span>2</span><b>Publica tus propiedades</b><p>Sube fotos, precio, ubicación y características.</p></li>
             <li><span>3</span><b>Comparte y agenda</b><p>Genera la ficha técnica, compártela y organiza las visitas.</p></li>
         </ol>
@@ -212,6 +260,14 @@ $money      = static fn ($v): string => '$' . number_format((float) $v, 0, '.', 
             </div>
             <div class="lp-faq__list">
                 <details open>
+                    <summary>¿Cuánto cuesta?</summary>
+                    <p>Para particulares que venden o rentan su propia propiedad, publicar es gratis siempre.<?php if ($offer): ?> Agentes, inmobiliarias y constructoras que se registren antes del <?= esc($offer['ends']) ?> la usan gratis hasta el <?= esc($offer['freeUntil']) ?>; antes de que termine ese periodo avisaremos los planes con anticipación.<?php else: ?> Para agentes, inmobiliarias y constructoras, <a href="<?= site_url('contact') ?>">escríbenos</a> y te contamos los planes.<?php endif ?></p>
+                </details>
+                <details>
+                    <summary>Soy constructora, ¿puedo publicar mis desarrollos?</summary>
+                    <p>Sí. Regístrate como Constructor y publica tus casas y departamentos, incluso en preventa. Si lo prefieres, mándanos tus fichas y los cargamos por ti.</p>
+                </details>
+                <details>
                     <summary>¿Puedo publicar si soy agente independiente?</summary>
                     <p>Sí. Tus propiedades aparecen en el portal aunque no pertenezcas a una inmobiliaria.</p>
                 </details>
@@ -238,7 +294,11 @@ $money      = static fn ($v): string => '$' . number_format((float) $v, 0, '.', 
         <div class="lp-final__box">
             <div>
                 <h2>¿Listo para empezar?</h2>
+                <?php if ($offer): ?>
+                <p>Regístrate antes del <?= esc($offer['ends']) ?> y úsala gratis hasta el <?= esc($offer['freeUntil']) ?>.</p>
+                <?php else: ?>
                 <p>Crea tu cuenta y publica tu primera propiedad hoy.</p>
+                <?php endif ?>
             </div>
             <div class="lp-final__cta">
                 <a class="lp-btn lp-btn--gold" href="<?= $signupUrl ?>"><?= $loggedIn ? 'Publicar mi propiedad' : 'Crear mi cuenta' ?><i class="ms" aria-hidden="true">arrow_forward</i></a>
