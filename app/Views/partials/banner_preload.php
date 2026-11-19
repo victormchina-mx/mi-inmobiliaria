@@ -1,6 +1,6 @@
 <?php
 /**
- * Precarga del banner oscuro de las páginas interiores (images/breadcromb.webp).
+ * Precarga del banner oscuro de las páginas interiores (foto elegida en Admin → Fondos).
  *
  * El banner es un fondo CSS escrito en el <body>, así que el navegador lo
  * descubre tarde; en celular es la imagen principal (LCP) y esperaba ~3.7 s
@@ -12,4 +12,4 @@
  *   <?= $this->endSection() ?>
  */
 ?>
-<link rel="preload" as="image" href="<?= base_url('images/breadcromb.webp') ?>" fetchpriority="high">
+<link rel="preload" as="image" href="<?= esc(\App\Libraries\PageBanner::url(), 'attr') ?>" fetchpriority="high">

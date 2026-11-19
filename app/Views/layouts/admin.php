@@ -86,7 +86,13 @@
                         </ul>
                     </li>
 
-                    <li><a href="<?= site_url('admin/portada') ?>"><i class="fe fe-picture"></i> Portada del inicio</a></li>
+                    <li class="submenu">
+                        <a href="#"><i class="fe fe-picture"></i> Fondos <span class="menu-arrow"></span></a>
+                        <ul>
+                            <li><a href="<?= site_url('admin/portada') ?>">Portada del inicio</a></li>
+                            <li><a href="<?= site_url('admin/banner') ?>">Banner de páginas</a></li>
+                        </ul>
+                    </li>
                     <li><a href="<?= site_url('admin/about') ?>"><i class="fe fe-info"></i> Nosotros</a></li>
                 </ul>
             </div>

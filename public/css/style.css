@@ -4231,6 +4231,7 @@ footer .divider {
     rgba(15,23,42,0.50) 100%
   );
   z-index: 0;
+  opacity: var(--banner-shade, 1);   /* intensidad elegida en Admin → Fondos */
 }
 .page-banner .container {
   position: relative;

@@ -29,7 +29,7 @@ $ready = $ready ?? false;
 
 <?= $this->section('content') ?>
 
-<div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.webp') ?>');">
+<div class="banner-full-row page-banner" <?= \App\Libraries\PageBanner::style() ?>>
     <div class="container">
         <div class="row">
             <div class="col-md-8"><h1 class="h2 page-name float-left text-white text-uppercase">Agenda de citas</h1></div>
