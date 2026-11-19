@@ -104,6 +104,10 @@ $routes->get('admin/reset-password/(:hash)', 'Admin\Auth::resetPassword/$1');
 $routes->post('admin/reset-password/(:hash)', 'Admin\Auth::doResetPassword/$1', ['filter' => 'throttle:5,300']);
 
 $routes->group('admin', ['filter' => 'admin-auth'], static function ($routes) {
+    // Portada del inicio (foto de fondo)
+    $routes->get('portada', 'Admin\HomeHero::index');
+    $routes->post('portada', 'Admin\HomeHero::save');
+    $routes->post('portada/restaurar', 'Admin\HomeHero::reset');
     // Dashboard
     $routes->get('dashboard', 'Admin\Dashboard::index');
 

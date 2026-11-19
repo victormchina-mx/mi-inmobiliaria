@@ -3420,7 +3420,7 @@ blockquote {
   height: 100vh !important;
   min-height: 600px;
   background-size: cover !important;
-  background-position: center center;
+  background-position: var(--hero-pos, center center);
   background-repeat: no-repeat;
   overflow: hidden;
   isolation: isolate;
@@ -3434,7 +3434,7 @@ blockquote {
   z-index: -1;
   background-image: inherit;
   background-size: cover;
-  background-position: center center;
+  background-position: var(--hero-pos, center center);   /* encuadre elegido en Admin → Portada */
   background-repeat: no-repeat;
   transform-origin: center center;
   will-change: transform;
