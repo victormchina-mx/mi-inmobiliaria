@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('styles') ?>
 <!-- La portada es la imagen principal (LCP): descargarla primero -->
-<link rel="preload" as="image" href="<?= base_url('images/banner/rshmpg.webp') ?>" fetchpriority="high">
+<link rel="preload" as="image" href="<?= esc(\App\Libraries\HomeHero::url(), 'attr') ?>" fetchpriority="high">
 <?= $this->endSection() ?>
 <?= $this->section('schema') ?>
 <?php
@@ -12,7 +12,7 @@ $organization = [
     'name'       => 'Inmobiliaria by VMCH',
     'url'        => base_url('/'),
     'logo'       => base_url('images/logo/icon-192.png'),
-    'image'      => base_url('images/banner/rshmpg.webp'),
+    'image'      => \App\Libraries\HomeHero::url(),
     'telephone'  => '+52 55 7606 2384',
     'email'      => 'inmobiliaria.info@vmch.net',
     'areaServed' => ['@type' => 'Country', 'name' => 'México'],
@@ -39,7 +39,7 @@ $jsonFlags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JS
 
 <!-- Banner -->
 <div id="hero-section" class="overlay-black w-100 slider-banner1 position-relative"
-     style="background-image: url('<?= base_url('images/banner/rshmpg.webp') ?>'); background-size: cover; background-position: center center;">
+     style="background-image: url('<?= esc(\App\Libraries\HomeHero::url(), 'attr') ?>'); background-size: cover; --hero-pos: <?= \App\Libraries\HomeHero::css() ?>; background-position: var(--hero-pos);">
     <div class="container h-100">
         <div class="row h-100 align-items-center">
             <div class="col-lg-10 col-xl-8">

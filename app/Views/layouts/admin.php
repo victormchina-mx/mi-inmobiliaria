@@ -86,6 +86,7 @@
                         </ul>
                     </li>
 
+                    <li><a href="<?= site_url('admin/portada') ?>"><i class="fe fe-picture"></i> Portada del inicio</a></li>
                     <li><a href="<?= site_url('admin/about') ?>"><i class="fe fe-info"></i> Nosotros</a></li>
                 </ul>
             </div>

@@ -16,6 +16,7 @@ class Home extends BaseController
 
         $data = [
             'pageTitle'  => 'Inicio',
+            'ogImage'    => \App\Libraries\HomeHero::isCustom() ? \App\Libraries\HomeHero::url() : null,
             'properties' => $propertyModel->withOwner()->available()->orderBy('created_at', 'DESC')->limit(9)->findAll(),
             'feedback'   => $feedbackModel->active()->findAll(),
             'totalProps' => $propertyModel->available()->countAllResults(),
