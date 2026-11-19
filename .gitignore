@@ -5,6 +5,7 @@ writable/logs/*
 writable/session/*
 writable/uploads/*
 writable/home-hero.json
+writable/page-banner.json
 writable/debugbar/*
 # Las fotos subidas no van al repositorio, pero sí la regla que impide
 # ejecutar scripts dentro de la carpeta de subidas

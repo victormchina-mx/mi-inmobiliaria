@@ -1,10 +1,14 @@
 <?= $this->extend('layouts/admin') ?>
 <?php
 /**
- * Admin → Portada del inicio (Controlador: Admin\HomeHero · Reglas: App\Libraries\HomeHero)
- * La vista previa imita la portada real: foto, degradado oscuro y el título.
+ * Admin → Fondos → Portada del inicio / Banner de páginas
+ * (Controlador: Admin\HomeHero · Reglas: App\Libraries\Backdrop)
+ * La vista previa imita el fondo real: foto, degradado oscuro y el texto.
  */
-use App\Libraries\HomeHero;
+use App\Libraries\Backdrop as HomeHero;
+
+$isHome = $cfg['kind'] === 'home';
+$base   = site_url('admin/' . $slot);
 ?>
 
 <?= $this->section('styles') ?>
@@ -14,6 +18,11 @@ use App\Libraries\HomeHero;
 .hh-preview__text { position: absolute; left: 6%; top: 50%; transform: translateY(-50%); color: #fff; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(22px, 3.4vw, 42px); font-weight: 700; line-height: 1.1; }
 .hh-preview__text span { color: #C9A96E; }
 .hh-preview__bar { position: absolute; left: 6%; right: 30%; bottom: 14%; height: 12%; max-height: 46px; border-radius: 8px; background: rgba(255, 255, 255, .9); }
+.hh-preview--pages { aspect-ratio: auto; min-height: 0; height: 220px; }
+.hh-preview--pages::before { background: linear-gradient(135deg, rgba(15, 23, 42, .80) 0%, rgba(15, 23, 42, .50) 100%); }
+.hh-band { position: absolute; left: 6%; right: 6%; top: 50%; display: flex; justify-content: space-between; align-items: center; gap: 12px; transform: translateY(-50%); color: #fff; }
+.hh-band b { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(20px, 2.6vw, 32px); letter-spacing: 1px; text-transform: uppercase; }
+.hh-band small { font-size: 14px; opacity: .9; white-space: nowrap; }
 .hh-tag { position: absolute; top: 12px; right: 12px; z-index: 1; padding: 3px 10px; border-radius: 20px; background: rgba(255, 255, 255, .92); color: #0F172A; font-size: 12px; font-weight: 700; }
 .hh-pos { display: flex; gap: 8px; flex-wrap: wrap; }
 .hh-pos label { flex: 1; min-width: 90px; margin: 0; cursor: pointer; }
@@ -39,31 +48,40 @@ use App\Libraries\HomeHero;
 <div class="page-header">
     <div class="row align-items-center">
         <div class="col">
-            <h3 class="page-title">Portada del inicio</h3>
+            <h3 class="page-title"><?= esc($cfg['title']) ?></h3>
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= site_url('admin/dashboard') ?>">Dashboard</a></li>
-                <li class="breadcrumb-item active">Portada del inicio</li>
+                <li class="breadcrumb-item">Fondos</li>
+                <li class="breadcrumb-item active"><?= esc($cfg['title']) ?></li>
             </ul>
         </div>
         <div class="col-auto">
-            <a href="<?= site_url('/') ?>" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm"><i class="fe fe-eye"></i> Ver el inicio</a>
+            <a href="<?= site_url($cfg['viewUrl']) ?>" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm"><i class="fe fe-eye"></i> <?= $isHome ? 'Ver el inicio' : 'Ver una página' ?></a>
         </div>
     </div>
 </div>
 
 
-<form method="post" action="<?= site_url('admin/portada') ?>" enctype="multipart/form-data" id="hh-form">
+<?php if (! $isHome): ?>
+<div class="alert alert-light border small">Este banner aparece arriba de <b>Nosotros, Contacto, Propiedades, Agentes</b>, la calculadora, Mi cuenta y el área de agentes. La portada del inicio se cambia en <a href="<?= site_url('admin/portada') ?>">Fondos → Portada del inicio</a>.</div>
+<?php endif ?>
+
+<form method="post" action="<?= $base ?>" enctype="multipart/form-data" id="hh-form">
     <?= csrf_field() ?>
     <div class="row">
         <div class="col-lg-8">
             <div class="card"><div class="card-body">
                 <h5 class="card-title mb-3">Vista previa</h5>
-                <div class="hh-preview" id="hh-preview" style="background-image:url('<?= esc($url, 'attr') ?>'); background-position: <?= esc(HomeHero::POSITIONS[$position][1], 'attr') ?>; --shade: <?= $shade / 100 ?>;">
+                <div class="hh-preview<?= $isHome ? '' : ' hh-preview--pages' ?>" id="hh-preview" style="background-image:url('<?= esc($url, 'attr') ?>'); background-position: <?= esc(HomeHero::POSITIONS[$position][1], 'attr') ?>; --shade: <?= $shade / 100 ?>;">
                     <span class="hh-tag" id="hh-tag"><?= $custom ? 'Foto actual' : 'Foto original' ?></span>
+                    <?php if ($isHome): ?>
                     <div class="hh-preview__text"><span>Déjanos</span><br>Guiarte a tu Hogar</div>
                     <div class="hh-preview__bar"></div>
+                    <?php else: ?>
+                    <div class="hh-band"><b>Nosotros</b><small>Inicio &gt; Nosotros</small></div>
+                    <?php endif ?>
                 </div>
-                <p class="text-muted small mt-2 mb-0">Así se verá en el inicio. El degradado oscuro hace legible el texto; ajústalo a la derecha. En celular se muestra la parte central de la foto.</p>
+                <p class="text-muted small mt-2 mb-0">Así se verá<?= $isHome ? ' en el inicio' : ' arriba de cada página' ?>. El degradado oscuro hace legible el texto; ajústalo a la derecha. En celular se muestra la parte central de la foto.</p>
             </div></div>
         </div>
         <div class="col-lg-4">
@@ -78,7 +96,7 @@ use App\Libraries\HomeHero;
                 </label>
                 <ul class="small text-muted mt-3 pl-3 mb-0">
                     <li>Horizontal, de preferencia <b>1920×1080 px</b> o más.</li>
-                    <li>Mejor si el lado izquierdo es sencillo: ahí va el texto.</li>
+                    <li><?= esc($cfg['tip']) ?></li>
                     <li>Se optimiza sola para que la página cargue rápido.</li>
                 </ul>
 
@@ -108,7 +126,7 @@ use App\Libraries\HomeHero;
 
             <?php if ($custom || $shade !== HomeHero::SHADE_DEFAULT || $position !== 'center'): ?>
             <div class="card"><div class="card-body">
-                <h6 class="mb-2">¿Volver a la portada original?</h6>
+                <h6 class="mb-2">¿Volver <?= $isHome ? 'a la portada original' : 'al banner original' ?>?</h6>
                 <p class="small text-muted">Se borra la foto subida y regresa la de la plantilla, con el encuadre y el degradado originales.</p>
                 <button type="submit" form="hh-reset" class="btn btn-outline-danger btn-sm"><i class="fe fe-loop"></i> Restaurar la original</button>
             </div></div>
@@ -118,7 +136,7 @@ use App\Libraries\HomeHero;
 </form>
 
 <?php if ($custom || $shade !== HomeHero::SHADE_DEFAULT || $position !== 'center'): ?>
-<form method="post" action="<?= site_url('admin/portada/restaurar') ?>" id="hh-reset" onsubmit="return confirm('¿Restaurar la portada original?');">
+<form method="post" action="<?= $base ?>/restaurar" id="hh-reset" onsubmit="return confirm('<?= $isHome ? '¿Restaurar la portada original?' : '¿Restaurar el banner original?' ?>');">
     <?= csrf_field() ?>
 </form>
 <?php endif ?>

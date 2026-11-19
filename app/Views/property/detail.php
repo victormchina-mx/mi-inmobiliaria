@@ -76,7 +76,7 @@ $gallerySizes = '(min-width: 1200px) 770px, (min-width: 992px) 610px, 100vw';
 ?>
 <script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
 
-<div class="banner-full-row page-banner" style="background-image:url('<?= base_url('images/breadcromb.webp') ?>');">
+<div class="banner-full-row page-banner" <?= \App\Libraries\PageBanner::style() ?>>
     <div class="container">
         <div class="row">
             <div class="col-md-6"><h2 class="page-name float-left text-white text-uppercase">Detalle de Propiedad</h2></div>
