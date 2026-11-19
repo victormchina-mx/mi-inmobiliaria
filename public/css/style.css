@@ -3453,6 +3453,7 @@ blockquote {
     rgba(201, 169, 110, 0.10) 100%
   );
   z-index: 0;
+  opacity: var(--hero-shade, 1);   /* intensidad elegida en Admin → Portada */
 }
 
 /* Content above overlay */

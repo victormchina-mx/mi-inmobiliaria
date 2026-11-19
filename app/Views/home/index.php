@@ -39,7 +39,7 @@ $jsonFlags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JS
 
 <!-- Banner -->
 <div id="hero-section" class="overlay-black w-100 slider-banner1 position-relative"
-     style="background-image: url('<?= esc(\App\Libraries\HomeHero::url(), 'attr') ?>'); background-size: cover; --hero-pos: <?= \App\Libraries\HomeHero::css() ?>; background-position: var(--hero-pos);">
+     style="background-image: url('<?= esc(\App\Libraries\HomeHero::url(), 'attr') ?>'); background-size: cover; --hero-pos: <?= \App\Libraries\HomeHero::css() ?>; --hero-shade: <?= \App\Libraries\HomeHero::shadeCss() ?>; background-position: var(--hero-pos);">
     <div class="container h-100">
         <div class="row h-100 align-items-center">
             <div class="col-lg-10 col-xl-8">

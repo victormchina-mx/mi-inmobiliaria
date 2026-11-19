@@ -7,7 +7,8 @@ use CodeIgniter\HTTP\Files\UploadedFile;
 /**
  * Foto de fondo de la portada del inicio ("Déjanos guiarte a tu hogar").
  *
- * Se cambia en Admin → Portada del inicio (Admin\HomeHero). No usa base de
+ * Se cambia en Admin → Portada del inicio (Admin\HomeHero): la foto, su
+ * encuadre y qué tan oscuro es el degradado sobre ella. No usa base de
  * datos: la foto se guarda en public/uploads/home/ y la elección en
  * writable/home-hero.json. Sin archivo, se usa la foto original del tema.
  *
@@ -28,9 +29,14 @@ class HomeHero
         'bottom' => ['Abajo', 'center bottom'],
     ];
 
+    /** Intensidad del degradado oscuro, en % (100 = como venía la plantilla) */
+    public const SHADE_DEFAULT = 100;
+    public const SHADE_MIN     = 0;
+    public const SHADE_MAX     = 100;
+
     private static ?array $cache = null;
 
-    /** @return array{file: ?string, position: string} */
+    /** @return array{file: ?string, position: string, shade: int} */
     public static function settings(): array
     {
         if (self::$cache === null) {
@@ -40,7 +46,8 @@ class HomeHero
                 $file = null;   // borraron el archivo: vuelve a la original
             }
             $pos         = is_array($data) && isset(self::POSITIONS[$data['position'] ?? '']) ? $data['position'] : 'center';
-            self::$cache = ['file' => $file, 'position' => $pos];
+            $shade       = is_array($data) && isset($data['shade']) ? self::clampShade($data['shade']) : self::SHADE_DEFAULT;
+            self::$cache = ['file' => $file, 'position' => $pos, 'shade' => $shade];
         }
 
         return self::$cache;
@@ -73,10 +80,29 @@ class HomeHero
         return self::POSITIONS[self::position()][1];
     }
 
+    /** Intensidad del degradado (0–100 %). */
+    public static function shade(): int
+    {
+        return self::settings()['shade'];
+    }
+
+    /** Valor CSS de opacity del degradado ("0.85"). */
+    public static function shadeCss(): string
+    {
+        return rtrim(rtrim(number_format(self::shade() / 100, 2, '.', ''), '0'), '.') ?: '0';
+    }
+
+    public static function clampShade($value): int
+    {
+        $n = (int) round((float) $value);
+
+        return max(self::SHADE_MIN, min(self::SHADE_MAX, $n));
+    }
+
     /**
-     * Guarda una foto nueva (y la posición). Devuelve el mensaje de error o null.
+     * Guarda una foto nueva (con encuadre y degradado). Devuelve el mensaje de error o null.
      */
-    public static function upload(UploadedFile $file, string $position): ?string
+    public static function upload(UploadedFile $file, string $position, int $shade = self::SHADE_DEFAULT): ?string
     {
         if (! $file->isValid()) {
             return $file->getError() === UPLOAD_ERR_INI_SIZE || $file->getError() === UPLOAD_ERR_FORM_SIZE
@@ -142,7 +168,7 @@ class HomeHero
         }
 
         $old = self::settings()['file'];
-        self::write(['file' => $name, 'position' => $position]);
+        self::write(['file' => $name, 'position' => $position, 'shade' => $shade]);
         if ($old !== null && $old !== $name) {
             @unlink(self::dir() . $old);
         }
@@ -150,13 +176,13 @@ class HomeHero
         return null;
     }
 
-    /** Cambia solo el encuadre. */
-    public static function setPosition(string $position): void
+    /** Cambia el encuadre y el degradado sin cambiar la foto. */
+    public static function setLook(string $position, int $shade): void
     {
-        self::write(['file' => self::settings()['file'], 'position' => $position]);
+        self::write(['file' => self::settings()['file'], 'position' => $position, 'shade' => $shade]);
     }
 
-    /** Vuelve a la foto original del tema (y borra la subida). */
+    /** Vuelve a la foto original del tema, con encuadre y degradado normales (y borra la subida). */
     public static function reset(): void
     {
         $old = self::settings()['file'];
@@ -174,6 +200,7 @@ class HomeHero
     private static function write(array $data): void
     {
         $data['position'] = isset(self::POSITIONS[$data['position'] ?? '']) ? $data['position'] : 'center';
+        $data['shade']    = self::clampShade($data['shade'] ?? self::SHADE_DEFAULT);
         file_put_contents(self::configPath(), json_encode($data, JSON_PRETTY_PRINT), LOCK_EX);
         self::$cache = null;
     }
