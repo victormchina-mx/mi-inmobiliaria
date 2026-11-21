@@ -68,6 +68,10 @@ Arranca en hosting compartido de Hostinger y migra a VPS solo con variables de e
   deja bitácora en `mensajes` y encola `EnviarMensaje`). Textos en `plantillas_mensaje` con `{variables}`.
 - En Blade, una directiva pegada a una letra (`km@endif`) NO se compila (se toma como correo): dejar un espacio
   o un `}}` antes de la `@`.
+- CFDI SOLO con `App\Services\Cfdi\Facturador` (timbra/cancela con el PAC de `CFDI_DRIVER`, guarda XML y PDF,
+  mueve saldos). Cobros con `RegistrarPago` (genera el REP de las PPD). Una factura timbrada nunca se edita:
+  se cancela, se sustituye o se corrige con nota de crédito.
+- Utilidad por orden SOLO con `App\Services\Finanzas\Rentabilidad`; KPIs en `Indicadores` (cada uno con definición).
 - XML de terceros (facturas): parsear con `LIBXML_NONET` y nunca `LIBXML_NOENT`.
 - Selects de Filament que validan el valor elegido: usar `->options()` (con `->searchable()`), no solo
   `getSearchResultsUsing`, o la validación rechaza la opción.
@@ -92,6 +96,10 @@ app/Actions/Postventa/    GenerarGarantias, RevisarGarantias, ReclamarGarantia, 
                           EnviarRecordatorios, CalendarioVerificacion, EnviarEncuestas, RegistrarRespuestaNps
 app/Http/Controllers/     WhatsAppWebhookController, PortalClienteController (seguimiento y baja), EncuestaController
 app/Filament/Pages/       Conversaciones (bandeja WhatsApp), Satisfaccion (NPS)
+app/Services/Cfdi/        Facturador, ProveedorCfdi (PacFacturama, PacSimulado), DatosCfdi, GeneradorXml
+app/Actions/Facturacion/  PrepararFacturas (seguro dividido), CrearNotaCredito, CrearSustituta, RegistrarPago, CancelarPago
+app/Services/Finanzas/    Rentabilidad (utilidad por orden) e Indicadores (KPIs)
+app/Filament/Pages/       CuentasPorCobrar, Indicadores, RentabilidadOrdenes
 app/Jobs/                 GenerarPdfIngreso (PDF + correo al cliente), EnviarMensaje
 app/Services/             DecodificadorVin (NHTSA vPIC)
 app/Enums/                Rol, TipoOrden, TipoPersona, CanalPreferido, TipoBahia

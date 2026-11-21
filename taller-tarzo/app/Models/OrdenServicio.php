@@ -107,6 +107,26 @@ class OrdenServicio extends Model
         return $this->hasMany(Requisicion::class);
     }
 
+    public function facturas(): HasMany
+    {
+        return $this->hasMany(Factura::class);
+    }
+
+    public function pagos(): HasMany
+    {
+        return $this->hasMany(Pago::class);
+    }
+
+    public function gastos(): HasMany
+    {
+        return $this->hasMany(GastoOrden::class);
+    }
+
+    public function cierre(): HasOne
+    {
+        return $this->hasOne(CierreOrden::class);
+    }
+
     public function consumos(): HasMany
     {
         return $this->hasMany(MovimientoInventario::class)->latest('id');

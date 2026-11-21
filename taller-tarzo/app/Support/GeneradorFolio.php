@@ -14,7 +14,15 @@ final class GeneradorFolio
     {
         $anio ??= (int) now()->format('Y');
 
-        $numero = DB::transaction(function () use ($serie, $anio) {
+        return sprintf('%s-%d-%06d', $serie, $anio, self::numero($serie, $anio));
+    }
+
+    /**
+     * Consecutivo numérico. Con $anio = 0 la numeración no se reinicia cada año (folios de CFDI).
+     */
+    public static function numero(string $serie, int $anio = 0): int
+    {
+        return DB::transaction(function () use ($serie, $anio) {
             $fila = DB::table('consecutivos')
                 ->where('serie', $serie)
                 ->where('anio', $anio)
@@ -32,7 +40,5 @@ final class GeneradorFolio
 
             return $siguiente;
         });
-
-        return sprintf('%s-%d-%06d', $serie, $anio, $numero);
     }
 }

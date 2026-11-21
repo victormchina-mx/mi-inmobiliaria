@@ -32,6 +32,35 @@ return [
         'email_privacidad' => env('TARZO_EMAIL_PRIVACIDAD', env('TARZO_EMAIL', '')),
     ],
 
+    /*
+     * Facturación CFDI 4.0 por medio de un PAC.
+     *  - simulado: genera UUID y XML de prueba SIN VALIDEZ FISCAL (desarrollo y capacitación).
+     *  - facturama: API Lite (multiemisor) de Facturama; subir antes el CSD en su portal.
+     * Las claves SAT por tipo de partida deben confirmarse con el contador.
+     */
+    'cfdi' => [
+        'driver' => env('CFDI_DRIVER', 'simulado'),
+        'ambiente' => env('CFDI_AMBIENTE', 'pruebas'), // pruebas | produccion
+        'usuario' => env('CFDI_USUARIO'),
+        'password' => env('CFDI_PASSWORD'),
+        'serie' => env('CFDI_SERIE', 'A'),
+        'serie_nota_credito' => env('CFDI_SERIE_NC', 'NC'),
+        'serie_pago' => env('CFDI_SERIE_PAGO', 'P'),
+        'emisor' => [
+            'rfc' => env('CFDI_EMISOR_RFC', 'EKU9003173C9'),           // RFC de pruebas del SAT
+            'nombre' => env('CFDI_EMISOR_NOMBRE', 'ESCUELA KEMPER URGATE'),
+            'regimen' => env('CFDI_EMISOR_REGIMEN', '601'),
+            'codigo_postal' => env('CFDI_LUGAR_EXPEDICION', '42501'),
+        ],
+        'claves' => [
+            'mano_obra' => ['78181500', 'E48', 'Servicio'],
+            'hojalateria_pintura' => ['78181500', 'E48', 'Servicio'],
+            'refaccion' => ['25174000', 'H87', 'Pieza'],
+            'otro' => ['78181500', 'E48', 'Servicio'],
+            'nota_credito' => ['84111506', 'ACT', 'Actividad'],
+        ],
+    ],
+
     // 'compartido' o 'vps'. Solo informativo para diagnósticos y el panel.
     'hosting' => env('TARZO_HOSTING', 'compartido'),
 

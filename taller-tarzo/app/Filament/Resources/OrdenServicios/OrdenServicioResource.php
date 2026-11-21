@@ -11,6 +11,8 @@ use App\Filament\Resources\OrdenServicios\RelationManagers\ConsumosRelationManag
 use App\Filament\Resources\OrdenServicios\RelationManagers\CotizacionesRelationManager;
 use App\Filament\Resources\OrdenServicios\RelationManagers\DiagnosticosRelationManager;
 use App\Filament\Resources\OrdenServicios\RelationManagers\EvidenciasRelationManager;
+use App\Filament\Resources\OrdenServicios\RelationManagers\FacturasRelationManager;
+use App\Filament\Resources\OrdenServicios\RelationManagers\GastosRelationManager;
 use App\Filament\Resources\OrdenServicios\RelationManagers\MensajesRelationManager;
 use App\Filament\Resources\OrdenServicios\RelationManagers\RefaccionesRelationManager;
 use App\Filament\Resources\OrdenServicios\RelationManagers\TareasRelationManager;
@@ -69,7 +71,7 @@ class OrdenServicioResource extends Resource
 
     public static function getRelations(): array
     {
-        return [DiagnosticosRelationManager::class, CotizacionesRelationManager::class, TareasRelationManager::class, RefaccionesRelationManager::class, EvidenciasRelationManager::class, ConsumosRelationManager::class, MensajesRelationManager::class];
+        return [DiagnosticosRelationManager::class, CotizacionesRelationManager::class, TareasRelationManager::class, RefaccionesRelationManager::class, EvidenciasRelationManager::class, ConsumosRelationManager::class, GastosRelationManager::class, FacturasRelationManager::class, MensajesRelationManager::class];
     }
 
     public static function getGloballySearchableAttributes(): array

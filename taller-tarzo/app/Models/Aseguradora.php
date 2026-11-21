@@ -14,7 +14,7 @@ class Aseguradora extends Model
 
     protected $table = 'aseguradoras';
 
-    protected $fillable = ['nombre', 'rfc', 'telefono', 'email', 'dias_pago', 'notas', 'activo'];
+    protected $fillable = ['nombre', 'rfc', 'razon_social', 'regimen_fiscal', 'codigo_postal', 'uso_cfdi', 'telefono', 'email', 'email_facturacion', 'dias_pago', 'notas', 'activo'];
 
     protected function casts(): array
     {

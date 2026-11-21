@@ -8,6 +8,7 @@ use App\Models\Checklist;
 use App\Models\Etapa;
 use App\Models\OrdenServicio;
 use App\Models\User;
+use App\Services\Finanzas\Rentabilidad;
 use App\Support\Checklists;
 use App\Support\Media;
 use Illuminate\Support\Facades\DB;
@@ -66,6 +67,7 @@ class EntregarVehiculo
             }
 
             (new GenerarGarantias)($orden->refresh());
+            app(Rentabilidad::class)->cerrar($orden, $usuario);
 
             return $checklist;
         });

@@ -25,6 +25,7 @@
         <env name="CACHE_STORE" value="array"/>
         <env name="MEDIA_DISK" value="media"/>
         <env name="WHATSAPP_DRIVER" value="desactivado"/>
+        <env name="CFDI_DRIVER" value="simulado"/>
         <env name="TARZO_COLA_POR_CRON" value="true"/>
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\OrdenServicios\Pages;
 
 use App\Actions\Cotizacion\AbrirCotizacion;
+use App\Actions\Facturacion\PrepararFacturas;
 use App\Actions\Ordenes\CambiarEtapa;
 use App\Actions\Piso\EntregarVehiculo;
 use App\Actions\Piso\RegistrarCalidad;
@@ -10,16 +11,20 @@ use App\Enums\EstadoMensaje;
 use App\Enums\EventoMensaje;
 use App\Enums\TipoOrden;
 use App\Filament\Actions\EnviarAFirmaAction;
+use App\Filament\Facturacion\FormularioCobro;
 use App\Filament\Resources\Checkins\CheckinResource;
 use App\Filament\Resources\Cotizaciones\CotizacionResource;
+use App\Filament\Resources\Facturas\FacturaResource;
 use App\Filament\Resources\OrdenServicios\OrdenServicioResource;
 use App\Filament\Resources\OrdenServicios\Schemas\SiniestroForm;
 use App\Jobs\GenerarPdfIngreso;
 use App\Models\Etapa;
 use App\Models\OrdenServicio;
+use App\Models\Parametro;
 use App\Models\Siniestro;
 use App\Services\Comunicacion\Notificador;
 use App\Services\Cotizacion\Cotizador;
+use App\Services\Finanzas\Rentabilidad;
 use App\Support\Checklists;
 use App\Support\EnlacePortal;
 use Filament\Actions\Action;
@@ -60,6 +65,46 @@ class ViewOrdenServicio extends ViewRecord
                 ->visible($gestiona),
 
             EnviarAFirmaAction::make(fn () => $this->record->checkin),
+
+            Action::make('facturar')->label('Facturar')->icon(Heroicon::OutlinedDocumentCurrencyDollar)
+                ->visible(fn () => auth()->user()?->can('facturacion.gestionar') && $this->record->tieneCotizacionAprobada()
+                    && ! $this->record->facturas()->where('tipo', 'I')->where('estado', '!=', 'cancelada')->exists())
+                ->requiresConfirmation()
+                ->modalDescription(fn () => $this->record->tipo === TipoOrden::Seguro
+                    ? 'Se preparan dos borradores: a la aseguradora lo cubierto (crédito, PPD) y al cliente el deducible y lo no cubierto. Revísalos antes de timbrar.'
+                    : 'Se prepara el borrador de la factura con las partidas autorizadas. Revísalo antes de timbrar.')
+                ->action(function () {
+                    try {
+                        $facturas = app(PrepararFacturas::class)($this->record, auth()->user());
+                    } catch (ValidationException $e) {
+                        Notification::make()->title('No se pudo facturar')->body(collect($e->errors())->flatten()->first())->danger()->persistent()->send();
+
+                        return;
+                    }
+                    Notification::make()->title($facturas->count() === 1 ? 'Borrador de factura listo' : "{$facturas->count()} borradores listos")->success()->send();
+                    $this->redirect($facturas->count() === 1
+                        ? FacturaResource::getUrl('view', ['record' => $facturas->first()])
+                        : FacturaResource::getUrl('index', ['filters' => ['orden_servicio_id' => ['value' => $this->record->id]]]));
+                }),
+
+            FormularioCobro::accion('cobrar', fn () => [
+                'pagador' => 'cliente', 'cliente_id' => $this->record->cliente_id, 'orden_servicio_id' => $this->record->id,
+            ])->label('Cobro / anticipo')->color('gray'),
+
+            Action::make('utilidad')->label('Utilidad')->icon(Heroicon::OutlinedChartPie)->color('gray')
+                ->visible(fn () => auth()->user()?->can('reportes.ver'))
+                ->modalHeading(fn () => 'Utilidad de la orden '.$this->record->folio)
+                ->modalContent(fn () => view('filament.orden-utilidad', [
+                    'u' => app(Rentabilidad::class)->calcular($this->record),
+                    'cierre' => $this->record->cierre,
+                    'minimo' => Parametro::valor('margen_minimo', 25),
+                ]))
+                ->modalSubmitActionLabel('Guardar cálculo')
+                ->modalCancelActionLabel('Cerrar')
+                ->action(function () {
+                    app(Rentabilidad::class)->cerrar($this->record, auth()->user());
+                    Notification::make()->title('Utilidad guardada')->success()->send();
+                }),
 
             Action::make('cotizar')
                 ->label(fn () => $this->record->cotizacionActual ? 'Ver cotización' : 'Cotizar')

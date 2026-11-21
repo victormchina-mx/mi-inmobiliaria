@@ -15,7 +15,7 @@ class Tecnico extends Model
 
     protected $table = 'tecnicos';
 
-    protected $fillable = ['user_id', 'area_id', 'nombre', 'especialidad', 'costo_hora', 'capacidad_horas_dia', 'activo'];
+    protected $fillable = ['user_id', 'area_id', 'nombre', 'especialidad', 'costo_hora', 'sueldo_mensual', 'factor_cargas', 'horas_productivas_mes', 'capacidad_horas_dia', 'activo'];
 
     protected function casts(): array
     {
@@ -47,6 +47,14 @@ class Tecnico extends Model
     public function horasPendientes(): float
     {
         return (float) $this->tareas()->abiertas()->sum('horas_estandar');
+    }
+
+    /**
+     * Costo de hora-hombre = sueldo mensual × factor de cargas sociales ÷ horas productivas del mes.
+     */
+    public static function calcularCostoHora(?float $sueldo, ?float $factor, ?int $horas): ?float
+    {
+        return $sueldo && $horas ? round($sueldo * ($factor ?: 1) / $horas, 2) : null;
     }
 
     public function getActivitylogOptions(): LogOptions

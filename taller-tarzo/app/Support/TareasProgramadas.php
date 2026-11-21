@@ -34,6 +34,9 @@ final class TareasProgramadas
         $schedule->command('tarzo:enviar-recordatorios')->dailyAt('10:20')->withoutOverlapping();
         $schedule->command('tarzo:enviar-encuestas')->hourlyAt(25)->between('9:00', '20:00')->withoutOverlapping();
         $schedule->command('tarzo:revisar-garantias')->dailyAt('07:40');
+
+        // Módulo 6 · reportes
+        $schedule->command('tarzo:resumen-mensual')->monthlyOn(1, '07:10');
         $schedule->command('queue:prune-failed', ['--hours' => 24 * 30])->daily()->at('03:10');
         $schedule->command('activitylog:clean')->monthly();
         $schedule->command('auth:clear-resets')->daily()->at('03:20');

@@ -6,6 +6,29 @@ cliente por WhatsApp y facturación CFDI 4.0.
 
 ## Estado
 
+**Módulo 6 · Administración, facturación y reportes (listo):**
+
+- Facturación CFDI 4.0 desde la orden con las partidas autorizadas y claves SAT por concepto; XML y PDF
+  (con QR de verificación) se guardan y se envían al receptor.
+- Orden de seguro: dos facturas automáticas. Aseguradora (PPD, a crédito) por lo cubierto menos deducible,
+  demérito y salvamento, y cliente (PUE) por el deducible y lo no cubierto; cuadran con el Cotizador.
+- Complemento de recepción de pagos 2.0 al cobrar facturas PPD (parcialidades y saldo insoluto).
+- Notas de crédito (relación 01), sustitución (04) y cancelación con motivo SAT 01–04.
+- Caja: cobros en efectivo, tarjeta y transferencia, anticipos/saldo a favor y recibo imprimible.
+- Cuentas por cobrar por aseguradora, flotilla y particulares con antigüedad 0–30/31–60/61–90/+90,
+  contrarrecibo y fecha de pago comprometida.
+- Utilidad real por orden (facturado − refacciones del XML − materiales − horas reales × costo hora-hombre
+  − subcontratos) con aviso si el margen queda bajo el mínimo; calculadora de costo de hora-hombre.
+- Tablero de KPIs con su definición visible: ciclo de reparación, días por etapa y cuello de botella, eficiencia
+  y productividad por técnico, retorno, fecha promesa, ticket, margen, aprobación, NPS y rotación;
+  filtros por tipo, aseguradora y asesor, tendencia de 6 meses, exportación a Excel y resumen el día 1.
+
+**Configurar el PAC (Facturama):** dar de alta la cuenta API (multiemisor), subir el CSD del taller en su portal
+y poner en `.env`: `CFDI_DRIVER=facturama`, `CFDI_AMBIENTE=pruebas` (después `produccion`), `CFDI_USUARIO`,
+`CFDI_PASSWORD` y los datos del emisor (`CFDI_EMISOR_RFC`, `CFDI_EMISOR_NOMBRE`, `CFDI_EMISOR_REGIMEN`,
+`CFDI_LUGAR_EXPEDICION`). Con `CFDI_DRIVER=simulado` se factura para capacitación sin validez fiscal.
+Las claves SAT por tipo de partida (`config/tarzo.php → cfdi.claves`) deben confirmarse con el contador.
+
 **Módulo 5 · Comunicación y CRM (listo):**
 
 - Avisos automáticos al cliente por WhatsApp Business (API oficial de Meta) o correo, según su preferencia:

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Aseguradoras\Schemas;
 
+use App\Models\RegimenFiscal;
+use App\Models\UsoCfdi;
 use App\Rules\RfcValido;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -23,6 +25,21 @@ class AseguradoraForm
             TextInput::make('dias_pago')->label('Días de pago')->helperText('Plazo habitual entre la factura y el pago.')->numeric()->minValue(0)->default(30)->required(),
             Toggle::make('activo')->label('Activa')->default(true),
             Textarea::make('notas')->label('Notas')->rows(3)->columnSpanFull(),
+
+            Section::make('Datos para facturar (CFDI 4.0)')
+                ->description('Deben coincidir con la constancia de situación fiscal de la aseguradora.')
+                ->columns(2)->columnSpanFull()->collapsible()
+                ->schema([
+                    TextInput::make('razon_social')->label('Razón social (sin régimen societario)')->maxLength(255)->placeholder('QUALITAS COMPAÑIA DE SEGUROS'),
+                    Select::make('regimen_fiscal')->label('Régimen fiscal')
+                        ->options(fn () => RegimenFiscal::where('persona_moral', true)->pluck('descripcion', 'clave')->map(fn ($d, $c) => "{$c} · {$d}"))
+                        ->searchable(),
+                    TextInput::make('codigo_postal')->label('Código postal fiscal')->numeric()->length(5),
+                    Select::make('uso_cfdi')->label('Uso del CFDI')
+                        ->options(fn () => UsoCfdi::where('persona_moral', true)->pluck('descripcion', 'clave')->map(fn ($d, $c) => "{$c} · {$d}"))
+                        ->default('G03')->searchable(),
+                    TextInput::make('email_facturacion')->label('Correo para recibir facturas')->email(),
+                ]),
 
             Section::make('Tabulador pactado')
                 ->description('Se aplica automáticamente a las partidas que paga esta aseguradora.')

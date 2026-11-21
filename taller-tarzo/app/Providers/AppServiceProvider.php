@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use App\Enums\Rol;
 use App\Models\User;
+use App\Services\Cfdi\PacFacturama;
+use App\Services\Cfdi\PacSimulado;
+use App\Services\Cfdi\ProveedorCfdi;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Auth\Events\Login;
@@ -19,7 +22,11 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        // PAC para CFDI: cambiar CFDI_DRIVER no requiere tocar código.
+        $this->app->bind(ProveedorCfdi::class, fn () => match (config('tarzo.cfdi.driver')) {
+            'facturama' => new PacFacturama,
+            default => new PacSimulado,
+        });
     }
 
     public function boot(): void

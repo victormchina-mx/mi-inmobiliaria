@@ -5,6 +5,7 @@ use App\Http\Controllers\AprobacionPresupuestoController;
 use App\Http\Controllers\CotizacionPdfController;
 use App\Http\Controllers\DocumentoIngresoController;
 use App\Http\Controllers\EncuestaController;
+use App\Http\Controllers\FacturacionArchivosController;
 use App\Http\Controllers\FirmaClienteController;
 use App\Http\Controllers\PortalClienteController;
 use App\Http\Controllers\TableroTvController;
@@ -39,6 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/panel/cotizaciones/{cotizacion}/pdf', CotizacionPdfController::class)->name('cotizaciones.pdf');
     Route::get('/panel/tablero-tv', TableroTvController::class)->name('tablero.tv');
     Route::get('/panel/ordenes/{orden}/evidencias.pdf', AlbumEvidenciasController::class)->name('ordenes.album');
+    Route::get('/panel/facturas/{factura}/archivo.{formato}', [FacturacionArchivosController::class, 'factura'])
+        ->whereIn('formato', ['xml', 'pdf'])->name('facturas.archivo');
+    Route::get('/panel/caja/{pago}/recibo.pdf', [FacturacionArchivosController::class, 'recibo'])->name('caja.recibo');
 });
 
 // Aviso de privacidad público (enlazado desde la firma y los correos).
