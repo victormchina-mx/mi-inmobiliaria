@@ -4,6 +4,7 @@ namespace App\Actions\Cotizacion;
 
 use App\Enums\EstadoCotizacion;
 use App\Models\Cotizacion;
+use App\Models\Requisicion;
 use App\Models\Tarea;
 use App\Models\User;
 use App\Services\Cotizacion\Cotizador;
@@ -48,6 +49,7 @@ class CrearSuplemento
 
                 // Las tareas de taller ya generadas siguen a la copia (no se duplican).
                 Tarea::where('partida_id', $partida->id)->update(['partida_id' => $copia->id]);
+                Requisicion::where('partida_id', $partida->id)->update(['partida_id' => $copia->id]);
             }
 
             $anterior->update(['estado' => EstadoCotizacion::Reemplazada]);

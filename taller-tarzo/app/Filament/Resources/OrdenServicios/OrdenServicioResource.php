@@ -7,9 +7,11 @@ use App\Filament\Resources\OrdenServicios\Pages\CreateOrdenServicio;
 use App\Filament\Resources\OrdenServicios\Pages\EditOrdenServicio;
 use App\Filament\Resources\OrdenServicios\Pages\ListOrdenServicios;
 use App\Filament\Resources\OrdenServicios\Pages\ViewOrdenServicio;
+use App\Filament\Resources\OrdenServicios\RelationManagers\ConsumosRelationManager;
 use App\Filament\Resources\OrdenServicios\RelationManagers\CotizacionesRelationManager;
 use App\Filament\Resources\OrdenServicios\RelationManagers\DiagnosticosRelationManager;
 use App\Filament\Resources\OrdenServicios\RelationManagers\EvidenciasRelationManager;
+use App\Filament\Resources\OrdenServicios\RelationManagers\RefaccionesRelationManager;
 use App\Filament\Resources\OrdenServicios\RelationManagers\TareasRelationManager;
 use App\Filament\Resources\OrdenServicios\Schemas\OrdenServicioForm;
 use App\Filament\Resources\OrdenServicios\Schemas\OrdenServicioInfolist;
@@ -66,7 +68,7 @@ class OrdenServicioResource extends Resource
 
     public static function getRelations(): array
     {
-        return [DiagnosticosRelationManager::class, CotizacionesRelationManager::class, TareasRelationManager::class, EvidenciasRelationManager::class];
+        return [DiagnosticosRelationManager::class, CotizacionesRelationManager::class, TareasRelationManager::class, RefaccionesRelationManager::class, EvidenciasRelationManager::class, ConsumosRelationManager::class];
     }
 
     public static function getGloballySearchableAttributes(): array

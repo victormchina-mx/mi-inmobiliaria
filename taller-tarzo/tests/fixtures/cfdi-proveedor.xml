@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/4" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" Version="4.0" Fecha="2026-11-24T10:15:00" SubTotal="3150.00" Total="3654.00" Moneda="MXN" TipoDeComprobante="I">
+  <cfdi:Emisor Rfc="RFA010101AB1" Nombre="REFACCIONARIA DEL VALLE" RegimenFiscal="601"/>
+  <cfdi:Receptor Rfc="XAXX010101000" Nombre="TALLER" UsoCFDI="G01" DomicilioFiscalReceptor="50000" RegimenFiscalReceptor="616"/>
+  <cfdi:Conceptos>
+    <cfdi:Concepto ClaveProdServ="25172504" NoIdentificacion="BAL-4521" Cantidad="1" ClaveUnidad="H87" Descripcion="JUEGO DE BALATAS DELANTERAS CERAMICAS" ValorUnitario="950.00" Importe="950.00"/>
+    <cfdi:Concepto ClaveProdServ="15121501" NoIdentificacion="AC-5W30" Cantidad="10" ClaveUnidad="LTR" Descripcion="ACEITE SINTETICO 5W-30" ValorUnitario="220.00" Importe="2200.00"/>
+  </cfdi:Conceptos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital Version="1.1" UUID="a1b2c3d4-0000-4000-8000-123456789abc" FechaTimbrado="2026-11-24T10:16:00"/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>

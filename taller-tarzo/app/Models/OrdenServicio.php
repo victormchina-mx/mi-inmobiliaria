@@ -102,6 +102,16 @@ class OrdenServicio extends Model
         return $this->hasMany(Evidencia::class)->latest();
     }
 
+    public function requisiciones(): HasMany
+    {
+        return $this->hasMany(Requisicion::class);
+    }
+
+    public function consumos(): HasMany
+    {
+        return $this->hasMany(MovimientoInventario::class)->latest('id');
+    }
+
     public function checklists(): HasMany
     {
         return $this->hasMany(Checklist::class)->latest('id');

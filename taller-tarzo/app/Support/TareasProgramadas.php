@@ -27,6 +27,7 @@ final class TareasProgramadas
         }
 
         $schedule->command('tarzo:recordar-cotizaciones')->hourly()->withoutOverlapping();
+        $schedule->command('tarzo:revisar-compras')->dailyAt('08:05');
         $schedule->command('queue:prune-failed', ['--hours' => 24 * 30])->daily()->at('03:10');
         $schedule->command('activitylog:clean')->monthly();
         $schedule->command('auth:clear-resets')->daily()->at('03:20');

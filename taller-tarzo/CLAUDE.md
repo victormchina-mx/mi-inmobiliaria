@@ -62,6 +62,11 @@ Arranca en hosting compartido de Hostinger y migra a VPS solo con variables de e
 - En vistas que renderiza Livewire (páginas y componentes de Filament) NO usar `@php(...)` en línea ni `@if`
   de varias líneas dentro de atributos HTML: Livewire 4 los compila mal. Usar `@php … @endphp` y expresiones `{{ }}`.
 - Modelos con relación `orden()` no pueden tener una columna llamada `orden` (la columna tapa la relación).
+- Existencias y costo promedio SOLO cambian con `App\Services\Inventario\Inventario` (bloquea la fila, deja kárdex
+  y avisa al cruzar el mínimo). Toda salida va a una orden o a gasto general con motivo.
+- XML de terceros (facturas): parsear con `LIBXML_NONET` y nunca `LIBXML_NOENT`.
+- Selects de Filament que validan el valor elegido: usar `->options()` (con `->searchable()`), no solo
+  `getSearchResultsUsing`, o la validación rechaza la opción.
 
 ## Estructura
 
@@ -75,6 +80,9 @@ app/Actions/Piso/         GenerarTareas, TrasAutorizacion, RelojTarea, Registrar
                           RegistrarEvidencia
 app/Filament/Pages/       Tablero (Kanban), MisTareas (técnico), CargaTrabajo
 app/Support/DatosTablero  datos compartidos por el tablero y el modo TV (/panel/tablero-tv)
+app/Services/Inventario/  Inventario (único punto que cambia existencias, costo promedio ponderado) y LectorCfdi
+app/Actions/Almacen/      CrearRequisiciones, CrearOrdenCompra, CambiarEstadoCompra, RecibirMercancia,
+                          VerificarRefacciones (saca la orden de "Espera de refacciones")
 app/Jobs/                 GenerarPdfIngreso (PDF + correo al cliente)
 app/Services/             DecodificadorVin (NHTSA vPIC)
 app/Enums/                Rol, TipoOrden, TipoPersona, CanalPreferido, TipoBahia

@@ -47,6 +47,7 @@ class Partida extends Model
             'importe_materiales' => 'float',
             'precio_unitario' => 'float',
             'importe' => 'float',
+            'costo_real' => 'float',
         ];
     }
 

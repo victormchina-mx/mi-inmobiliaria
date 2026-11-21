@@ -6,6 +6,17 @@ cliente por WhatsApp y facturación CFDI 4.0.
 
 ## Estado
 
+**Módulo 4 · Almacén y refacciones (listo):**
+
+- Inventario con clave, código de barras, ubicación, mínimo y máximo; kárdex por producto con costo promedio
+  ponderado; valor del inventario, productos bajo mínimo y sin movimiento en 90 días.
+- Entradas, salidas (siempre a una orden o a gasto general), devoluciones y ajustes; conteo físico con lector.
+- Alerta a almacén al bajar del mínimo y orden de compra de reposición con cantidad sugerida.
+- Piezas por pedir generadas de las refacciones autorizadas; la aseguradora puede surtirlas.
+- Órdenes de compra por proveedor con envío por WhatsApp, confirmación, seguimiento y aviso de atraso.
+- Recepción total o parcial con foto y XML de la factura: el costo real se toma del CFDI y llega a la partida.
+- Cuando una orden tiene todas sus piezas, sale sola de "Espera de refacciones" y se avisa al asesor y al jefe.
+
 **Módulo 3 · Operación y piso (listo):**
 
 - Tablero Kanban por etapas con arrastre, filtros, semáforo de días, límite de autos y refresco automático;
