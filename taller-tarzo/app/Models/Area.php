@@ -13,7 +13,7 @@ class Area extends Model
 
     protected $table = 'areas';
 
-    protected $fillable = ['nombre', 'descripcion', 'tarifa_hora', 'activo'];
+    protected $fillable = ['clave', 'nombre', 'descripcion', 'tarifa_hora', 'activo'];
 
     protected function casts(): array
     {

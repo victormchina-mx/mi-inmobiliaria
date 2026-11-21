@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\OrdenServicios\Schemas;
 
+use App\Enums\TipoOrden;
 use App\Filament\Resources\Clientes\ClienteResource;
 use App\Filament\Resources\Vehiculos\VehiculoResource;
 use App\Models\OrdenServicio;
@@ -42,6 +43,16 @@ class OrdenServicioInfolist
             Section::make('Check-in')->columnSpan(1)->schema([
                 ViewEntry::make('checkin')->hiddenLabel()->view('filament.checkin.resumen'),
             ]),
+
+            Section::make('Siniestro')->columns(4)->columnSpanFull()
+                ->visible(fn (OrdenServicio $record) => $record->tipo === TipoOrden::Seguro)
+                ->schema([
+                    TextEntry::make('siniestro.numero')->label('Número')->placeholder('Sin capturar'),
+                    TextEntry::make('siniestro.estatus')->label('Estatus')->badge()->placeholder('—'),
+                    TextEntry::make('siniestro.ajustador_nombre')->label('Ajustador')->placeholder('—'),
+                    TextEntry::make('deducible')->label('Deducible')->money('MXN')
+                        ->state(fn (OrdenServicio $record) => $record->siniestro?->deducibleMonto())->placeholder('—'),
+                ]),
 
             Section::make('Historial de etapas')->collapsible()->collapsed()->columnSpanFull()->schema([
                 RepeatableEntry::make('historialEtapas')->hiddenLabel()->contained(false)

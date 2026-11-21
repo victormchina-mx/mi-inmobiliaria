@@ -65,6 +65,22 @@ class OrdenServicio extends Model
         return $this->belongsTo(Poliza::class);
     }
 
+    public function siniestro(): HasOne
+    {
+        return $this->hasOne(Siniestro::class);
+    }
+
+    public function cotizaciones(): HasMany
+    {
+        return $this->hasMany(Cotizacion::class)->orderByDesc('version');
+    }
+
+    /** Versión más reciente del presupuesto. */
+    public function cotizacionActual(): HasOne
+    {
+        return $this->hasOne(Cotizacion::class)->latestOfMany('version');
+    }
+
     public function checkin(): HasOne
     {
         return $this->hasOne(Checkin::class);

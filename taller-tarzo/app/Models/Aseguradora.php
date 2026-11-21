@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -18,6 +19,11 @@ class Aseguradora extends Model
     protected function casts(): array
     {
         return ['activo' => 'boolean'];
+    }
+
+    public function tabulador(): HasOne
+    {
+        return $this->hasOne(Tabulador::class);
     }
 
     public function polizas(): HasMany

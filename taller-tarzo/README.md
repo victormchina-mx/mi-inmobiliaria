@@ -6,6 +6,19 @@ cliente por WhatsApp y facturación CFDI 4.0.
 
 ## Estado
 
+**Módulo 2 · Cotización y valuación (listo):**
+
+- Cotizador de mecánica (operaciones con horas estándar, refacciones con margen, paquetes de servicio).
+- Hojalatería y pintura por pieza: horas de laminado y pintura, materiales por m² según tipo de pintura
+  y nivel de daño, pieza nueva si se sustituye, ciclos de cabina.
+- Aseguradoras: tabulador con tarifas por área y descuentos; expediente del siniestro con ajustador,
+  deducible (monto o porcentaje), demérito, salvamento y orden de admisión; reparto automático
+  entre lo que paga la aseguradora y lo que paga el cliente.
+- Versiones y suplementos: lo ya autorizado se conserva; solo se pide autorización de lo nuevo.
+- Aprobación remota por enlace (cliente y ajustador por separado), partida por partida, con evidencia;
+  aviso al asesor, registro de autorizaciones telefónicas y recordatorio a las 24 h.
+- Hallazgos del diagnóstico pasan a la cotización con un clic. PDF de presupuesto y de valuación.
+
 **Módulo 1 · Recepción y diagnóstico (listo):**
 
 - Clientes (personas y empresas) con aviso de duplicados, datos fiscales CFDI 4.0 y constancia en PDF.

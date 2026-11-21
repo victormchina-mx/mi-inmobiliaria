@@ -2,10 +2,15 @@
 
 namespace App\Filament\Resources\OrdenServicios\RelationManagers;
 
+use App\Actions\Cotizacion\AbrirCotizacion;
+use App\Actions\Cotizacion\AgregarPartidas;
 use App\Enums\Prioridad;
+use App\Filament\Resources\Cotizaciones\CotizacionResource;
 use App\Models\Diagnostico;
 use App\Models\Tecnico;
 use App\Support\Media;
+use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -14,13 +19,17 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 
 class DiagnosticosRelationManager extends RelationManager
 {
@@ -99,6 +108,7 @@ class DiagnosticosRelationManager extends RelationManager
                     ->stacked()->limit(3)->limitedRemainingText()->imageHeight(36),
                 TextColumn::make('tecnico.nombre')->label('Técnico')->placeholder('—'),
                 TextColumn::make('created_at')->label('Registrado')->since(),
+                IconColumn::make('convertido_a_partida')->label('En cotización')->boolean(),
             ])
             ->filters([SelectFilter::make('prioridad')->label('Prioridad')->options(Prioridad::class)])
             ->defaultSort('created_at', 'desc')
@@ -107,6 +117,27 @@ class DiagnosticosRelationManager extends RelationManager
                     ->mutateDataUsing(fn (array $data) => [...$data, 'user_id' => auth()->id()]),
             ])
             ->recordActions([EditAction::make(), DeleteAction::make()])
+            ->toolbarActions([
+                BulkAction::make('aCotizacion')->label('Pasar a la cotización')->icon('heroicon-o-calculator')
+                    ->visible(fn () => auth()->user()?->can('cotizacion.gestionar'))
+                    ->deselectRecordsAfterCompletion()
+                    ->action(function (Collection $records) {
+                        $cotizacion = app(AbrirCotizacion::class)($this->getOwnerRecord(), auth()->user());
+
+                        try {
+                            app(AgregarPartidas::class)->desdeDiagnosticos($cotizacion, $records);
+                        } catch (ValidationException $e) {
+                            Notification::make()->title('No se agregaron')->body(collect($e->errors())->flatten()->first())->danger()->send();
+
+                            return;
+                        }
+
+                        Notification::make()->title('Hallazgos agregados a '.$cotizacion->folio)
+                            ->body('Ajusta horas, refacciones y precios en la cotización.')->success()
+                            ->actions([Action::make('abrir')->label('Abrir cotización')->url(CotizacionResource::getUrl('edit', ['record' => $cotizacion]))])
+                            ->send();
+                    }),
+            ])
             ->emptyStateHeading('Sin hallazgos todavía')
             ->emptyStateDescription('El técnico registra aquí lo que encuentra; el asesor lo convierte en presupuesto.');
     }

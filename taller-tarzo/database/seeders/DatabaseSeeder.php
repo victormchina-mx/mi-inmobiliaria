@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             RolesYPermisosSeeder::class,
             CatalogosSatSeeder::class,
             CatalogosTallerSeeder::class,
+            CatalogosCotizacionSeeder::class,
         ]);
     }
 }

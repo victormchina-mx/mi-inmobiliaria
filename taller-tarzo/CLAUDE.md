@@ -52,12 +52,19 @@ Arranca en hosting compartido de Hostinger y migra a VPS solo con variables de e
 - Archivos de clientes: disco privado `media` (ruta `/archivos`, URL firmada temporal). Usar `App\Support\Media`.
 - Enlaces públicos para el cliente: firma relativa (`absolute: false` + middleware `signed:relative`).
 - Números y moneda: formato es_MX y MXN configurado globalmente en `AppServiceProvider`.
+- Todo cálculo de dinero pasa por `App\Services\Cotizacion\Cotizador` (vista previa y guardado usan el mismo código).
+  Si cambias una regla, actualiza `tests/Unit/CotizadorTest.php`, que tiene los casos calculados a mano.
+- Las notificaciones de Filament (`sendToDatabase`) van por la cola: en hosting compartido llegan con el cron (≤ 1 min).
+- Montos de ejemplo (tarifas, costos por m², cabina) viven en la tabla `parametros`; el seeder no los sobrescribe.
 
 ## Estructura
 
 ```
 app/Actions/Ordenes/      AbrirOrden, CambiarEtapa
 app/Actions/Recepcion/    FirmarCheckin, EnlaceFirma (firma del inventario)
+app/Actions/Cotizacion/   AbrirCotizacion, CrearSuplemento, AgregarPartidas, EnviarCotizacion,
+                          ResponderCotizacion, EnlaceAprobacion
+app/Services/Cotizacion/  Cotizador (motor de cálculo, reglas documentadas en la clase) y Contexto
 app/Jobs/                 GenerarPdfIngreso (PDF + correo al cliente)
 app/Services/             DecodificadorVin (NHTSA vPIC)
 app/Enums/                Rol, TipoOrden, TipoPersona, CanalPreferido, TipoBahia

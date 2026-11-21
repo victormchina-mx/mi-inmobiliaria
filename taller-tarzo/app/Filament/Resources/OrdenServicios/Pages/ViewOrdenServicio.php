@@ -2,13 +2,19 @@
 
 namespace App\Filament\Resources\OrdenServicios\Pages;
 
+use App\Actions\Cotizacion\AbrirCotizacion;
 use App\Actions\Ordenes\CambiarEtapa;
+use App\Enums\TipoOrden;
 use App\Filament\Actions\EnviarAFirmaAction;
 use App\Filament\Resources\Checkins\CheckinResource;
+use App\Filament\Resources\Cotizaciones\CotizacionResource;
 use App\Filament\Resources\OrdenServicios\OrdenServicioResource;
+use App\Filament\Resources\OrdenServicios\Schemas\SiniestroForm;
 use App\Jobs\GenerarPdfIngreso;
 use App\Models\Etapa;
 use App\Models\OrdenServicio;
+use App\Models\Siniestro;
+use App\Services\Cotizacion\Cotizador;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\EditAction;
@@ -40,6 +46,40 @@ class ViewOrdenServicio extends ViewRecord
                 ->visible($gestiona),
 
             EnviarAFirmaAction::make(fn () => $this->record->checkin),
+
+            Action::make('cotizar')
+                ->label(fn () => $this->record->cotizacionActual ? 'Ver cotización' : 'Cotizar')
+                ->icon(Heroicon::OutlinedCalculator)
+                ->visible(fn () => auth()->user()?->can('cotizacion.gestionar') || ($this->record->cotizacionActual && auth()->user()?->can('cotizacion.ver')))
+                ->action(function () {
+                    $cotizacion = $this->record->cotizacionActual ?? app(AbrirCotizacion::class)($this->record, auth()->user());
+                    $this->redirect(CotizacionResource::getUrl('edit', ['record' => $cotizacion]));
+                }),
+
+            Action::make('siniestro')->label('Siniestro')->icon(Heroicon::OutlinedShieldCheck)->color('gray')
+                ->visible(fn () => $this->record->tipo === TipoOrden::Seguro && auth()->user()?->can('cotizacion.gestionar'))
+                ->modalHeading(fn () => 'Expediente del siniestro · '.$this->record->aseguradora?->nombre)
+                ->modalWidth('4xl')
+                ->fillForm(fn () => $this->record->siniestro?->toArray() ?? [
+                    'numero' => $this->record->numero_siniestro,
+                    'deducible_tipo' => 'monto',
+                    'deducible_valor' => $this->record->poliza?->deducible_monto ?? 0,
+                ])
+                ->schema(fn (Schema $schema) => $schema->components(SiniestroForm::campos()))
+                ->action(function (array $data) {
+                    Siniestro::updateOrCreate(
+                        ['orden_servicio_id' => $this->record->id],
+                        [...$data, 'aseguradora_id' => $this->record->aseguradora_id],
+                    );
+                    $this->record->update(['numero_siniestro' => $data['numero']]);
+
+                    // Recalcula el borrador para reflejar deducible, demérito y salvamento.
+                    if (($c = $this->record->cotizacionActual) && $c->estado->editable()) {
+                        app(Cotizador::class)->recalcular($c);
+                    }
+
+                    Notification::make()->title('Siniestro guardado')->success()->send();
+                }),
 
             Action::make('pdf')->label('PDF de ingreso')->icon(Heroicon::OutlinedDocumentArrowDown)->color('gray')
                 ->visible(fn () => $this->record->checkin !== null)
