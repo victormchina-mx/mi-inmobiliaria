@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
+
+class Aseguradora extends Model
+{
+    use LogsActivity;
+
+    protected $table = 'aseguradoras';
+
+    protected $fillable = ['nombre', 'rfc', 'telefono', 'email', 'dias_pago', 'notas', 'activo'];
+
+    protected function casts(): array
+    {
+        return ['activo' => 'boolean'];
+    }
+
+    public function polizas(): HasMany
+    {
+        return $this->hasMany(Poliza::class);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
+}

@@ -1,0 +1,9 @@
+# Solo para la opción B de INSTALACION.md (la app completa dentro de la carpeta pública).
+# Envía todo a public/ y bloquea el acceso directo a archivos sensibles.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(\.env|\.git|composer\.(json|lock)|artisan|storage|vendor|database|deploy|tests|app|bootstrap|config|routes|resources)(/|$) - [F,L]
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+Options -Indexes
