@@ -6,6 +6,19 @@ cliente por WhatsApp y facturación CFDI 4.0.
 
 ## Estado
 
+**Módulo 3 · Operación y piso (listo):**
+
+- Tablero Kanban por etapas con arrastre, filtros, semáforo de días, límite de autos y refresco automático;
+  modo TV para una pantalla del taller.
+- Reglas por etapa: cotización autorizada para entrar a reparación, control de calidad antes de "Listo",
+  checklist firmado para entregar, evidencia obligatoria en órdenes de seguro; excepción con comentario.
+- Tareas generadas de las partidas autorizadas; asignación de técnico, bahía y fecha; carga de trabajo
+  por técnico y agenda de la cabina de pintura.
+- Pantalla del técnico para celular: iniciar, pausar con motivo, terminar y subir fotos; horas reales vs.
+  estándar y eficiencia.
+- Evidencias con marca de agua (folio, fecha, momento), visibles al cliente a elección, álbum PDF.
+- Aviso por correo al cliente al entrar a etapas marcadas (pintura, listo, entregado).
+
 **Módulo 2 · Cotización y valuación (listo):**
 
 - Cotizador de mecánica (operaciones con horas estándar, refacciones con margen, paquetes de servicio).

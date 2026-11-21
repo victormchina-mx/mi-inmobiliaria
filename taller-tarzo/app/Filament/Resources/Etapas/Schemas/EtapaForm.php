@@ -25,6 +25,10 @@ class EtapaForm
             TextInput::make('limite_autos')->label('Límite de autos simultáneos')->numeric()->minValue(1),
             Toggle::make('notifica_cliente')->label('Avisar al cliente al entrar a esta etapa'),
             Toggle::make('es_final')->label('Etapa final (orden terminada)'),
+            Toggle::make('requiere_cotizacion_aprobada')->label('Solo entra con cotización autorizada'),
+            Select::make('requiere_checklist')->label('Para entrar se necesita')
+                ->options(['calidad' => 'Control de calidad aprobado', 'entrega' => 'Checklist de entrega firmado'])->placeholder('Nada'),
+            Toggle::make('requiere_evidencia')->label('Exigir foto de evidencia para avanzar (órdenes de seguro)'),
         ]);
     }
 }

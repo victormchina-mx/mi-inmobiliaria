@@ -2,6 +2,7 @@
 
 namespace App\Actions\Cotizacion;
 
+use App\Actions\Piso\TrasAutorizacion;
 use App\Enums\EstadoCotizacion;
 use App\Enums\EstadoPartida;
 use App\Enums\Paga;
@@ -89,6 +90,10 @@ class ResponderCotizacion
         });
 
         $this->avisarAsesor($cotizacion->refresh(), $aprobacion);
+
+        if ($aprobacion->partidas_aprobadas > 0) {
+            app(TrasAutorizacion::class)($cotizacion);
+        }
 
         return $aprobacion;
     }

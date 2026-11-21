@@ -2,25 +2,33 @@
 
 namespace App\Actions\Ordenes;
 
+use App\Enums\TipoOrden;
+use App\Mail\AvisoEtapa;
 use App\Models\Etapa;
 use App\Models\HistorialEtapa;
 use App\Models\OrdenServicio;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 
 /**
- * Mueve una orden a otra etapa del tablero y deja registro en el historial.
+ * Mueve una orden a otra etapa del tablero, aplica las reglas de la etapa y deja registro.
  *
- * Fase 0: solo valida permisos y registra. Las reglas de negocio por etapa
- * (cotización aprobada, checklist de calidad, refacciones pendientes) se
- * agregan en el Módulo 3 dentro de validarReglas().
+ * Reglas (configurables en Catálogos → Etapas):
+ *  - "Requiere cotización autorizada": no se entra sin presupuesto aprobado (garantías e internas exentas).
+ *  - "Checklist para entrar": Listo para entrega exige calidad aprobada; Entregado exige checklist de entrega.
+ *  - "Evidencia para salir": en órdenes de seguro, no se avanza sin al menos una foto de esa etapa.
+ *  - Límite de autos simultáneos por etapa.
+ * Quien tiene el permiso piso.forzar_etapa puede saltarse las reglas con un comentario; queda marcado.
  */
 class CambiarEtapa
 {
-    public function __invoke(OrdenServicio $orden, Etapa $destino, ?User $usuario = null, ?string $comentario = null, bool $forzar = false): OrdenServicio
+    public function __invoke(OrdenServicio $orden, Etapa $destino, ?User $usuario = null, ?string $comentario = null, bool $forzar = false, bool $interno = false): OrdenServicio
     {
-        if ($usuario && ! $usuario->can('piso.gestionar')) {
+        // $interno: lo llama otro proceso (calidad, entrega) que ya validó sus propios permisos.
+        if ($usuario && ! $interno && ! $usuario->can('piso.gestionar')) {
             throw new AuthorizationException('No tienes permiso para mover órdenes en el tablero.');
         }
 
@@ -32,11 +40,18 @@ class CambiarEtapa
             return $orden;
         }
 
-        if (! $forzar) {
-            $this->validarReglas($orden, $destino);
+        if ($forzar && blank($comentario)) {
+            throw ValidationException::withMessages(['comentario' => 'Explica por qué se salta la regla.']);
         }
 
-        return DB::transaction(function () use ($orden, $destino, $usuario, $comentario, $forzar) {
+        if (! $forzar) {
+            $problemas = self::problemas($orden, $destino);
+            if ($problemas !== []) {
+                throw ValidationException::withMessages(['etapa' => $problemas]);
+            }
+        }
+
+        $orden = DB::transaction(function () use ($orden, $destino, $usuario, $comentario, $forzar) {
             $anterior = $orden->etapa_id;
 
             $orden->forceFill([
@@ -55,10 +70,59 @@ class CambiarEtapa
 
             return $orden->refresh();
         });
+
+        $this->avisarCliente($orden, $destino);
+
+        return $orden;
     }
 
-    protected function validarReglas(OrdenServicio $orden, Etapa $destino): void
+    /**
+     * Motivos por los que la orden no puede entrar a la etapa (vacío si puede).
+     *
+     * @return list<string>
+     */
+    public static function problemas(OrdenServicio $orden, Etapa $destino): array
     {
-        // Reglas del Módulo 3 (ver Plan Maestro, historia KB-01).
+        $orden->loadMissing('etapa');
+        $origen = $orden->etapa;
+        $problemas = [];
+
+        $exenta = in_array($orden->tipo, [TipoOrden::Garantia, TipoOrden::Interna], true);
+        if ($destino->requiere_cotizacion_aprobada && ! $exenta && ! $orden->tieneCotizacionAprobada()) {
+            $problemas[] = "Para pasar a {$destino->nombre} la cotización debe estar autorizada.";
+        }
+
+        if ($destino->requiere_checklist && ! $orden->checklist($destino->requiere_checklist)?->aprobado) {
+            $problemas[] = $destino->requiere_checklist === 'entrega'
+                ? 'Para entregar se necesita el checklist de entrega firmado por el cliente.'
+                : "Para pasar a {$destino->nombre} el control de calidad debe estar aprobado.";
+        }
+
+        $avanza = $origen && $destino->orden > $origen->orden;
+        if ($avanza && $origen->requiere_evidencia && $orden->tipo === TipoOrden::Seguro
+            && $orden->evidencias()->where('etapa_id', $origen->id)->doesntExist()) {
+            $problemas[] = "Sube al menos una foto de evidencia de {$origen->nombre} antes de avanzar (la pide la aseguradora).";
+        }
+
+        if ($destino->limite_autos) {
+            $ocupados = OrdenServicio::where('etapa_id', $destino->id)->whereNull('cerrada_at')->count();
+            if ($ocupados >= $destino->limite_autos) {
+                $problemas[] = "{$destino->nombre} ya tiene su límite de {$destino->limite_autos} autos.";
+            }
+        }
+
+        return $problemas;
+    }
+
+    private function avisarCliente(OrdenServicio $orden, Etapa $destino): void
+    {
+        $cliente = $orden->cliente;
+
+        if (! $destino->notifica_cliente || blank($cliente?->email)) {
+            return;
+        }
+
+        // WhatsApp automático llega en el Módulo 5; por ahora, correo en cola.
+        Mail::to($cliente->email)->queue(new AvisoEtapa($orden, $destino));
     }
 }

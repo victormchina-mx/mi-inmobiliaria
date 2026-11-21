@@ -17,13 +17,22 @@ class Etapa extends Model
 
     public const ENTREGADO = 'entregado';
 
+    public const ESPERA_REFACCIONES = 'espera_refacciones';
+
+    public const CALIDAD = 'calidad';
+
     protected $table = 'etapas';
 
-    protected $fillable = ['clave', 'nombre', 'orden', 'color', 'dias_max', 'limite_autos', 'notifica_cliente', 'es_final'];
+    protected $fillable = ['clave', 'nombre', 'orden', 'color', 'dias_max', 'limite_autos', 'notifica_cliente', 'es_final', 'requiere_cotizacion_aprobada', 'requiere_checklist', 'requiere_evidencia'];
 
     protected function casts(): array
     {
-        return ['notifica_cliente' => 'boolean', 'es_final' => 'boolean'];
+        return [
+            'notifica_cliente' => 'boolean',
+            'es_final' => 'boolean',
+            'requiere_cotizacion_aprobada' => 'boolean',
+            'requiere_evidencia' => 'boolean',
+        ];
     }
 
     public function ordenes(): HasMany

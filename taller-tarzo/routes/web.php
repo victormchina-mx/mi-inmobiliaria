@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\AlbumEvidenciasController;
 use App\Http\Controllers\AprobacionPresupuestoController;
 use App\Http\Controllers\CotizacionPdfController;
 use App\Http\Controllers\DocumentoIngresoController;
 use App\Http\Controllers\FirmaClienteController;
+use App\Http\Controllers\TableroTvController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/panel');
@@ -22,6 +24,8 @@ Route::get('/firma-recibida', [FirmaClienteController::class, 'gracias'])->name(
 Route::middleware('auth')->group(function () {
     Route::get('/panel/ordenes/{orden}/ingreso.pdf', DocumentoIngresoController::class)->name('ordenes.pdf-ingreso');
     Route::get('/panel/cotizaciones/{cotizacion}/pdf', CotizacionPdfController::class)->name('cotizaciones.pdf');
+    Route::get('/panel/tablero-tv', TableroTvController::class)->name('tablero.tv');
+    Route::get('/panel/ordenes/{orden}/evidencias.pdf', AlbumEvidenciasController::class)->name('ordenes.album');
 });
 
 // Aviso de privacidad público (enlazado desde la firma y los correos).

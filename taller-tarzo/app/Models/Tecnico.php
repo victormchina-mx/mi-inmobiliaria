@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -33,6 +34,19 @@ class Tecnico extends Model
     public function area(): BelongsTo
     {
         return $this->belongsTo(Area::class);
+    }
+
+    public function tareas(): HasMany
+    {
+        return $this->hasMany(Tarea::class);
+    }
+
+    /**
+     * Horas estándar de tareas asignadas y no terminadas.
+     */
+    public function horasPendientes(): float
+    {
+        return (float) $this->tareas()->abiertas()->sum('horas_estandar');
     }
 
     public function getActivitylogOptions(): LogOptions

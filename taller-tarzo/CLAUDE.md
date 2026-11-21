@@ -56,6 +56,12 @@ Arranca en hosting compartido de Hostinger y migra a VPS solo con variables de e
   Si cambias una regla, actualiza `tests/Unit/CotizadorTest.php`, que tiene los casos calculados a mano.
 - Las notificaciones de Filament (`sendToDatabase`) van por la cola: en hosting compartido llegan con el cron (≤ 1 min).
 - Montos de ejemplo (tarifas, costos por m², cabina) viven en la tabla `parametros`; el seeder no los sobrescribe.
+- Los seeders de catálogos usan `firstOrCreate`: nunca deben pisar lo que el dueño configuró en producción.
+- Mover órdenes entre etapas siempre con `CambiarEtapa` (aplica reglas y deja historial). Los procesos que ya
+  validaron sus permisos (calidad, entrega) pasan `interno: true`.
+- En vistas que renderiza Livewire (páginas y componentes de Filament) NO usar `@php(...)` en línea ni `@if`
+  de varias líneas dentro de atributos HTML: Livewire 4 los compila mal. Usar `@php … @endphp` y expresiones `{{ }}`.
+- Modelos con relación `orden()` no pueden tener una columna llamada `orden` (la columna tapa la relación).
 
 ## Estructura
 
@@ -65,6 +71,10 @@ app/Actions/Recepcion/    FirmarCheckin, EnlaceFirma (firma del inventario)
 app/Actions/Cotizacion/   AbrirCotizacion, CrearSuplemento, AgregarPartidas, EnviarCotizacion,
                           ResponderCotizacion, EnlaceAprobacion
 app/Services/Cotizacion/  Cotizador (motor de cálculo, reglas documentadas en la clase) y Contexto
+app/Actions/Piso/         GenerarTareas, TrasAutorizacion, RelojTarea, RegistrarCalidad, EntregarVehiculo,
+                          RegistrarEvidencia
+app/Filament/Pages/       Tablero (Kanban), MisTareas (técnico), CargaTrabajo
+app/Support/DatosTablero  datos compartidos por el tablero y el modo TV (/panel/tablero-tv)
 app/Jobs/                 GenerarPdfIngreso (PDF + correo al cliente)
 app/Services/             DecodificadorVin (NHTSA vPIC)
 app/Enums/                Rol, TipoOrden, TipoPersona, CanalPreferido, TipoBahia

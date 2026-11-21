@@ -9,6 +9,8 @@ use App\Filament\Resources\OrdenServicios\Pages\ListOrdenServicios;
 use App\Filament\Resources\OrdenServicios\Pages\ViewOrdenServicio;
 use App\Filament\Resources\OrdenServicios\RelationManagers\CotizacionesRelationManager;
 use App\Filament\Resources\OrdenServicios\RelationManagers\DiagnosticosRelationManager;
+use App\Filament\Resources\OrdenServicios\RelationManagers\EvidenciasRelationManager;
+use App\Filament\Resources\OrdenServicios\RelationManagers\TareasRelationManager;
 use App\Filament\Resources\OrdenServicios\Schemas\OrdenServicioForm;
 use App\Filament\Resources\OrdenServicios\Schemas\OrdenServicioInfolist;
 use App\Filament\Resources\OrdenServicios\Tables\OrdenServiciosTable;
@@ -64,7 +66,7 @@ class OrdenServicioResource extends Resource
 
     public static function getRelations(): array
     {
-        return [DiagnosticosRelationManager::class, CotizacionesRelationManager::class];
+        return [DiagnosticosRelationManager::class, CotizacionesRelationManager::class, TareasRelationManager::class, EvidenciasRelationManager::class];
     }
 
     public static function getGloballySearchableAttributes(): array

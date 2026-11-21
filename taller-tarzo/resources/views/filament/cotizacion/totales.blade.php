@@ -1,4 +1,4 @@
-@php($mx = fn ($n) => '$'.number_format((float) $n, 2))
+@php $mx = fn ($n) => '$'.number_format((float) $n, 2); @endphp
 @if ($t)
 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:24px; font-variant-numeric: tabular-nums;">
     <dl style="display:grid; grid-template-columns: 1fr auto; gap:6px 16px; margin:0;">

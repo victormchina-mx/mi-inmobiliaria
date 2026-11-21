@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EstadoCotizacion;
 use App\Enums\TipoOrden;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -91,9 +92,37 @@ class OrdenServicio extends Model
         return $this->hasMany(Diagnostico::class)->latest();
     }
 
+    public function tareas(): HasMany
+    {
+        return $this->hasMany(Tarea::class)->orderBy('posicion')->orderBy('id');
+    }
+
+    public function evidencias(): HasMany
+    {
+        return $this->hasMany(Evidencia::class)->latest();
+    }
+
+    public function checklists(): HasMany
+    {
+        return $this->hasMany(Checklist::class)->latest('id');
+    }
+
+    /** Último checklist del tipo indicado (calidad o entrega). */
+    public function checklist(string $tipo): ?Checklist
+    {
+        return $this->checklists()->where('tipo', $tipo)->first();
+    }
+
+    public function tieneCotizacionAprobada(): bool
+    {
+        return $this->cotizaciones()
+            ->whereIn('estado', [EstadoCotizacion::Aprobada->value, EstadoCotizacion::AprobadaParcial->value])
+            ->exists();
+    }
+
     public function historialEtapas(): HasMany
     {
-        return $this->hasMany(HistorialEtapa::class)->latest('id');
+        return $this->hasMany(HistorialEtapa::class)->with(['etapa', 'etapaAnterior', 'usuario'])->latest('id');
     }
 
     /**
