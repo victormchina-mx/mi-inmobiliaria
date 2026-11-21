@@ -15,13 +15,22 @@
 |  CACHE_STORE=database                CACHE_STORE=redis
 |  SESSION_DRIVER=database             SESSION_DRIVER=redis
 |  TARZO_TIEMPO_REAL=polling           TARZO_TIEMPO_REAL=reverb
-|  MEDIA_DISK=public                   MEDIA_DISK=r2
+|  MEDIA_DISK=media                    MEDIA_DISK=r2
 |
 */
 
 return [
 
     'nombre_comercial' => env('TARZO_NOMBRE', 'TARZO'),
+
+    // Datos del taller que aparecen en el PDF de ingreso, el aviso de privacidad y los correos.
+    'taller' => [
+        'razon_social' => env('TARZO_RAZON_SOCIAL', env('TARZO_NOMBRE', 'TARZO')),
+        'domicilio' => env('TARZO_DOMICILIO', ''),
+        'telefono' => env('TARZO_TELEFONO', ''),
+        'email' => env('TARZO_EMAIL', ''),
+        'email_privacidad' => env('TARZO_EMAIL_PRIVACIDAD', env('TARZO_EMAIL', '')),
+    ],
 
     // 'compartido' o 'vps'. Solo informativo para diagnósticos y el panel.
     'hosting' => env('TARZO_HOSTING', 'compartido'),
@@ -41,8 +50,10 @@ return [
     ],
 
     'media' => [
-        // Disco para fotos, video, firmas y documentos. 'public' en compartido, 'r2' o 's3' en VPS.
-        'disco' => env('MEDIA_DISK', 'public'),
+        // Disco privado para fotos, video, firmas y documentos: 'media' en compartido, 'r2' en VPS.
+        'disco' => env('MEDIA_DISK', 'media'),
+        'max_foto_px' => 1600,       // las fotos se reducen en el navegador antes de subirlas
+        'max_video_mb' => 60,
     ],
 
     'seguridad' => [

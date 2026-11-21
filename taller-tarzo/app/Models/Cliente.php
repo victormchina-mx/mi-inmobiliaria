@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -36,6 +37,41 @@ class Cliente extends Model
             'canal_preferido' => CanalPreferido::class,
             'acepta_promociones' => 'boolean',
         ];
+    }
+
+    /**
+     * Teléfonos solo con dígitos (10 dígitos en México) para poder buscarlos y enviar WhatsApp.
+     */
+    protected function telefono(): Attribute
+    {
+        return Attribute::set(fn (?string $v) => self::limpiarTelefono($v));
+    }
+
+    protected function whatsapp(): Attribute
+    {
+        return Attribute::set(fn (?string $v) => self::limpiarTelefono($v));
+    }
+
+    public static function limpiarTelefono(?string $v): ?string
+    {
+        $digitos = preg_replace('/\D/', '', (string) $v);
+
+        if ($digitos === '') {
+            return null;
+        }
+
+        // Quita lada internacional de México (52 / 521) si viene completa.
+        return strlen($digitos) > 10 && str_starts_with($digitos, '52') ? substr($digitos, -10) : $digitos;
+    }
+
+    /**
+     * Número para WhatsApp en formato internacional (52 + 10 dígitos).
+     */
+    public function numeroWhatsapp(): ?string
+    {
+        $n = $this->whatsapp ?: $this->telefono;
+
+        return $n && strlen($n) === 10 ? '52'.$n : $n;
     }
 
     protected function nombreCompleto(): Attribute
@@ -82,6 +118,26 @@ class Cliente extends Model
             ->orWhere('whatsapp', 'like', $t)
             ->orWhere('email', 'like', $t)
             ->orWhereHas('datosFiscales', fn (Builder $f) => $f->where('rfc', 'like', $t)));
+    }
+
+    /**
+     * Clientes que ya usan ese teléfono o correo (para avisar de posibles duplicados).
+     */
+    public static function posiblesDuplicados(?string $telefono, ?string $email, ?int $exceptoId = null): Collection
+    {
+        $telefono = $telefono ? preg_replace('/\D/', '', $telefono) : null;
+
+        if (blank($telefono) && blank($email)) {
+            return collect();
+        }
+
+        return static::query()
+            ->when($exceptoId, fn (Builder $query) => $query->whereKeyNot($exceptoId))
+            ->where(fn (Builder $q) => $q
+                ->when($telefono, fn (Builder $q) => $q->orWhere('telefono', $telefono)->orWhere('whatsapp', $telefono))
+                ->when($email, fn (Builder $q) => $q->orWhere('email', $email)))
+            ->limit(5)
+            ->get();
     }
 
     public function getActivitylogOptions(): LogOptions

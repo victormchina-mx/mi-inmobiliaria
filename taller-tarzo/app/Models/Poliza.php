@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Cobertura;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -14,6 +15,7 @@ class Poliza extends Model
     protected function casts(): array
     {
         return [
+            'cobertura' => Cobertura::class,
             'vigencia_inicio' => 'date',
             'vigencia_fin' => 'date',
             'deducible_porcentaje' => 'decimal:2',

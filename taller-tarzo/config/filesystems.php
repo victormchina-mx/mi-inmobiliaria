@@ -38,6 +38,17 @@ return [
             'report' => false,
         ],
 
+        // Fotos, video, firmas y documentos de clientes (privado; se sirven con URL firmada temporal).
+        'media' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/media'),
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/archivos',
+            'serve' => true,
+            'visibility' => 'private',
+            'throw' => false,
+            'report' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

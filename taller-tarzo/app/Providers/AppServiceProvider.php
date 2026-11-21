@@ -4,11 +4,14 @@ namespace App\Providers;
 
 use App\Enums\Rol;
 use App\Models\User;
+use Filament\Schemas\Schema;
+use Filament\Tables\Table;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Number;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -25,6 +28,12 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->isProduction()) {
             URL::forceScheme('https');
         }
+
+        // Números y moneda con formato de México (48,000.50 y $1,250.00 MXN).
+        Number::useLocale('es_MX');
+        Number::useCurrency('MXN');
+        Table::configureUsing(fn (Table $table) => $table->defaultNumberLocale('es_MX')->defaultCurrency('MXN'));
+        Schema::configureUsing(fn (Schema $schema) => $schema->defaultNumberLocale('es_MX')->defaultCurrency('MXN'));
 
         // Detecta consultas N+1 y atributos inexistentes mientras se desarrolla.
         Model::shouldBeStrict(! $this->app->isProduction());

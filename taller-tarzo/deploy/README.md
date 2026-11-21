@@ -10,7 +10,7 @@ El sistema arranca en el **hosting compartido de Hostinger** y está preparado p
 | Conexión de colas | `QUEUE_CONNECTION=database` | `QUEUE_CONNECTION=redis` |
 | Caché y sesiones | `database` | `redis` |
 | Tablero en tiempo real | `TARZO_TIEMPO_REAL=polling` (refresco cada 15 s) | `TARZO_TIEMPO_REAL=reverb` (websockets) |
-| Fotos y video | `MEDIA_DISK=public` (disco del hosting) | `MEDIA_DISK=r2` (Cloudflare R2) |
+| Fotos y video | `MEDIA_DISK=media` (disco privado del hosting) | `MEDIA_DISK=r2` (Cloudflare R2 privado) |
 | Base de datos | MySQL/MariaDB de Hostinger | MySQL 8 / MariaDB en el VPS o administrada |
 | Despliegue | `deploy/hostinger-compartido/deploy.sh` por SSH | `deploy/vps/deploy.sh` |
 

@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Hostinger (y la mayoría de VPS con proxy/CDN) termina TLS antes de PHP.
         $middleware->trustProxies(at: env('TRUSTED_PROXIES', '*'));
         $middleware->append(SecurityHeaders::class);
+        $middleware->redirectGuestsTo(fn () => route('filament.taller.auth.login'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

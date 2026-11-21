@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Support\TareasProgramadas;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Number;
 use Tests\TestCase;
 
 class InfraestructuraTest extends TestCase
@@ -47,5 +48,11 @@ class InfraestructuraTest extends TestCase
         $this->assertSame('America/Mexico_City', config('app.timezone'));
         $this->assertSame('es', app()->getLocale());
         $this->assertSame('Debes aceptar términos.', __('validation.accepted', ['attribute' => 'términos']));
+    }
+
+    public function test_los_numeros_usan_formato_de_mexico(): void
+    {
+        $this->assertSame('48,000', Number::format(48000));
+        $this->assertSame('$1,250.50', Number::currency(1250.5));
     }
 }

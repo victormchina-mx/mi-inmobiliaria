@@ -29,7 +29,7 @@ Cualquiera de estas señales indica que ya conviene:
 4. Crear el bucket en Cloudflare R2 y copiar las fotos actuales:
 
    ```bash
-   rclone copy ~/domains/vmch.net/tarzo-repo/taller-tarzo/storage/app/public r2:tarzo-media
+   rclone copy ~/domains/vmch.net/tarzo-repo/taller-tarzo/storage/app/private/media r2:tarzo-media
    ```
 
 5. Copiar `nginx/tarzo.conf`, `supervisor/*.conf` y `env.produccion.example` al servidor y ajustarlos.
@@ -47,7 +47,7 @@ mysql -u tarzo -p tarzo < tarzo-AAAA-MM-DD.sql
 bash deploy/vps/deploy.sh
 
 # 3. Sincronizar las fotos subidas desde el ensayo
-rclone sync storage/app/public r2:tarzo-media   # (ejecutar en Hostinger)
+rclone sync storage/app/private/media r2:tarzo-media   # (ejecutar en Hostinger)
 ```
 
 4. Cambiar el DNS del subdominio de producción al IP del VPS (TTL bajo desde un día antes).
@@ -65,7 +65,7 @@ rclone sync storage/app/public r2:tarzo-media   # (ejecutar en Hostinger)
 | `CACHE_STORE` / `SESSION_DRIVER` | `database` | `redis` |
 | `TARZO_TIEMPO_REAL` | `polling` | `reverb` |
 | `BROADCAST_CONNECTION` | `log` | `reverb` |
-| `MEDIA_DISK` | `public` | `r2` |
+| `MEDIA_DISK` | `media` | `r2` |
 
 ## Regreso (si algo falla)
 

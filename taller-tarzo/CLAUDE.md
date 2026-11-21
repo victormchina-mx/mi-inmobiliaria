@@ -47,13 +47,23 @@ Arranca en hosting compartido de Hostinger y migra a VPS solo con variables de e
 - Validación mexicana: `App\Rules\RfcValido`, `App\Rules\VinValido`; catálogos SAT en `sat_regimenes_fiscales` y `sat_usos_cfdi`.
 - Modelos importantes usan `LogsActivity` (auditoría) y `SoftDeletes`.
 - La orden de servicio (`ordenes_servicio`) es el centro: todo lo demás cuelga de ella.
+- En closures de Filament el parámetro de la consulta se llama `$query` (Filament inyecta por nombre; `$q` recibe una consulta vacía).
+- Los RelationManagers que deben poder editarse desde una página de consulta declaran `isReadOnly(): false`.
+- Archivos de clientes: disco privado `media` (ruta `/archivos`, URL firmada temporal). Usar `App\Support\Media`.
+- Enlaces públicos para el cliente: firma relativa (`absolute: false` + middleware `signed:relative`).
+- Números y moneda: formato es_MX y MXN configurado globalmente en `AppServiceProvider`.
 
 ## Estructura
 
 ```
 app/Actions/Ordenes/      AbrirOrden, CambiarEtapa
+app/Actions/Recepcion/    FirmarCheckin, EnlaceFirma (firma del inventario)
+app/Jobs/                 GenerarPdfIngreso (PDF + correo al cliente)
+app/Services/             DecodificadorVin (NHTSA vPIC)
 app/Enums/                Rol, TipoOrden, TipoPersona, CanalPreferido, TipoBahia
-app/Filament/Resources/   Catálogos: Áreas, Bahías, Técnicos, Etapas, Aseguradoras, Usuarios
+app/Filament/Resources/   Órdenes, Check-in, Clientes, Vehículos, Flotillas + catálogos
+resources/views/firma/    Página pública donde el cliente firma desde su celular
+resources/views/pdf/      PDF del inventario de ingreso
 app/Models/               Cliente, Vehiculo, Poliza, OrdenServicio, HistorialEtapa, …
 app/Support/              MatrizPermisos, GeneradorFolio, TareasProgramadas, Rfc, Vin
 config/tarzo.php          Modo compartido / VPS
