@@ -7,6 +7,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **GitHub:** https://github.com/victormchina-mx/mi-inmobiliaria
 - **Producción:** https://inmobiliaria.vmch.net/
 
+## Subproyecto `taller-tarzo/`
+
+La carpeta `taller-tarzo/` contiene un proyecto **independiente** (Laravel 13 + Filament 5): el nuevo CRM
+del taller automotriz TARZO. No comparte código ni base de datos con la inmobiliaria (CodeIgniter 4).
+Para trabajar en él, lee `taller-tarzo/CLAUDE.md` y ejecuta los comandos desde esa carpeta.
+
 ## Comandos esenciales
 
 ```bash

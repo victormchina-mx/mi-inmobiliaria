@@ -1,0 +1,72 @@
+name: taller-tarzo
+
+on:
+  push:
+    paths: ['taller-tarzo/**', '.github/workflows/taller-tarzo.yml']
+  pull_request:
+    paths: ['taller-tarzo/**', '.github/workflows/taller-tarzo.yml']
+
+defaults:
+  run:
+    working-directory: taller-tarzo
+
+jobs:
+  pruebas:
+    name: Pruebas (SQLite)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, intl, gd, zip, pdo_sqlite, bcmath, exif
+          coverage: none
+      - name: Dependencias
+        run: composer install --no-interaction --prefer-dist --no-progress
+      - name: Entorno
+        run: cp .env.example .env && php artisan key:generate
+      - name: Estilo de código (Pint)
+        run: vendor/bin/pint --test
+      - name: Pruebas
+        run: php artisan test
+
+  mariadb:
+    name: Migraciones en MariaDB (como Hostinger)
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:10.11
+        env:
+          MARIADB_DATABASE: tarzo
+          MARIADB_USER: tarzo
+          MARIADB_PASSWORD: secreto
+          MARIADB_ROOT_PASSWORD: secreto
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, intl, gd, zip, pdo_mysql, bcmath, exif
+          coverage: none
+      - name: Dependencias (sin dev, como producción)
+        run: composer install --no-interaction --prefer-dist --no-progress --no-dev --optimize-autoloader
+      - name: Migrar y sembrar
+        env:
+          APP_ENV: production
+          APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+          DB_CONNECTION: mariadb
+          DB_HOST: 127.0.0.1
+          DB_DATABASE: tarzo
+          DB_USERNAME: tarzo
+          DB_PASSWORD: secreto
+        run: |
+          php artisan migrate --force
+          php artisan db:seed --force
+          php artisan db:seed --force
+          php artisan migrate:rollback --force
+          php artisan migrate --force
+          php artisan optimize
