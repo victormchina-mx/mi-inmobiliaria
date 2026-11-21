@@ -58,6 +58,16 @@ class Vehiculo extends Model
         return $this->hasMany(OrdenServicio::class);
     }
 
+    public function garantias(): HasMany
+    {
+        return $this->hasMany(Garantia::class);
+    }
+
+    public function recordatorios(): HasMany
+    {
+        return $this->hasMany(Recordatorio::class);
+    }
+
     public function scopeBuscar(Builder $query, string $termino): Builder
     {
         $limpio = strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $termino));

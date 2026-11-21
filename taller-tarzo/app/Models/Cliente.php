@@ -24,10 +24,14 @@ class Cliente extends Model
 
     protected $table = 'clientes';
 
+    protected $attributes = [
+        'acepta_recordatorios' => true,
+    ];
+
     protected $fillable = [
         'tipo_persona', 'nombre', 'apellidos', 'telefono', 'whatsapp', 'email',
         'calle', 'colonia', 'municipio', 'estado', 'codigo_postal',
-        'canal_preferido', 'acepta_promociones', 'flotilla_id', 'notas',
+        'canal_preferido', 'acepta_promociones', 'acepta_recordatorios', 'flotilla_id', 'notas',
     ];
 
     protected function casts(): array
@@ -36,6 +40,7 @@ class Cliente extends Model
             'tipo_persona' => TipoPersona::class,
             'canal_preferido' => CanalPreferido::class,
             'acepta_promociones' => 'boolean',
+            'acepta_recordatorios' => 'boolean',
         ];
     }
 
@@ -97,6 +102,21 @@ class Cliente extends Model
     public function vehiculos(): HasMany
     {
         return $this->hasMany(Vehiculo::class);
+    }
+
+    public function mensajes(): HasMany
+    {
+        return $this->hasMany(Mensaje::class)->latest('id');
+    }
+
+    /**
+     * Busca al cliente por su número de WhatsApp o teléfono (compara los últimos 10 dígitos).
+     */
+    public static function porTelefono(string $telefono): ?self
+    {
+        $diez = substr(preg_replace('/\D/', '', $telefono), -10);
+
+        return $diez === '' ? null : static::where('whatsapp', $diez)->orWhere('telefono', $diez)->latest('id')->first();
     }
 
     public function ordenes(): HasMany

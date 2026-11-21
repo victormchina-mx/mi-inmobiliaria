@@ -3,6 +3,7 @@
 namespace App\Actions\Piso;
 
 use App\Actions\Ordenes\CambiarEtapa;
+use App\Actions\Postventa\GenerarGarantias;
 use App\Models\Checklist;
 use App\Models\Etapa;
 use App\Models\OrdenServicio;
@@ -63,6 +64,8 @@ class EntregarVehiculo
             if ($kilometraje && $kilometraje > (int) $orden->vehiculo->kilometraje) {
                 $orden->vehiculo->forceFill(['kilometraje' => $kilometraje])->saveQuietly();
             }
+
+            (new GenerarGarantias)($orden->refresh());
 
             return $checklist;
         });

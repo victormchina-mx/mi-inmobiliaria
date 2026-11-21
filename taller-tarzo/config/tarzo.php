@@ -56,6 +56,22 @@ return [
         'max_video_mb' => 60,
     ],
 
+    // WhatsApp Business Platform (Cloud API de Meta).
+    //  'desactivado': los avisos se mandan por correo (mientras Meta aprueba el número y las plantillas).
+    //  'cloud': envío real por la API de Meta.   'log': simula el envío y lo escribe en el log (pruebas).
+    'whatsapp' => [
+        'driver' => env('WHATSAPP_DRIVER', 'desactivado'),
+        'token' => env('WHATSAPP_TOKEN'),                    // token permanente del usuario del sistema
+        'phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
+        'app_secret' => env('WHATSAPP_APP_SECRET'),          // para validar la firma del webhook
+        'verify_token' => env('WHATSAPP_VERIFY_TOKEN'),      // el que se captura al configurar el webhook en Meta
+        'version' => env('WHATSAPP_API_VERSION', 'v21.0'),
+        'idioma' => env('WHATSAPP_IDIOMA', 'es_MX'),
+    ],
+
+    // Postventa
+    'url_resena' => env('TARZO_URL_RESENA', ''), // enlace "Escríbenos una reseña" de Google Business
+
     'seguridad' => [
         'hsts' => (bool) env('TARZO_HSTS', false),
     ],

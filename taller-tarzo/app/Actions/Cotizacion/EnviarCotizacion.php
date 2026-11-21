@@ -3,10 +3,13 @@
 namespace App\Actions\Cotizacion;
 
 use App\Enums\EstadoCotizacion;
+use App\Enums\EventoMensaje;
 use App\Mail\PresupuestoParaAutorizar;
 use App\Models\Cotizacion;
+use App\Services\Comunicacion\Notificador;
 use App\Services\Cotizacion\Cotizador;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Number;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -15,7 +18,8 @@ use Illuminate\Validation\ValidationException;
 class EnviarCotizacion
 {
     /**
-     * @param  list<string>  $correoA  roles a los que se envía correo: cliente, ajustador
+     * @param  list<string>  $correoA  roles a los que se envía correo (cliente, ajustador) y/o 'whatsapp_api'
+     *                                 (aviso automático al cliente por WhatsApp/correo según su preferencia)
      */
     public function __invoke(Cotizacion $cotizacion, array $correoA = []): Cotizacion
     {
@@ -35,7 +39,14 @@ class EnviarCotizacion
             'recordatorio_at' => null,
         ])->save();
 
-        foreach ($correoA as $rol) {
+        if (in_array('whatsapp_api', $correoA, true)) {
+            app(Notificador::class)->avisar(EventoMensaje::PresupuestoListo, $cotizacion->orden->cliente, $cotizacion->orden, [
+                'total' => Number::currency($cotizacion->total),
+                'enlace_aprobacion' => EnlaceAprobacion::generar($cotizacion, 'cliente'),
+            ]);
+        }
+
+        foreach (array_diff($correoA, ['whatsapp_api']) as $rol) {
             $correo = $rol === 'ajustador' ? $cotizacion->orden->siniestro?->ajustador_email : $cotizacion->orden->cliente->email;
             if (filled($correo)) {
                 Mail::to($correo)->queue(new PresupuestoParaAutorizar($cotizacion, $rol));

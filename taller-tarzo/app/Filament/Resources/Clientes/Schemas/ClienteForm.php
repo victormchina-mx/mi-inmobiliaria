@@ -59,6 +59,7 @@ class ClienteForm
                 TextInput::make('municipio')->label('Municipio')->maxLength(120),
                 TextInput::make('estado')->label('Estado')->maxLength(80)->default('Estado de México'),
                 TextInput::make('codigo_postal')->label('Código postal')->numeric()->length(5),
+                Toggle::make('acepta_recordatorios')->label('Acepta recordatorios de servicio y encuestas')->default(true)->inline(false),
                 Toggle::make('acepta_promociones')->label('Acepta recibir promociones')->inline(false),
             ]),
 

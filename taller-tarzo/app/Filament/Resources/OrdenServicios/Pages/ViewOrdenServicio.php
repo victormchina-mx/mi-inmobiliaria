@@ -6,6 +6,8 @@ use App\Actions\Cotizacion\AbrirCotizacion;
 use App\Actions\Ordenes\CambiarEtapa;
 use App\Actions\Piso\EntregarVehiculo;
 use App\Actions\Piso\RegistrarCalidad;
+use App\Enums\EstadoMensaje;
+use App\Enums\EventoMensaje;
 use App\Enums\TipoOrden;
 use App\Filament\Actions\EnviarAFirmaAction;
 use App\Filament\Resources\Checkins\CheckinResource;
@@ -16,8 +18,10 @@ use App\Jobs\GenerarPdfIngreso;
 use App\Models\Etapa;
 use App\Models\OrdenServicio;
 use App\Models\Siniestro;
+use App\Services\Comunicacion\Notificador;
 use App\Services\Cotizacion\Cotizador;
 use App\Support\Checklists;
+use App\Support\EnlacePortal;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\EditAction;
@@ -168,6 +172,24 @@ class ViewOrdenServicio extends ViewRecord
 
             ActionGroup::make([
                 EditAction::make()->label('Editar datos de la orden'),
+                Action::make('enlaceSeguimiento')->label('Enlace de seguimiento para el cliente')->icon(Heroicon::OutlinedLink)
+                    ->visible(fn () => auth()->user()?->can('crm.gestionar') || $gestiona())
+                    ->modalDescription('El cliente ve el avance, las fotos autorizadas y el presupuesto pendiente, sin crear cuenta. Vence en 90 días.')
+                    ->schema([
+                        TextInput::make('enlace')->label('Enlace')->readOnly()->copyable(copyMessage: 'Enlace copiado')
+                            ->default(fn () => EnlacePortal::generar($this->record)),
+                        Toggle::make('avisar')->label('Enviarlo al cliente (WhatsApp o correo, según su preferencia)')->default(true),
+                    ])
+                    ->modalSubmitActionLabel('Listo')
+                    ->action(function (array $data) {
+                        if (! ($data['avisar'] ?? false)) {
+                            return;
+                        }
+                        $m = app(Notificador::class)->avisar(EventoMensaje::Ingreso, $this->record->cliente, $this->record);
+                        $m->estado === EstadoMensaje::Omitido
+                            ? Notification::make()->title('No se envió')->body($m->error)->warning()->send()
+                            : Notification::make()->title('Enlace enviado al cliente')->success()->send();
+                    }),
                 Action::make('reenviarPdf')->label('Reenviar PDF al cliente por correo')->icon(Heroicon::OutlinedEnvelope)
                     ->visible(fn () => $gestiona() && $this->record->checkin?->estaFirmado() && filled($this->record->cliente->email))
                     ->requiresConfirmation()

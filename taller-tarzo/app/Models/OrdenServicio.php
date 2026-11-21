@@ -112,6 +112,21 @@ class OrdenServicio extends Model
         return $this->hasMany(MovimientoInventario::class)->latest('id');
     }
 
+    public function mensajes(): HasMany
+    {
+        return $this->hasMany(Mensaje::class)->latest('id');
+    }
+
+    public function garantias(): HasMany
+    {
+        return $this->hasMany(Garantia::class);
+    }
+
+    public function encuesta(): HasOne
+    {
+        return $this->hasOne(EncuestaNps::class);
+    }
+
     public function checklists(): HasMany
     {
         return $this->hasMany(Checklist::class)->latest('id');

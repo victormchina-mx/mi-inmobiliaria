@@ -15,9 +15,10 @@ use App\Enums\EstadoTarea;
 use App\Enums\MomentoEvidencia;
 use App\Enums\MotivoPausa;
 use App\Enums\TipoOrden;
-use App\Mail\AvisoEtapa;
+use App\Mail\MensajeCorreo;
 use App\Models\Etapa;
 use App\Models\Evidencia;
+use App\Models\Mensaje;
 use App\Models\Tarea;
 use App\Support\Checklists;
 use App\Support\Media;
@@ -174,7 +175,10 @@ class ReglasPisoTest extends PisoTestCase
         (new CambiarEtapa)($orden->fresh(), $this->etapa('calidad'), $this->jefe);
         app(RegistrarCalidad::class)($orden->fresh(), array_keys(Checklists::CALIDAD), $this->jefe);
         $this->assertSame(Etapa::LISTO_ENTREGA, $orden->fresh()->etapa->clave);
-        Mail::assertQueued(AvisoEtapa::class, fn ($m) => $m->hasTo('cliente@example.com') && $m->etapa->clave === Etapa::LISTO_ENTREGA);
+        $aviso = Mensaje::where('orden_servicio_id', $orden->id)->where('evento', 'listo_entrega')->sole();
+        $this->assertSame('correo', $aviso->canal);
+        $this->assertStringContainsString('está listo', $aviso->cuerpo);
+        Mail::assertSent(MensajeCorreo::class, fn ($m) => $m->hasTo('cliente@example.com'));
     }
 
     public function test_no_se_salta_calidad_para_ir_a_listo(): void

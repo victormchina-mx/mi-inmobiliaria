@@ -4,8 +4,11 @@ use App\Http\Controllers\AlbumEvidenciasController;
 use App\Http\Controllers\AprobacionPresupuestoController;
 use App\Http\Controllers\CotizacionPdfController;
 use App\Http\Controllers\DocumentoIngresoController;
+use App\Http\Controllers\EncuestaController;
 use App\Http\Controllers\FirmaClienteController;
+use App\Http\Controllers\PortalClienteController;
 use App\Http\Controllers\TableroTvController;
+use App\Http\Controllers\WhatsAppWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/panel');
@@ -18,7 +21,17 @@ Route::middleware(['signed:relative', 'throttle:20,1'])->group(function () {
     // Autorización del presupuesto por el cliente o el ajustador.
     Route::get('/presupuesto/{cotizacion}/{rol}', [AprobacionPresupuestoController::class, 'mostrar'])->name('presupuesto.mostrar');
     Route::post('/presupuesto/{cotizacion}/{rol}', [AprobacionPresupuestoController::class, 'guardar'])->name('presupuesto.guardar');
+
+    // Portal de seguimiento, encuesta de satisfacción y baja de recordatorios.
+    Route::get('/seguimiento/{orden}', [PortalClienteController::class, 'orden'])->name('portal.orden');
+    Route::get('/encuesta/{encuesta}', [EncuestaController::class, 'mostrar'])->name('encuesta.mostrar');
+    Route::post('/encuesta/{encuesta}', [EncuestaController::class, 'guardar'])->name('encuesta.guardar');
+    Route::get('/baja/{cliente}', [PortalClienteController::class, 'baja'])->name('baja.recordatorios');
 });
+
+// Webhook de WhatsApp (Meta). Sin sesión ni CSRF; se valida la firma.
+Route::get('/webhooks/whatsapp', [WhatsAppWebhookController::class, 'verificar']);
+Route::post('/webhooks/whatsapp', [WhatsAppWebhookController::class, 'recibir'])->middleware('throttle:240,1');
 Route::get('/firma-recibida', [FirmaClienteController::class, 'gracias'])->name('firma.gracias');
 
 Route::middleware('auth')->group(function () {

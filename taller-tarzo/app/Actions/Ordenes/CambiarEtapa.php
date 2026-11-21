@@ -2,15 +2,15 @@
 
 namespace App\Actions\Ordenes;
 
+use App\Enums\EventoMensaje;
 use App\Enums\TipoOrden;
-use App\Mail\AvisoEtapa;
 use App\Models\Etapa;
 use App\Models\HistorialEtapa;
 use App\Models\OrdenServicio;
 use App\Models\User;
+use App\Services\Comunicacion\Notificador;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -116,13 +116,17 @@ class CambiarEtapa
 
     private function avisarCliente(OrdenServicio $orden, Etapa $destino): void
     {
-        $cliente = $orden->cliente;
-
-        if (! $destino->notifica_cliente || blank($cliente?->email)) {
+        if (! $destino->notifica_cliente || ! $orden->cliente) {
             return;
         }
 
-        // WhatsApp automático llega en el Módulo 5; por ahora, correo en cola.
-        Mail::to($cliente->email)->queue(new AvisoEtapa($orden, $destino));
+        $evento = match ($destino->clave) {
+            Etapa::LISTO_ENTREGA => EventoMensaje::ListoEntrega,
+            Etapa::ENTREGADO => EventoMensaje::Entregado,
+            default => EventoMensaje::CambioEtapa,
+        };
+
+        // WhatsApp o correo según la preferencia del cliente (queda en la bitácora de mensajes).
+        app(Notificador::class)->avisar($evento, $orden->cliente, $orden);
     }
 }

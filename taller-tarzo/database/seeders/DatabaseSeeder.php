@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             CatalogosSatSeeder::class,
             CatalogosTallerSeeder::class,
             CatalogosCotizacionSeeder::class,
+            ComunicacionSeeder::class,
         ]);
     }
 }

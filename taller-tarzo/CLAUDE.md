@@ -64,6 +64,10 @@ Arranca en hosting compartido de Hostinger y migra a VPS solo con variables de e
 - Modelos con relación `orden()` no pueden tener una columna llamada `orden` (la columna tapa la relación).
 - Existencias y costo promedio SOLO cambian con `App\Services\Inventario\Inventario` (bloquea la fila, deja kárdex
   y avisa al cruzar el mínimo). Toda salida va a una orden o a gasto general con motivo.
+- Mensajes al cliente SOLO con `App\Services\Comunicacion\Notificador` (elige canal, respeta consentimiento,
+  deja bitácora en `mensajes` y encola `EnviarMensaje`). Textos en `plantillas_mensaje` con `{variables}`.
+- En Blade, una directiva pegada a una letra (`km@endif`) NO se compila (se toma como correo): dejar un espacio
+  o un `}}` antes de la `@`.
 - XML de terceros (facturas): parsear con `LIBXML_NONET` y nunca `LIBXML_NOENT`.
 - Selects de Filament que validan el valor elegido: usar `->options()` (con `->searchable()`), no solo
   `getSearchResultsUsing`, o la validación rechaza la opción.
@@ -83,7 +87,12 @@ app/Support/DatosTablero  datos compartidos por el tablero y el modo TV (/panel/
 app/Services/Inventario/  Inventario (único punto que cambia existencias, costo promedio ponderado) y LectorCfdi
 app/Actions/Almacen/      CrearRequisiciones, CrearOrdenCompra, CambiarEstadoCompra, RecibirMercancia,
                           VerificarRefacciones (saca la orden de "Espera de refacciones")
-app/Jobs/                 GenerarPdfIngreso (PDF + correo al cliente)
+app/Services/Comunicacion/ Notificador (canal + plantilla + bitácora) y WhatsAppCloud (API de Meta, driver log)
+app/Actions/Postventa/    GenerarGarantias, RevisarGarantias, ReclamarGarantia, GenerarRecordatorios,
+                          EnviarRecordatorios, CalendarioVerificacion, EnviarEncuestas, RegistrarRespuestaNps
+app/Http/Controllers/     WhatsAppWebhookController, PortalClienteController (seguimiento y baja), EncuestaController
+app/Filament/Pages/       Conversaciones (bandeja WhatsApp), Satisfaccion (NPS)
+app/Jobs/                 GenerarPdfIngreso (PDF + correo al cliente), EnviarMensaje
 app/Services/             DecodificadorVin (NHTSA vPIC)
 app/Enums/                Rol, TipoOrden, TipoPersona, CanalPreferido, TipoBahia
 app/Filament/Resources/   Órdenes, Check-in, Clientes, Vehículos, Flotillas + catálogos

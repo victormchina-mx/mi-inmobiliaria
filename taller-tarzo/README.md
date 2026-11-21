@@ -6,6 +6,25 @@ cliente por WhatsApp y facturación CFDI 4.0.
 
 ## Estado
 
+**Módulo 5 · Comunicación y CRM (listo):**
+
+- Avisos automáticos al cliente por WhatsApp Business (API oficial de Meta) o correo, según su preferencia:
+  vehículo recibido, presupuesto listo (con enlace de autorización), avance de etapa, listo para entrega y entregado.
+- Bitácora de cada mensaje con su estado (enviado, entregado, leído, fallido u omitido y por qué) y reintento.
+- Portal de seguimiento para el cliente (sin cuenta): etapa actual, historial, fotos autorizadas y garantías.
+- Bandeja de conversaciones: los mensajes del cliente llegan al panel y avisan al asesor; respuesta dentro de 24 h.
+- Garantías automáticas al entregar (mecánica, pintura, refacciones, plazos en Parámetros), aviso 15 días antes
+  de vencer y reclamo que abre una orden de garantía.
+- Recordatorios de mantenimiento por kilometraje estimado o tiempo y de verificación vehicular por terminación de placa.
+- Encuesta NPS 24 h después de la entrega; un detractor genera aviso de seguimiento; promotores ven el enlace
+  de reseña en Google. Indicador por asesor y aseguradora.
+- Consentimiento: los recordatorios y encuestas respetan el aviso de privacidad y cada correo trae enlace de baja.
+
+**Configurar WhatsApp:** crear la app en Meta for Developers, poner `WHATSAPP_DRIVER=cloud`, `WHATSAPP_TOKEN`,
+`WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_APP_SECRET` y `WHATSAPP_VERIFY_TOKEN` en `.env`, registrar el webhook
+`https://<dominio>/webhooks/whatsapp` y aprobar las plantillas con los nombres de *Postventa → Plantillas de mensajes*.
+Mientras no esté configurado, todo sale por correo (`WHATSAPP_DRIVER=log` sirve para probar sin enviar).
+
 **Módulo 4 · Almacén y refacciones (listo):**
 
 - Inventario con clave, código de barras, ubicación, mínimo y máximo; kárdex por producto con costo promedio

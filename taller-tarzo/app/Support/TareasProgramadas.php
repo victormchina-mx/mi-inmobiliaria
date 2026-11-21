@@ -28,6 +28,12 @@ final class TareasProgramadas
 
         $schedule->command('tarzo:recordar-cotizaciones')->hourly()->withoutOverlapping();
         $schedule->command('tarzo:revisar-compras')->dailyAt('08:05');
+
+        // Módulo 5 · postventa
+        $schedule->command('tarzo:generar-recordatorios')->monthlyOn(1, '06:15');
+        $schedule->command('tarzo:enviar-recordatorios')->dailyAt('10:20')->withoutOverlapping();
+        $schedule->command('tarzo:enviar-encuestas')->hourlyAt(25)->between('9:00', '20:00')->withoutOverlapping();
+        $schedule->command('tarzo:revisar-garantias')->dailyAt('07:40');
         $schedule->command('queue:prune-failed', ['--hours' => 24 * 30])->daily()->at('03:10');
         $schedule->command('activitylog:clean')->monthly();
         $schedule->command('auth:clear-resets')->daily()->at('03:20');

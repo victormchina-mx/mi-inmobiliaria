@@ -13,6 +13,7 @@ use App\Filament\Resources\Cotizaciones\CotizacionResource;
 use App\Filament\Resources\Cotizaciones\Support\ContextoFormulario;
 use App\Filament\Resources\OrdenServicios\OrdenServicioResource;
 use App\Models\Paquete;
+use App\Services\Comunicacion\WhatsAppCloud;
 use App\Services\Cotizacion\Cotizador;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -112,8 +113,10 @@ class EditCotizacion extends EditRecord
                     ->afterStateUpdated(fn (?string $state, Set $set) => $set('enlace', EnlaceAprobacion::generar($this->record, $state ?: 'cliente'))),
                 TextInput::make('enlace')->label('Enlace')->readOnly()->copyable(copyMessage: 'Enlace copiado')
                     ->default(fn () => EnlaceAprobacion::generar($this->record, array_key_first($roles()))),
-                CheckboxList::make('correo')->label('Enviar también por correo')
+                CheckboxList::make('correo')->label('Enviar también')
                     ->options(fn () => array_filter([
+                        'whatsapp_api' => app(WhatsAppCloud::class)->activo() && filled($this->record->orden->cliente->numeroWhatsapp())
+                            ? 'WhatsApp automático del taller al cliente' : null,
                         'cliente' => filled($this->record->orden->cliente->email) ? 'Cliente: '.$this->record->orden->cliente->email : null,
                         'ajustador' => $this->record->esSeguro() && filled($this->record->orden->siniestro?->ajustador_email) ? 'Ajustador: '.$this->record->orden->siniestro->ajustador_email : null,
                     ])),
@@ -133,7 +136,9 @@ class EditCotizacion extends EditRecord
                     return;
                 }
 
-                $wa = EnlaceAprobacion::whatsapp($this->record->refresh(), $data['rol']);
+                $wa = in_array('whatsapp_api', $data['correo'] ?? [], true) && $data['rol'] === 'cliente'
+                    ? null
+                    : EnlaceAprobacion::whatsapp($this->record->refresh(), $data['rol']);
                 Notification::make()->title('Cotización enviada')->success()->send();
 
                 $wa ? $this->redirect($wa) : $this->recargar();
