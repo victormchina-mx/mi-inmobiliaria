@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
     <title>Inventario de ingreso {{ $orden->folio }} · {{ config('tarzo.nombre_comercial') }}</title>
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('img/marca/icono-180.png') }}">
     @include('firma._estilos')
 </head>
 <body>
 <main>
     <header>
-        <h1>{{ config('tarzo.nombre_comercial') }}</h1>
+        <h1 class="logo" style="margin:0"><x-marca /></h1>
         <p>Inventario de ingreso · orden <strong>{{ $orden->folio }}</strong></p>
     </header>
 

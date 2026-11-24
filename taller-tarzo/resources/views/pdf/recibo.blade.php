@@ -16,7 +16,7 @@
     .grid td, .grid th { border: 1px solid #d6dde0; }
     .num { text-align: right; }
     .muted { color: #5a666c; }
-    .monto { font-size: 20px; font-weight: bold; color: #0d7a4a; }
+    .monto { font-size: 20px; font-weight: bold; color: #1f3e7f; }
 </style>
 </head>
 <body>

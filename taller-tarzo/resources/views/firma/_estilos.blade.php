@@ -1,5 +1,5 @@
 <style>
-    :root { --bg:#f2f4f5; --paper:#fff; --fg:#1a2124; --muted:#5a666c; --line:#d6dde0; --accent:#0d7a4a; --danger:#b42318; }
+    :root { --bg:#f2f4f5; --paper:#fff; --fg:#1a2124; --muted:#5a666c; --line:#d6dde0; --accent:#c4520e; --marca:#0f1e33; --danger:#b42318; }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
     main { max-width: 640px; margin: 0 auto; padding: 20px 16px 48px; display: grid; gap: 16px; }

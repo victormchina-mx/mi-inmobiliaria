@@ -16,7 +16,7 @@
     @page { margin: 28px 32px; }
     body { font-family: DejaVu Sans, sans-serif; font-size: 10px; color: #1a2124; }
     h1 { font-size: 16px; margin: 0; }
-    h2 { font-size: 11px; margin: 14px 0 6px; padding-bottom: 3px; border-bottom: 1px solid #0d7a4a; color: #0d7a4a; text-transform: uppercase; letter-spacing: .5px; }
+    h2 { font-size: 11px; margin: 14px 0 6px; padding-bottom: 3px; border-bottom: 1px solid #1f3e7f; color: #1f3e7f; text-transform: uppercase; letter-spacing: .5px; }
     table { width: 100%; border-collapse: collapse; }
     td, th { padding: 3px 5px; vertical-align: top; text-align: left; }
     .grid td { border: 1px solid #d6dde0; }

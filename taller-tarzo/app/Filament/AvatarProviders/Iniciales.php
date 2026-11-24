@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
  */
 class Iniciales implements AvatarProvider
 {
-    private const COLORES = ['#0d7a4a', '#2b5f8a', '#7a4fb0', '#a15c07', '#b8336a', '#3f5560'];
+    private const COLORES = ['#1f3e7f', '#c4520e', '#7a4fb0', '#a15c07', '#b8336a', '#3f5560'];
 
     public function get(Model $record): string
     {

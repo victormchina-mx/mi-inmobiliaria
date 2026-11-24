@@ -34,6 +34,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('taller')
             ->path('panel')
             ->brandName(config('tarzo.nombre_comercial'))
+            ->brandLogo(fn () => asset('img/marca/logo.png'))
+            ->darkModeBrandLogo(fn () => asset('img/marca/logo-oscuro.png'))
+            ->brandLogoHeight('2.4rem')
+            ->favicon(fn () => asset('favicon.ico'))
             ->defaultAvatarProvider(Iniciales::class)
             ->login()
             ->passwordReset()
@@ -45,7 +49,9 @@ class AdminPanelProvider extends PanelProvider
                     && (bool) auth()->user()?->hasAnyRole([Rol::Dueno->value, Rol::Contabilidad->value]),
             )
             ->colors([
-                'primary' => Color::hex('#0d7a4a'),
+                // Naranja de la marca TarsoHub (#FA741B). El tono 600 se oscurece para que el texto blanco
+                // de los botones tenga contraste suficiente (≥ 4.5:1); si no, Filament los pinta pálidos.
+                'primary' => [...Color::hex('#FA741B'), 600 => 'oklch(0.56 0.169 47.321)', 700 => 'oklch(0.50 0.155 47.321)', 800 => 'oklch(0.44 0.13 47.321)'],
                 'gray' => Color::Slate,
             ])
             ->navigationGroups([

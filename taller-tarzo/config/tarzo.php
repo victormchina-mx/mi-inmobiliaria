@@ -21,11 +21,11 @@
 
 return [
 
-    'nombre_comercial' => env('TARZO_NOMBRE', 'TARZO'),
+    'nombre_comercial' => env('TARZO_NOMBRE', 'TarsoHub'),
 
     // Datos del taller que aparecen en el PDF de ingreso, el aviso de privacidad y los correos.
     'taller' => [
-        'razon_social' => env('TARZO_RAZON_SOCIAL', env('TARZO_NOMBRE', 'TARZO')),
+        'razon_social' => env('TARZO_RAZON_SOCIAL', env('TARZO_NOMBRE', 'TarsoHub')),
         'domicilio' => env('TARZO_DOMICILIO', ''),
         'telefono' => env('TARZO_TELEFONO', ''),
         'email' => env('TARZO_EMAIL', ''),

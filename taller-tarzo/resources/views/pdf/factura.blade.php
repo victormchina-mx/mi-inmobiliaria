@@ -14,7 +14,7 @@
     @page { margin: 28px 32px; }
     body { font-family: DejaVu Sans, sans-serif; font-size: 9px; color: #1a2124; }
     h1 { font-size: 15px; margin: 0; }
-    h2 { font-size: 10px; margin: 12px 0 5px; padding-bottom: 3px; border-bottom: 1px solid #0d7a4a; color: #0d7a4a; text-transform: uppercase; }
+    h2 { font-size: 10px; margin: 12px 0 5px; padding-bottom: 3px; border-bottom: 1px solid #1f3e7f; color: #1f3e7f; text-transform: uppercase; }
     table { width: 100%; border-collapse: collapse; }
     td, th { padding: 3px 5px; vertical-align: top; text-align: left; }
     .grid td, .grid th { border: 1px solid #d6dde0; }

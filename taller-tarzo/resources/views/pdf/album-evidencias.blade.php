@@ -8,7 +8,7 @@
     @page { margin: 28px 32px; }
     body { font-family: DejaVu Sans, sans-serif; font-size: 9.5px; color: #1a2124; }
     h1 { font-size: 15px; margin: 0; }
-    h2 { font-size: 10.5px; margin: 12px 0 5px; padding-bottom: 3px; border-bottom: 1px solid #0d7a4a; color: #0d7a4a; text-transform: uppercase; }
+    h2 { font-size: 10.5px; margin: 12px 0 5px; padding-bottom: 3px; border-bottom: 1px solid #1f3e7f; color: #1f3e7f; text-transform: uppercase; }
     .foto { width: 48%; display: inline-block; margin: 0 1% 10px 0; vertical-align: top; page-break-inside: avoid; }
     .foto img { width: 100%; height: 200px; }
     .muted { color: #5a666c; }

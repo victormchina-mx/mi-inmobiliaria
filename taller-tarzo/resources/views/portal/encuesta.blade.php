@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
     <title>¿Cómo te atendimos? · {{ config('tarzo.nombre_comercial') }}</title>
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('img/marca/icono-180.png') }}">
     @include('firma._estilos')
     <style>
         .escala { display: grid; grid-template-columns: repeat(11, 1fr); gap: 4px; }
@@ -20,7 +22,7 @@
 <body>
 <main>
     <header>
-        <h1>{{ config('tarzo.nombre_comercial') }}</h1>
+        <h1 class="logo" style="margin:0"><x-marca /></h1>
         <p>{{ $encuesta->orden->vehiculo->marca }} {{ $encuesta->orden->vehiculo->modelo }} · orden {{ $encuesta->orden->folio }}</p>
     </header>
 

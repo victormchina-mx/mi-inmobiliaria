@@ -7,6 +7,8 @@
     <meta http-equiv="refresh" content="{{ $refresco }}">
     <meta name="robots" content="noindex">
     <title>Tablero · {{ config('tarzo.nombre_comercial') }}</title>
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('img/marca/icono-180.png') }}">
     <style>
         :root { color-scheme: dark; }
         * { box-sizing: border-box; }
@@ -27,7 +29,7 @@
 </head>
 <body>
 <header>
-    <h1>{{ config('tarzo.nombre_comercial') }} · Tablero del taller</h1>
+    <h1 style="display:flex;align-items:center;gap:14px"><x-marca variante="oscuro" :alto="38" /><span>Tablero del taller</span></h1>
     <span>{{ $columnas->sum(fn ($c) => $c['ordenes']->count()) }} autos · {{ now()->format('H:i') }}</span>
 </header>
 <main>
