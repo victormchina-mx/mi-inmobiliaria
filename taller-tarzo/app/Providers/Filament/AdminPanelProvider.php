@@ -49,9 +49,13 @@ class AdminPanelProvider extends PanelProvider
                     && (bool) auth()->user()?->hasAnyRole([Rol::Dueno->value, Rol::Contabilidad->value]),
             )
             ->colors([
-                // Naranja de la marca TarsoHub (#FA741B). El tono 600 se oscurece para que el texto blanco
+                // Naranja de la marca TarsoHub (#FA741B). Los tonos 500–800 se oscurecen para que el texto blanco
                 // de los botones tenga contraste suficiente (≥ 4.5:1); si no, Filament los pinta pálidos.
-                'primary' => [600 => 'oklch(0.56 0.169 47.321)', 700 => 'oklch(0.50 0.155 47.321)', 800 => 'oklch(0.44 0.13 47.321)'] + Color::hex('#FA741B'),
+                // Filament exige contraste en el fondo (600) y en el hover (500), por eso se ajustan los dos.
+                'primary' => array_replace(Color::hex('#FA741B'), [
+                    500 => 'oklch(0.565 0.169 47.321)', 600 => 'oklch(0.52 0.16 47.321)',
+                    700 => 'oklch(0.47 0.145 47.321)', 800 => 'oklch(0.42 0.125 47.321)',
+                ]),
                 'gray' => Color::Slate,
             ])
             ->navigationGroups([
