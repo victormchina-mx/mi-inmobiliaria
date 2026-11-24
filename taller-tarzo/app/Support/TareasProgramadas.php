@@ -61,7 +61,9 @@ final class TareasProgramadas
     private static function comando(Schedule $schedule, string $comando, array $parametros = [], ?string $nombre = null): Event
     {
         if (self::puedeLanzarProcesos()) {
-            $evento = $schedule->command($comando, $parametros);
+            // Las opciones sin valor van en el texto del comando: "--opcion=1" hace fallar al worker.
+            $banderas = array_keys(array_filter($parametros, fn ($v) => $v === true));
+            $evento = $schedule->command(trim($comando.' '.implode(' ', $banderas)), array_filter($parametros, fn ($v) => $v !== true));
 
             return $nombre ? $evento->name($nombre) : $evento;
         }
