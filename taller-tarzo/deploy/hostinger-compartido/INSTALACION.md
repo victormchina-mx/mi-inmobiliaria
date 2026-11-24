@@ -60,10 +60,12 @@ como `.htaccess` en la carpeta del subdominio y coloca ahí la aplicación compl
 ```bash
 cp deploy/hostinger-compartido/env.produccion.example .env
 nano .env        # base de datos, APP_URL, correo
-php artisan key:generate
+                 # DB_DATABASE y DB_USERNAME llevan el prefijo de Hostinger (u123456789_…)
+                 # DB_PASSWORD entre comillas sencillas si tiene símbolos
+php artisan key:generate --force
 php artisan migrate --force
 php artisan db:seed --force
-php artisan storage:link
+ln -sfn ../storage/app/public public/storage   # storage:link falla porque Hostinger desactiva exec()
 php artisan optimize
 php artisan filament:optimize
 ```
