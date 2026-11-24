@@ -40,7 +40,8 @@ class AdminPanelProvider extends PanelProvider
             ->profile(isSimple: false)
             ->multiFactorAuthentication(
                 AppAuthentication::make()->recoverable(),
-                isRequired: fn (): bool => app()->isProduction()
+                // En consola (artisan) no hay usuario: no se consulta la sesión, que exige APP_KEY.
+                isRequired: fn (): bool => app()->isProduction() && ! app()->runningInConsole()
                     && (bool) auth()->user()?->hasAnyRole([Rol::Dueno->value, Rol::Contabilidad->value]),
             )
             ->colors([
