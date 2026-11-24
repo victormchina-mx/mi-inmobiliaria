@@ -15,7 +15,10 @@ echo "→ Descargando cambios"
 git pull --ff-only
 
 echo "→ Dependencias"
-$COMPOSER_BIN install --no-dev --optimize-autoloader --no-interaction
+# --no-scripts: Hostinger desactiva proc_open y los scripts de Composer fallan; se corren a mano.
+$COMPOSER_BIN install --no-dev --optimize-autoloader --no-interaction --no-scripts
+$PHP_BIN artisan package:discover --ansi
+$PHP_BIN artisan filament:upgrade
 
 echo "→ Base de datos"
 $PHP_BIN artisan migrate --force

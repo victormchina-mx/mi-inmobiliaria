@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Support\TareasProgramadas;
+use Illuminate\Console\Scheduling\CallbackEvent;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Number;
 use Tests\TestCase;
@@ -54,5 +55,19 @@ class InfraestructuraTest extends TestCase
     {
         $this->assertSame('48,000', Number::format(48000));
         $this->assertSame('$1,250.50', Number::currency(1250.5));
+    }
+
+    public function test_sin_proc_open_las_tareas_corren_dentro_del_cron(): void
+    {
+        config(['tarzo.cola.cron_en_proceso' => true, 'tarzo.cola.por_cron' => true]);
+        $schedule = new Schedule;
+        TareasProgramadas::registrar($schedule);
+
+        $eventos = collect($schedule->events());
+        $this->assertTrue($eventos->every(fn ($e) => $e instanceof CallbackEvent), 'Ninguna tarea lanza procesos');
+        $cola = $eventos->first(fn ($e) => str_starts_with((string) $e->description, 'queue:work'));
+        $this->assertNotNull($cola);
+        $this->assertStringContainsString('--stop-when-empty', $cola->description);
+        $this->assertTrue($cola->withoutOverlapping);
     }
 }

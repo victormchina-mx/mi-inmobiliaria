@@ -23,7 +23,7 @@ ssh -p 65002 USUARIO@IP_DEL_SERVIDOR
 
 ```bash
 cd ~/domains/vmch.net
-git clone https://github.com/victormchina-mx/REPOSITORIO.git tarzo-repo
+git clone -b claude/festive-volta-wr7hip https://github.com/victormchina-mx/mi-inmobiliaria.git tarzo-repo
 ```
 
 La aplicación queda **fuera** de `public_html`; solo la carpeta `public/` será visible desde internet.
@@ -32,10 +32,15 @@ Si el proyecto vive en una subcarpeta del repositorio (como hoy, `taller-tarzo/`
 
 ```bash
 cd ~/domains/vmch.net/tarzo-repo/taller-tarzo
-composer install --no-dev --optimize-autoloader --no-interaction
+composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+php artisan package:discover --ansi
+php artisan filament:upgrade
 ```
 
-(Si `composer` no existe, usa `composer2` o `php ~/composer.phar`.)
+(Si `composer` no existe, usa `composer2` o `php ~/composer.phar`.) Se usa `--no-scripts` porque Hostinger
+desactiva `proc_open` y los scripts de Composer fallan con *"The Process class relies on proc_open"*;
+los dos comandos siguientes hacen lo mismo que esos scripts. El cron de TARZO también funciona sin
+`proc_open`: lo detecta y corre las tareas dentro del mismo proceso.
 
 ## 3. Apuntar el subdominio a `public/`
 

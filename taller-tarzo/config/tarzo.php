@@ -70,6 +70,9 @@ return [
         'por_cron' => (bool) env('TARZO_COLA_POR_CRON', true),
         'max_segundos' => (int) env('TARZO_COLA_MAX_SEGUNDOS', 50),
         'colas' => env('TARZO_COLAS', 'alta,default,baja'),
+        // Sin proc_open (algunos planes compartidos) las tareas corren dentro del cron. Se detecta solo;
+        // true lo fuerza.
+        'cron_en_proceso' => (bool) env('TARZO_CRON_EN_PROCESO', false),
     ],
 
     'tiempo_real' => [
