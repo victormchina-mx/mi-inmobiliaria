@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\Cfdi\PacFacturama;
 use App\Services\Cfdi\PacSimulado;
 use App\Services\Cfdi\ProveedorCfdi;
+use App\Support\Media;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Auth\Events\Login;
@@ -35,6 +36,9 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->isProduction()) {
             URL::forceScheme('https');
         }
+
+        // Vistas previas de Filament (FileUpload, ImageColumn) con el mismo enlace sin extensión que Media.
+        Media::configurarDisco();
 
         // Números y moneda con formato de México (48,000.50 y $1,250.00 MXN).
         Number::useLocale('es_MX');

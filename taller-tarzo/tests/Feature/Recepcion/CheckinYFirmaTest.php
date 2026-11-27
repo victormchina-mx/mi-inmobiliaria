@@ -279,16 +279,21 @@ class CheckinYFirmaTest extends RecepcionTestCase
         // Usar la configuración real del disco (Storage::fake la reemplaza y le quita 'serve').
         config(['filesystems.disks.media' => (require config_path('filesystems.php'))['disks']['media']]);
         Storage::forgetDisk('media');
+        Media::configurarDisco();
         $ruta = 'pruebas/'.uniqid().'.jpg';
         Media::disco()->put($ruta, 'contenido');
 
         try {
             $temporal = Media::urlTemporal($ruta, 5);
-            $this->assertStringContainsString('/archivos/'.$ruta, $temporal);
+            $this->assertStringContainsString('/archivo/'.Media::codificar($ruta), $temporal);
 
             auth()->logout();
             $this->get($temporal)->assertOk();
-            $this->get('/archivos/'.$ruta)->assertForbidden();
+            $this->get('/archivo/'.Media::codificar($ruta))->assertForbidden();
+            $this->assertContains($this->get('/archivos/'.$ruta)->status(), [403, 404], 'La ruta directa de Laravel exige firma');
+
+            // Las vistas previas de Filament usan el mismo enlace (temporaryUrl del disco).
+            $this->assertStringContainsString('/archivo/', Media::disco()->temporaryUrl($ruta, now()->addMinutes(5)));
         } finally {
             Media::disco()->delete($ruta);
         }

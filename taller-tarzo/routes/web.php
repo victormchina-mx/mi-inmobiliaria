@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlbumEvidenciasController;
 use App\Http\Controllers\AprobacionPresupuestoController;
+use App\Http\Controllers\ArchivoPrivadoController;
 use App\Http\Controllers\CotizacionPdfController;
 use App\Http\Controllers\DocumentoIngresoController;
 use App\Http\Controllers\EncuestaController;
@@ -29,6 +30,10 @@ Route::middleware(['signed:relative', 'throttle:20,1'])->group(function () {
     Route::post('/encuesta/{encuesta}', [EncuestaController::class, 'guardar'])->name('encuesta.guardar');
     Route::get('/baja/{cliente}', [PortalClienteController::class, 'baja'])->name('baja.recordatorios');
 });
+
+// Fotos, firmas y documentos privados: enlace firmado sin extensión (ver App\Support\Media).
+Route::get('/archivo/{clave}', ArchivoPrivadoController::class)
+    ->where('clave', '[A-Za-z0-9_-]+')->middleware(['signed:relative', 'throttle:600,1'])->name('archivo.ver');
 
 // Webhook de WhatsApp (Meta). Sin sesión ni CSRF; se valida la firma.
 Route::get('/webhooks/whatsapp', [WhatsAppWebhookController::class, 'verificar']);
