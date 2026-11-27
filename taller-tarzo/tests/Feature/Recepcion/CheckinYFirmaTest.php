@@ -146,7 +146,7 @@ class CheckinYFirmaTest extends RecepcionTestCase
     public function test_el_cliente_firma_desde_el_enlace(): void
     {
         Queue::fake();
-        $this->checkin->update($this->llenarInventario());
+        $this->checkin->update([...$this->llenarInventario(), 'completado_at' => now()]);
         auth()->logout();
 
         $enlace = EnlaceFirma::generar($this->checkin);
@@ -168,6 +168,42 @@ class CheckinYFirmaTest extends RecepcionTestCase
         $this->get($enlace)->assertOk()->assertSee('ya fue firmado')->assertDontSee('Firmar inventario');
     }
 
+    public function test_no_se_firma_un_inventario_que_no_se_ha_guardado(): void
+    {
+        auth()->logout();
+        config(['app.debug' => false]);
+        $enlace = EnlaceFirma::generar($this->checkin);
+
+        $this->get($enlace)->assertStatus(409)->assertSee('todavía está capturando el inventario');
+        $this->post($enlace, ['nombre' => 'Juan Pérez', 'firma' => $this->firmaPng(), 'acepta_aviso_privacidad' => '1', 'acepta_condiciones' => '1'])
+            ->assertStatus(409);
+        $this->assertFalse($this->checkin->fresh()->estaFirmado());
+    }
+
+    public function test_enviar_a_firma_guarda_primero_lo_capturado(): void
+    {
+        Livewire::test(EditCheckin::class, ['record' => $this->checkin->getRouteKey()])
+            ->fillForm([...$this->llenarInventario(), 'danos' => [['zona' => 'facia_delantera', 'tipo' => 'rayon']]])
+            ->mountAction('enviarFirma')
+            ->assertActionMounted('enviarFirma');
+
+        $c = $this->checkin->fresh('danos');
+        $this->assertSame(4, $c->nivel_combustible);
+        $this->assertCount(1, $c->danos);
+        $this->assertNotNull($c->completado_at);
+    }
+
+    public function test_enviar_a_firma_sin_datos_obligatorios_no_genera_el_enlace(): void
+    {
+        Livewire::test(EditCheckin::class, ['record' => $this->checkin->getRouteKey()])
+            ->fillForm(['nivel_combustible' => null, 'kilometraje' => null])
+            ->mountAction('enviarFirma')
+            ->assertActionNotMounted('enviarFirma')
+            ->assertHasFormErrors(['nivel_combustible' => 'required', 'kilometraje' => 'required']);
+
+        $this->assertNull($this->checkin->fresh()->completado_at);
+    }
+
     public function test_el_enlace_sin_firma_o_vencido_no_funciona(): void
     {
         auth()->logout();
@@ -185,6 +221,7 @@ class CheckinYFirmaTest extends RecepcionTestCase
 
     public function test_el_enlace_funciona_con_otro_dominio_o_esquema(): void
     {
+        $this->checkin->update([...$this->llenarInventario(), 'completado_at' => now()]);
         auth()->logout();
         $enlace = EnlaceFirma::generar($this->checkin);
         $otroHost = preg_replace('#^https?://[^/]+#', 'https://taller.ejemplo.mx', $enlace);

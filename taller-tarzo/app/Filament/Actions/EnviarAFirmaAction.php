@@ -3,6 +3,7 @@
 namespace App\Filament\Actions;
 
 use App\Actions\Recepcion\EnlaceFirma;
+use App\Filament\Resources\Checkins\Pages\EditCheckin;
 use App\Models\Checkin;
 use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
@@ -18,10 +19,19 @@ class EnviarAFirmaAction
     public static function make(\Closure $checkin): Action
     {
         return Action::make('enviarFirma')->label('Enviar a firma')->icon(Heroicon::OutlinedPaperAirplane)->color('gray')
-            ->visible(function () use ($checkin) {
+            ->visible(function ($livewire) use ($checkin) {
                 $c = $checkin();
 
-                return auth()->user()?->can('recepcion.gestionar') && $c instanceof Checkin && ! $c->estaFirmado();
+                // Fuera de la pantalla del check-in solo se ofrece si el inventario ya se guardó.
+                return auth()->user()?->can('recepcion.gestionar') && $c instanceof Checkin && ! $c->estaFirmado()
+                    && ($livewire instanceof EditCheckin || $c->completado_at);
+            })
+            // En la pantalla del check-in, guarda primero lo capturado: el cliente firma lo que ve guardado.
+            // Si falta un dato obligatorio, la validación lo marca en el formulario y el enlace no se genera.
+            ->mountUsing(function ($livewire) {
+                if ($livewire instanceof EditCheckin) {
+                    $livewire->save(shouldRedirect: false, shouldSendSavedNotification: false);
+                }
             })
             ->modalHeading('Enviar el inventario al cliente para firmar')
             ->modalDescription('El cliente revisa el inventario y firma desde su celular, sin crear cuenta. El enlace vence en '.EnlaceFirma::HORAS_VIGENCIA.' horas.')

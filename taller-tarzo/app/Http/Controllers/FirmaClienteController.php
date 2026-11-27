@@ -16,6 +16,7 @@ class FirmaClienteController extends Controller
 {
     public function mostrar(Checkin $checkin): View
     {
+        $this->exigirInventarioGuardado($checkin);
         $checkin->load(['orden.cliente', 'orden.vehiculo', 'danos']);
 
         return view('firma.mostrar', [
@@ -28,6 +29,7 @@ class FirmaClienteController extends Controller
 
     public function guardar(Request $request, Checkin $checkin, FirmarCheckin $firmar): RedirectResponse
     {
+        $this->exigirInventarioGuardado($checkin);
         $datos = $request->validate([
             'nombre' => ['required', 'string', 'min:3', 'max:160'],
             'firma' => ['required', 'string', 'max:1400000'],
@@ -42,6 +44,14 @@ class FirmaClienteController extends Controller
         $firmar($checkin, $datos['firma'], $datos['nombre'], true, true, 'enlace', $request->ip(), $request->userAgent());
 
         return redirect()->route('firma.gracias', ['folio' => $checkin->orden->folio]);
+    }
+
+    /**
+     * Nadie firma un inventario que el asesor no ha guardado (quedaría vacío y ya no se podría corregir).
+     */
+    private function exigirInventarioGuardado(Checkin $checkin): void
+    {
+        abort_if(! $checkin->estaFirmado() && ! $checkin->completado_at, 409);
     }
 
     public function gracias(Request $request): View
